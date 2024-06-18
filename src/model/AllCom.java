@@ -4,9 +4,16 @@ import java.io.Serializable;
 import java.sql.Date;
 
 public class AllCom implements Serializable {
-    private int allComId;           //全体コメントID
+	private int allComId;           //全体コメントID
     private String allComContents;  //全体コメント内容
     private Date allComDatetime;    //日付
+
+    public AllCom(int allComId, String allComContents, Date allComDatetime) {
+		super();
+		this.allComId = allComId;
+		this.allComContents = allComContents;
+		this.allComDatetime = allComDatetime;
+	}
 
     public int getAllComId() {
         return allComId;
