@@ -5,14 +5,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="/A1/css/login.css">
+<link rel="stylesheet" href="css/login.css">
 </head>
 <body>
     <div class="box">
         <div class="content">
             <h2 class="login">くらすぼーど</h2>
         </div>
-<form id="login_form" method="post" action="/A1/MainServlet" class="form">
+<form id="login_form" method="get" action="/A1/MainServlet" class="form">
 
         <label>User ID<br>
         <input type="text" name="id">

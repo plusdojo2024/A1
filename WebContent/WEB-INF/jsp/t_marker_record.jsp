@@ -7,8 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a href="/A1/AllMarkSearchServlet">
-            確認
-        </a>
+
 </body>
 </html>
