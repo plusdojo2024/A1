@@ -6,7 +6,7 @@ public class Marker implements Serializable {
     private int markerId;           //マーカーID
     private String markerContents;  //マーカーの内容
     private int boardId;            //板書番号
-    private date markerDatetime;    //日付
+    private Date markerDatetime;    //日付
 
     
     public int getMarkerId() {
@@ -33,11 +33,11 @@ public class Marker implements Serializable {
         this.boardId = boardId;
     }
 
-    public date getMarkerDatetime() {
+    public Date getMarkerDatetime() {
         return markerDatetime;
     }
 
-    public void setMarkerDatetime(date markerDatetime) {
+    public void setMarkerDatetime(Date markerDatetime) {
         this.markerDatetime = markerDatetime;
     }
 }

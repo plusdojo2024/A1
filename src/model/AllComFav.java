@@ -6,7 +6,7 @@ public class AllComFav implements Serializable {
     private int allComFavNum;       //全体コメントリアクション通し番号
     private String userId;          //ユーザー通し番号
     private int allComId;           //全体コメントID
-    private date allComFavDatetime; //日付
+    private Date allComFavDatetime; //日付
 
     public int getAllComFavNum() {
         return allComFavNum;
@@ -32,11 +32,11 @@ public class AllComFav implements Serializable {
         this.allComId = allComId;
     }
 
-    public date getAllComFavDatetime() {
+    public Date getAllComFavDatetime() {
         return allComFavDatetime;
     }
 
-    public void setAllComFavDatetime(date allComFavDatetime) {
+    public void setAllComFavDatetime(Date allComFavDatetime) {
         this.allComFavDatetime = allComFavDatetime;
     }
 

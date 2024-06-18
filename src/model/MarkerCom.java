@@ -6,7 +6,7 @@ public class MarkerCom implements Serializable {
     private int markerComId;            //マーカーコメントＩＤ
     private String markerComContents;   //マーカーコメント内容
     private int markerId;               //マーカーID
-    private date markerComDatetime;     //日付
+    private Date markerComDatetime;     //日付
     
     public int getMarkerComId() {
         return markerComId;
@@ -32,11 +32,11 @@ public class MarkerCom implements Serializable {
         this.markerId = markerId;
     }
 
-    public date getMarkerComDatetime() {
+    public Date getMarkerComDatetime() {
         return markerComDatetime;
     }
 
-    public void setMarkerComDatetime(date markerComDatetime) {
+    public void setMarkerComDatetime(Date markerComDatetime) {
         this.markerComDatetime = markerComDatetime;
     }
 }

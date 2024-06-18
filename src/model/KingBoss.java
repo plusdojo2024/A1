@@ -6,19 +6,19 @@ import java.util.Date;
 public class KingBoss implements Serializable {
     private int allComId;
     private String allComContents;
-    private date allComDatetime;
+    private Date allComDatetime;
     private int allComFavNum;
     private String userId;
-    private date allComFavDatetime;
+    private Date allComFavDatetime;
     private int boardId;
     private String boardContents;
-    private date blackBoardDatetime;
+    private Date blackBoardDatetime;
     private int markerId;
     private String markerContents;
-    private date markerDatetime;
+    private Date markerDatetime;
     private int markerComId;
     private String markerComContents;
-    private date markerComDatetime;
+    private Date markerComDatetime;
     private int markerComNumber; /*理解度コメントリアクション通し番号*/
     private int markerRecNumber ; /* 理解度リアクション通し番号 */
 	private int flagVeryGood; /*フラグよくわかった*/
@@ -43,10 +43,10 @@ public class KingBoss implements Serializable {
     public void setAllComContents(String allComContents) {
         this.allComContents = allComContents;
     }
-    public date getAllComDatetime() {
+    public Date getAllComDatetime() {
         return allComDatetime;
     }
-    public void setAllComDatetime(date allComDatetime) {
+    public void setAllComDatetime(Date allComDatetime) {
         this.allComDatetime = allComDatetime;
     }
     public int getAllComFavNum() {
@@ -61,10 +61,10 @@ public class KingBoss implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    public date getAllComFavDatetime() {
+    public Date getAllComFavDatetime() {
         return allComFavDatetime;
     }
-    public void setAllComFavDatetime(date allComFavDatetime) {
+    public void setAllComFavDatetime(Date allComFavDatetime) {
         this.allComFavDatetime = allComFavDatetime;
     }
     public int getBoardId() {
@@ -79,10 +79,10 @@ public class KingBoss implements Serializable {
     public void setBoardContents(String boardContents) {
         this.boardContents = boardContents;
     }
-    public date getBlackBoardDatetime() {
+    public Date getBlackBoardDatetime() {
         return blackBoardDatetime;
     }
-    public void setBlackBoardDatetime(date blackBoardDatetime) {
+    public void setBlackBoardDatetime(Date blackBoardDatetime) {
         this.blackBoardDatetime = blackBoardDatetime;
     }
     public int getMarkerId() {
@@ -97,10 +97,10 @@ public class KingBoss implements Serializable {
     public void setMarkerContents(String markerContents) {
         this.markerContents = markerContents;
     }
-    public date getMarkerDatetime() {
+    public Date getMarkerDatetime() {
         return markerDatetime;
     }
-    public void setMarkerDatetime(date markerDatetime) {
+    public void setMarkerDatetime(Date markerDatetime) {
         this.markerDatetime = markerDatetime;
     }
     public int getMarkerComId() {
@@ -115,10 +115,10 @@ public class KingBoss implements Serializable {
     public void setMarkerComContents(String markerComContents) {
         this.markerComContents = markerComContents;
     }
-    public date getMarkerComDatetime() {
+    public Date getMarkerComDatetime() {
         return markerComDatetime;
     }
-    public void setMarkerComDatetime(date markerComDatetime) {
+    public void setMarkerComDatetime(Date markerComDatetime) {
         this.markerComDatetime = markerComDatetime;
     }
     public int getMarkerComNumber() {

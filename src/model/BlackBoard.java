@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class BlackBoard implements Serializable {
     private int boardId;                //板書番号
     private String boardContents;       //板書内容
-    private date blackBoardDatetime;    //日付
+    private Date blackBoardDatetime;    //日付
 
     
     public int getBoardId() {
@@ -24,11 +24,11 @@ public class BlackBoard implements Serializable {
         this.boardContents = boardContents;
     }
 
-    public date getBlackBoardDatetime() {
+    public Date getBlackBoardDatetime() {
         return blackBoardDatetime;
     }
 
-    public void setBlackBoardDatetime(date blackBoardDatetime) {
+    public void setBlackBoardDatetime(Date blackBoardDatetime) {
         this.blackBoardDatetime = blackBoardDatetime;
     }
 }

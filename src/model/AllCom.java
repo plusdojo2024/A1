@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class AllCom implements Serializable {
     private int allComId;           //全体コメントID
     private String allComContents;  //全体コメント内容
-    private date allComDatetime;    //日付
+    private Date allComDatetime;    //日付
 
     public int getAllComId() {
         return allComId;
@@ -23,11 +23,11 @@ public class AllCom implements Serializable {
         this.allComContents = allComContents;
     }
 
-    public date getAllComDatetime() {
+    public Date getAllComDatetime() {
         return allComDatetime;
     }
 
-    public void setAllComDatetime(date allComDatetime) {
+    public void setAllComDatetime(Date allComDatetime) {
         this.allComDatetime = allComDatetime;
     }
 
