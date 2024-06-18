@@ -1,13 +1,13 @@
 package model;
-
 import java.io.Serializable;
+import java.sql.Date;
 
 public class BlackBoard implements Serializable {
     private int boardId;                //板書番号
     private String boardContents;       //板書内容
     private Date blackBoardDatetime;    //日付
 
-    
+
     public int getBoardId() {
         return boardId;
     }

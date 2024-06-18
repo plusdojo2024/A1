@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class AllCom implements Serializable {
     private int allComId;           //全体コメントID
@@ -31,7 +32,7 @@ public class AllCom implements Serializable {
         this.allComDatetime = allComDatetime;
     }
 
-    
 
-    
+
+
 }

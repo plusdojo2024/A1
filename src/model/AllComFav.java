@@ -1,6 +1,6 @@
 package model;
-
 import java.io.Serializable;
+import java.sql.Date;
 
 public class AllComFav implements Serializable {
     private int allComFavNum;       //全体コメントリアクション通し番号
@@ -11,7 +11,7 @@ public class AllComFav implements Serializable {
     public int getAllComFavNum() {
         return allComFavNum;
     }
-    
+
     public void setAllComFavNum(int allComFavNum) {
         this.allComFavNum = allComFavNum;
     }

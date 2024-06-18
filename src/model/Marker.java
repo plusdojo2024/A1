@@ -1,6 +1,6 @@
 package model;
-
 import java.io.Serializable;
+import java.sql.Date;
 
 public class Marker implements Serializable {
     private int markerId;           //マーカーID
@@ -8,7 +8,7 @@ public class Marker implements Serializable {
     private int boardId;            //板書番号
     private Date markerDatetime;    //日付
 
-    
+
     public int getMarkerId() {
         return markerId;
     }

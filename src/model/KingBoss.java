@@ -1,7 +1,6 @@
 package model;
-
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 public class KingBoss implements Serializable {
     private int allComId;
@@ -30,7 +29,7 @@ public class KingBoss implements Serializable {
 	private String mail ; /*メールアドレス*/
 	private String pass; /*パスワード*/
 	private int checkStudent ; /*生徒判別フラッグ*/
-    
+
     public int getAllComId() {
         return allComId;
     }

@@ -1,13 +1,13 @@
 package model;
-
 import java.io.Serializable;
+import java.sql.Date;
 
 public class MarkerCom implements Serializable {
     private int markerComId;            //マーカーコメントＩＤ
     private String markerComContents;   //マーカーコメント内容
     private int markerId;               //マーカーID
     private Date markerComDatetime;     //日付
-    
+
     public int getMarkerComId() {
         return markerComId;
     }
