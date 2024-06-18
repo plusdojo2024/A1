@@ -29,7 +29,7 @@ public class UsersDao {
 			// SELECT文を実行し、結果表を取得する
 			ResultSet rs = pStmt.executeQuery();
 
-			// ユーザーIDとパスワードが一致するユーザーがいたかどうかをチェックする
+			// ユーザーID(メールアドレス)とパスワードが一致するユーザーがいたかどうかをチェックする
 						rs.next();
 						if (rs.getInt("COUNT(*)") == 1) {
 							loginResult = true;
