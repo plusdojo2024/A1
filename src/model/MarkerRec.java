@@ -11,8 +11,21 @@ public class MarkerRec implements Serializable {
 	private int flagBad; /*フラグ　あまりわからない*/
 	private int flagVeryBad; /*フラグ　よくわからない*/
 	private Date markerRecDatetime; /*日付*/
-    
-    public int getMarkerRecNumber() {
+
+
+    public MarkerRec(int markerRecNumber, int userId, int markerId, int flagVeryGood, int flagGood, int flagBad,
+			int flagVeryBad, Date markerRecDatetime) {
+		super();
+		this.markerRecNumber = markerRecNumber;
+		this.userId = userId;
+		this.markerId = markerId;
+		this.flagVeryGood = flagVeryGood;
+		this.flagGood = flagGood;
+		this.flagBad = flagBad;
+		this.flagVeryBad = flagVeryBad;
+		this.markerRecDatetime = markerRecDatetime;
+	}
+	public int getMarkerRecNumber() {
         return markerRecNumber;
     }
     public void setMarkerRecNumber(int markerRecNumber) {
