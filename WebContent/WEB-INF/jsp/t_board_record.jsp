@@ -11,12 +11,21 @@
     <a href="/A1/MainServlet">
 <div class="boardpage" href= >板書</div>
     </a>
-<div class="tab">
-    <div class="tab1">
+    <div class="tab">
+        <a href="/A1/RecordServlet">
+        <div class="tab1">
+            板書履歴
+        </div>
+        </a>
+        <a href="/A1/MyMarkLevelServlet">
+        <div class="tab2">
+            理解度履歴
+        </div>
+        </a>
     </div>
-    <div class="tab2">
-    </div>
-</div>
+    <a href="/A1/AllMarkSearchServlet">
+            確認
+        </a>
 
 </body>
 </html>
