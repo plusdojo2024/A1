@@ -21,7 +21,7 @@ public class UsersDao {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SELECT文を準備する
-			String sql = "SELECT COUNT(*) FROM Uses WHERE id = ? AND pw = ?";
+			String sql = "SELECT COUNT(*) FROM Uses WHERE mail = ? AND pass = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, users.getMail());
 			pStmt.setString(2,users.getPass());
