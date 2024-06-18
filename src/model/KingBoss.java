@@ -30,7 +30,42 @@ public class KingBoss implements Serializable {
 	private String pass; /*パスワード*/
 	private int checkStudent ; /*生徒判別フラッグ*/
 
-    public int getAllComId() {
+    public KingBoss(int allComId, String allComContents, Date allComDatetime, int allComFavNum, String userId,
+			Date allComFavDatetime, int boardId, String boardContents, Date blackBoardDatetime, int markerId,
+			String markerContents, Date markerDatetime, int markerComId, String markerComContents,
+			Date markerComDatetime, int markerComNumber, int markerRecNumber, int flagVeryGood, int flagGood,
+			int flagBad, int flagVeryBad, Date markerRecDatetime, String userName, String mail, String pass,
+			int checkStudent) {
+		super();
+		this.allComId = allComId;
+		this.allComContents = allComContents;
+		this.allComDatetime = allComDatetime;
+		this.allComFavNum = allComFavNum;
+		this.userId = userId;
+		this.allComFavDatetime = allComFavDatetime;
+		this.boardId = boardId;
+		this.boardContents = boardContents;
+		this.blackBoardDatetime = blackBoardDatetime;
+		this.markerId = markerId;
+		this.markerContents = markerContents;
+		this.markerDatetime = markerDatetime;
+		this.markerComId = markerComId;
+		this.markerComContents = markerComContents;
+		this.markerComDatetime = markerComDatetime;
+		this.markerComNumber = markerComNumber;
+		this.markerRecNumber = markerRecNumber;
+		this.flagVeryGood = flagVeryGood;
+		this.flagGood = flagGood;
+		this.flagBad = flagBad;
+		this.flagVeryBad = flagVeryBad;
+		this.markerRecDatetime = markerRecDatetime;
+		this.userName = userName;
+		this.mail = mail;
+		this.pass = pass;
+		this.checkStudent = checkStudent;
+	}
+
+	public int getAllComId() {
         return allComId;
     }
     public void setAllComId(int allComId) {

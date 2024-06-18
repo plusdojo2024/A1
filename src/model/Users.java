@@ -9,7 +9,16 @@ public class Users implements Serializable{
 	private String pass; /*パスワード*/
 	private int checkStudent ; /*生徒判別フラッグ*/
 
-    public int getUserId() {
+
+    public Users(int userId, String userName, String mail, String pass, int checkStudent) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.mail = mail;
+		this.pass = pass;
+		this.checkStudent = checkStudent;
+	}
+	public int getUserId() {
         return userId;
     }
     public void setUserId(int userId) {

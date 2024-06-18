@@ -6,8 +6,16 @@ public class Marker implements Serializable {
     private int markerId;           //マーカーID
     private String markerContents;  //マーカーの内容
     private int boardId;            //板書番号
-    private Date markerDatetime;    //日付
+	private Date markerDatetime;    //日付
 
+
+	public Marker(int markerId, String markerContents, int boardId, Date markerDatetime) {
+		super();
+		this.markerId = markerId;
+		this.markerContents = markerContents;
+		this.boardId = boardId;
+		this.markerDatetime = markerDatetime;
+	}
 
     public int getMarkerId() {
         return markerId;

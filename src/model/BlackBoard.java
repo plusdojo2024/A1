@@ -8,7 +8,14 @@ public class BlackBoard implements Serializable {
     private Date blackBoardDatetime;    //日付
 
 
-    public int getBoardId() {
+    public BlackBoard(int boardId, String boardContents, Date blackBoardDatetime) {
+		super();
+		this.boardId = boardId;
+		this.boardContents = boardContents;
+		this.blackBoardDatetime = blackBoardDatetime;
+	}
+
+	public int getBoardId() {
         return boardId;
     }
 
