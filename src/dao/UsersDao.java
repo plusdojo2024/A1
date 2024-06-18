@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import model.Users;
 
-public class UsersDao {
+public class UsersDAO {
 	public boolean isLoginOK(Users users) {
 		Connection conn = null;
 		boolean loginResult = false;

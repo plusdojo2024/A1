@@ -11,7 +11,7 @@ import java.util.List;
 import model.AllComFav;
 
 
-public class AllComFavDao {
+public class AllComFavDAO {
 
 	// 全体コメントをセレクト
 	public List<AllComFav> select(AllComFav allComFav) {

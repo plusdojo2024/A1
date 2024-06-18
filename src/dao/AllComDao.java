@@ -11,7 +11,7 @@ import java.util.List;
 import model.AllCom;
 
 
-public class AllComDao {
+public class AllComDAO {
 
 	// 全体コメントをセレクト
 	public List<AllCom> select(AllCom allCom) {

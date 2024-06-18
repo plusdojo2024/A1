@@ -12,7 +12,7 @@ import java.util.List;
 
 import model.BlackBoard;
 
-public class BlackBoardDao {
+public class BlackBoardDAO {
 
 	// 引数paramで検索項目を指定し、検索結果のリストを返す
 	public List<BlackBoard> select(BlackBoard blackBoard){

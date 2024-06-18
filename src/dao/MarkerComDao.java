@@ -11,7 +11,7 @@ import java.util.List;
 import model.MarkerCom;
 
 
-public class MarkerComDao {
+public class MarkerComDAO {
 
 	// 全体コメントをセレクト
 	public List<MarkerCom> select(MarkerCom markerCom) {
