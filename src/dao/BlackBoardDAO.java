@@ -5,9 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import model.BlackBoard;
@@ -27,62 +25,29 @@ public class BlackBoardDAO {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SQL文を準備する
-			String sql = "SELECT * FROM Bc WHERE name LIKE ? AND address LIKE ? ORDER BY number";
+			String sql = "SELECT * FROM black_board";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			// SQL文を完成させる
-			if (card.getName() != null) {
-				pStmt.setString(1, "%" + card.getName() + "%");
-			}
-			else {
-				pStmt.setString(1, "%");
-			}
-			if (card.getAddress() != null) {
-				pStmt.setString(2, "%" + card.getAddress() + "%");
-			}
-			else {
-				pStmt.setString(2, "%");
-			}
 
 			// SQL文を実行し、結果表を取得する
 			ResultSet rs = pStmt.executeQuery();
 
 			// 結果表をコレクションにコピーする
 			while (rs.next()) {
-				Bc record = new Bc(
-				rs.getInt("number"),
-				rs.getString("company"),
-				rs.getString("department"),
-				rs.getString("position"),
-				rs.getString("name"),
-				rs.getString("ruby"),
-				rs.getString("zipcode"),
-				rs.getString("address"),
-				rs.getString("phone"),
-				rs.getString("fax"),
-				rs.getString("email"),
-				rs.getString("food"),
-				new Date(rs.getDate("regi").getTime()), //こいつでSQLのDateをJavaのDateに変える。
-
-				rs.getString("remarks")
+				BlackBoard record = new BlackBoard(
+				rs.getInt("boardId"),
+				rs.getString("boardContents"),
+				rs.getDate("boardDate")
 				);
-
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-				Date sqlDate =rs.getDate("regi");
-				String formattedDate = formatter.format(sqlDate);
-				Date utilDate = formatter.parse(formattedDate);
-				System.out.println(utilDate+"ssss");
-				record.setRegi(formatter.parse(formattedDate));
-
-				cardList.add(record);
+				blackBoardList.add(record);
 			}
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			cardList = null;
+			blackBoardList = null;
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			cardList = null;
+			blackBoardList = null;
 		}
 		finally {
 			// データベースを切断
@@ -92,13 +57,58 @@ public class BlackBoardDAO {
 				}
 				catch (SQLException e) {
 					e.printStackTrace();
-					cardList = null;
+					blackBoardList = null;
 				}
 			}
 		}
 
 		// 結果を返す
-		return cardList;
+		return blackBoardList;
 	}
 
+public boolean insert(BlackBoard blackBoard) {
+	Connection conn = null;
+	boolean result = false;
+
+	try {
+		// JDBCドライバを読み込む
+		Class.forName("org.h2.Driver");
+
+		// データベースに接続する
+		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+		// SQL文を準備する
+		String sql = "INSERT INTO black_board VALUES (NULL, ?, ?)";
+		PreparedStatement pStmt = conn.prepareStatement(sql);
+
+		// SQL文を完成させる
+		pStmt.setString(1, blackBoard.getBoardContents());
+		pStmt.setDate(2, blackBoard.getBlackBoardDatetime());
+
+		// SQL文を実行する
+		if (pStmt.executeUpdate() == 1) {
+			result = true;
+		}
+	}
+	catch (SQLException e) {
+		e.printStackTrace();
+	}
+	catch (ClassNotFoundException e) {
+		e.printStackTrace();
+	}
+	finally {
+		// データベースを切断
+		if (conn != null) {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// 結果を返す
+	return result;
+}
 }
