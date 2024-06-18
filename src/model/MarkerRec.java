@@ -1,5 +1,66 @@
 package model;
+import java.io.Serializable;
+import java.util.Date;
 
-public class MarkerRec {
+public class MarkerRec implements Serializable {
+	private int markerRecNumber ; /* 理解度リアクション通し番号 */
+	private int userId ; /*ユーザー通し番号*/
+	private int markerId; /*マーカーID*/
+	private int flagVeryGood; /*フラグよくわかった*/
+	private int flagGood; /*フラグ　わかった*/
+	private int flagBad; /*フラグ　あまりわからない*/
+	private int flagVeryBad; /*フラグ　よくわからない*/
+	private Date markerRecDatetime; /*日付*/
     
+    public int getMarkerRecNumber() {
+        return markerRecNumber;
+    }
+    public void setMarkerRecNumber(int markerRecNumber) {
+        this.markerRecNumber = markerRecNumber;
+    }
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    public int getMarkerId() {
+        return markerId;
+    }
+    public void setMarkerId(int markerId) {
+        this.markerId = markerId;
+    }
+    public int getFlagVeryGood() {
+        return flagVeryGood;
+    }
+    public void setFlagVeryGood(int flagVeryGood) {
+        this.flagVeryGood = flagVeryGood;
+    }
+    public int getFlagGood() {
+        return flagGood;
+    }
+    public void setFlagGood(int flagGood) {
+        this.flagGood = flagGood;
+    }
+    public int getFlagBad() {
+        return flagBad;
+    }
+    public void setFlagBad(int flagBad) {
+        this.flagBad = flagBad;
+    }
+    public int getFlagVeryBad() {
+        return flagVeryBad;
+    }
+    public void setFlagVeryBad(int flagVeryBad) {
+        this.flagVeryBad = flagVeryBad;
+    }
+    public Date getMarkerRecDatetime() {
+        return markerRecDatetime;
+    }
+    public void setMarkerRecDatetime(Date markerRecDatetime) {
+        this.markerRecDatetime = markerRecDatetime;
+    }
+
+
+
 }
