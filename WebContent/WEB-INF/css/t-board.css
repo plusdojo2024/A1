@@ -1,0 +1,344 @@
+* {
+    margin: 0;
+    padding:0;
+    box-sizing:border-box;}
+body{
+    background:rgba(254, 255, 239, 1)
+}
+.center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+a:link{
+    text-decoration: none;
+    color:black;
+}
+li{
+    list-style: none; /* 点を消す */
+    padding: 0; /* パディングを削除 */
+}
+/* 板書 */
+.board{
+    width:45%;
+    height:80%;
+    background-color: white;
+    border:1px solid rgba(48, 133, 195, 1);
+    position:absolute;
+    left:50%;
+    margin-top:8%;
+    transform: translate(-50%);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.text{
+    width:99%;
+    height:99%;
+    border: none;
+    resize: none;
+    outline: none;
+}
+/* 左上 */
+.com{
+    background-color: white;
+    width:26%;
+    height:38%;
+    border:1px solid rgba(48, 133, 195, 1);
+    position:absolute;
+    margin-top:8%;
+    top:0px;
+    left:1%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.marklivecom1{
+    position: relative;
+    width:100%;
+    height:60px;
+    border:1px solid rgba(48, 133, 195, 1);
+    margin-top:10px;
+}
+.marklivecom2{
+    position: relative;
+    width:350px;
+    height:60px;
+    border:1px solid rgba(48, 133, 195, 1);
+    margin-top:10px;
+}
+.marklivecom3{
+    position: relative;
+    width:350px;
+    height:60px;
+    border:1px solid rgba(48, 133, 195, 1);
+    margin-top:10px;
+}
+.markcombox{
+    list-style: none;
+}
+.marktext{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.markre{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform: translate(-50%,-50%);
+    font-size: 2rem;
+    
+}
+/* 左下 */
+.allcom{
+    background-color: white;
+    width:26%;
+    height:40%;
+    border:1px solid rgba(48, 133, 195, 1);
+    position:absolute;
+    top:57%;
+    left:1%;
+}
+.allcomtext{
+    bottom: 10%;
+    margin:1%;
+    z-index:2;
+}
+.allcombtn{
+    bottom: 10%;
+    z-index:2;
+}
+.allcomform{
+    position: absolute;
+    bottom: 10%;
+    left:47%;
+    transform: translate(-50%);
+}
+.allcomtext{
+    position: absolute;
+    left:40%;
+    top: 10%;
+    
+}
+.allcomtext p{
+    margin:4px;
+}
+/* 右 */
+.marker{
+    background-color: white;
+    width:26%;
+    height:80%;
+    border:1px solid rgba(48, 133, 195, 1);
+    position:absolute;
+    margin-top:8%;
+    top:0px;
+    right:1%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.newDiv {
+    background-color: white;
+    width: 26%;
+    height: 0;
+    border: 1px solid rgba(48, 133, 195, 1);
+    position: absolute;
+    bottom: 3%;
+    right: 1%;
+    overflow: hidden;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.newDiv.big {
+    animation: growUp 0.3s forwards;
+    z-index: 10;
+}
+.newDiv.close {
+    animation: slideDown 0.3s forwards;
+    z-index: 10;
+}
+#newDivText{
+    position:absolute;
+    left:50%;
+    top:5%;
+    transform: translate(-50%);
+}
+.comform{
+
+}
+
+.combtn{
+    bottom: 10%;
+    z-index:2;
+}
+.comform{
+    position: absolute;
+    bottom: 10%;
+    left:50%;
+    transform: translate(-50%);
+}
+#myChart{
+    scale:70%;
+}
+.markercontents{
+    position:absolute;
+    width:120%;
+    height:200px;
+    left:50%;
+    transform: translate(-50%);
+}
+#markerList{
+    position:absolute;
+    left:10%;
+
+}
+/* 上 */
+.boardcomit{
+    background-color: white;
+    position:absolute;
+    width:15%;
+    height:10%;
+    border:1px solid rgba(48, 133, 195, 1);
+    margin:1%;
+    top:2%;
+    left:65%;
+}
+.pagechange{
+    background-color: white;
+    position:absolute;
+    width:7%;
+    height:10%;
+    border:1px solid rgba(48, 133, 195, 1);
+    top:3%;
+    left:85%;
+}
+.headbtn{
+    position:absolute;
+    top:5%;
+    left:50%;
+    transform: translate(-50%);
+}
+.markerbtn{
+    background: lightblue;
+    color: #fff;
+    width:150px;
+    height: 70px;
+    border: 0;
+    font-size: 1.3rem;
+    border-radius: 5px;
+    font-weight: 900;
+    z-index:1;
+}
+.markerbtn:hover {
+    background: lightcoral;
+    cursor: pointer;
+    }
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #f4f4f4;
+    margin: 5% auto;
+    width: 50%;
+    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),0 7px 20px 0 rgba(0,0,0,0.17);
+    animation-name: modalopen;
+    animation-duration: 1s;
+    position:relative;
+    top:20px;
+}
+
+@keyframes modalopen {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+.modal-header h1 {
+    margin: 1rem 0;
+}
+
+.modal-header {
+    background: lightblue;
+    padding: 3px 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modalClose {
+    font-size: 2rem;
+}
+
+.modalClose:hover {
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 10px 20px;
+    color: black;
+}
+.highlight {
+    position: relative;
+    background-color: yellow;
+}
+
+.comment {
+    display: none;
+    position: absolute;
+    text-align: center;
+    width:80px;
+    height:20px;
+    top: -20px; /* spanタグから20px上に表示 */
+    left: 0;
+    background-color: black;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    z-index: 10;
+}
+
+.highlight:hover .comment {
+    display: block;
+}
+
+.marker {
+    transition: height 0.3s ease;
+    overflow: hidden;
+}
+.marker.small {
+    height: 40%; /* markerの高さを半分に */
+}
+@keyframes growUp {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        height: 40vh;
+        opacity: 1;
+    }
+}
+@keyframes slideDown {
+    from {
+        height: 40vh;
+        opacity: 1;
+    }
+    to {
+        height: 0;
+        opacity: 0;
+    }
+}
+
