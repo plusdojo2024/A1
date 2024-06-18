@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="/A1/css/login.css">
 </head>
 <body>
     <div class="box">
@@ -13,15 +13,15 @@
             <h2 class="login">くらすぼーど</h2>
         </div>
 <form id="login_form" method="post" action="/A1/MainServlet" class="form">
-    
+
         <label>User ID<br>
         <input type="text" name="id">
         </label><br>
-        
+
         <label>Pass word<br>
         <input type="password" name="pw">
         </label><br>
-        
+
         <input type="submit" name="submit" value="log in">
         <input type="reset" name="reset" value="reset"><br>
         <span id="error_message">
