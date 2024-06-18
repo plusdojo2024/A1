@@ -3,11 +3,11 @@ import java.io.Serializable;
 
 public class MarkerComFav implements Serializable{
 	private int markerComNumber; /*理解度コメントリアクション通し番号*/
-	private int userId; /*ユーザー通し番号*/
+	private String userId; /*ユーザー通し番号*/
 	private int markerComId; /*マーカーコメントＩＤ*/
 
 
-    public MarkerComFav(int markerComNumber, int userId, int markerComId) {
+    public MarkerComFav(int markerComNumber, String userId, int markerComId) {
 		super();
 		this.markerComNumber = markerComNumber;
 		this.userId = userId;
@@ -19,10 +19,10 @@ public class MarkerComFav implements Serializable{
     public void setMarkerComNumber(int markerComNumber) {
         this.markerComNumber = markerComNumber;
     }
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
     public int getMarkerComId() {
