@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/UserRegistServlet")
-public class UserRegistServlet extends HttpServlet{
+@WebServlet("/SUserRegistServlet")
+public class SUserRegistServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 
