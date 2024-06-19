@@ -6,14 +6,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
-<link rel="stylesheet" href="css/t-board.css">
+<link rel="stylesheet" href="css/s-board.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
 	<header>
 		<div class="headbtn">
-			<button class="markerbtn">先生用</button>
+			<button class="markerbtn">生徒用</button>
 			<button id="modalOpen" class="markerbtn">マーカー</button>
 			<button class="markerbtn">
 				<span class=center></span>ファイル添付
@@ -27,6 +27,7 @@
 				<div class="modal-body">
 					<div class="contents" id="contents">
 						<!-- ここにテキストエリアの内容が表示されます -->
+
 					</div>
 					<form action="YourServlet" method="POST" id="enqueteForm">
 						<div class="enquete" id="enquete"></div>
@@ -73,6 +74,7 @@
 	<div class="allcom">
 		<div class="allcomtext" id="allcomdiv">
 			<!-- ここにコメントを表示 -->
+
 		</div>
 		<div class="allcomform">
 			<input type="text" name="allComContents" class="allcomsend"
@@ -91,9 +93,12 @@
 	</div>
 
 	<div class="newDiv" id="newDiv">
-		<span class="closeBtn">×</span>
-		<p id="newDivText"></p>
-		<div class="markerlevel"></div>
+    <span class="closeBtn">×</span>
+    <p id="newDivText"></p>
+    <div>
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
 		<div class="comform">
 			<!--<input type="text" name="sendcomtext" class="comsend">
             <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
@@ -329,7 +334,6 @@
             dataType: 'json',
             data: postData,
             success: function(data) {
-                alert("データベースに追加されました！");
                 document.getElementById("test").innerText = data.message;
             },
             error: function() {
@@ -349,10 +353,12 @@
                 console.log(data); // コンソールにデータを表示
                 let allcomdiv = document.getElementById('allcomdiv');
                 allcomdiv.innerHTML = ''; // 既存の内容をクリア
-                data.reverse().forEach(function(comment) { // 最新のコメントが上に来るように逆順にする
+                //data.reverse().
+                data.forEach(function(comment) { // 最新のコメントが上に来るように逆順にする
                     let p = document.createElement('p');
                     p.textContent = comment.allComContents + ' ♡';
                     allcomdiv.appendChild(p);
+                    allcomdiv.appendChild(document.createElement('hr'));
                 });
             },
             error: function() {
