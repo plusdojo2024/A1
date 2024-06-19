@@ -78,7 +78,7 @@ public boolean insert(BlackBoard blackBoard) {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "INSERT INTO black_board VALUES (NULL, ?, ?)";
+		String sql = "INSERT INTO black_board VALUES (NULL, ?, CURRENT_TIMESTAMP)";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
