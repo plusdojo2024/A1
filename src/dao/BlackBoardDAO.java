@@ -17,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +91,7 @@ public class BlackBoardDAO {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "INSERT INTO black_board VALUES (null, now(),? )";
+		String sql = "INSERT INTO black_board VALUES (null,  ,? )";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
@@ -226,9 +227,10 @@ public ArrayList<BlackBoard> selectDate(BlackBoard blackBoard) {
 
 
 //板書履歴の日付をクリックした際に、過去板書の中身を持ってくる
-public boolean selectBoard(BlackBoard blackBoard) {
+public ArrayList<BlackBoard> selectBoard(Timestamp blackBoard) {
 	Connection conn = null;
-	boolean result = false;
+	ArrayList<BlackBoard> blackBoardList= new ArrayList<BlackBoard>();
+
 
 	try {
 		// JDBCドライバを読み込む
@@ -243,18 +245,17 @@ public boolean selectBoard(BlackBoard blackBoard) {
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
-		pStmt.setDate(1 , blackBoard.getBlackBoardDatetime());
+		pStmt.setTimestamp(1, blackBoard);
 
 		// SQL文を実行する
-		if (pStmt.executeUpdate() == 1) {
-			result = true;
-		}
-	}
-	catch (SQLException e) {
+		pStmt.executeUpdate();
+
+	}catch(SQLException e) {
 		e.printStackTrace();
-	}
-	catch (ClassNotFoundException e) {
+		System.out.println("SQLのエラーだよ！");
+	}catch(ClassNotFoundException e) {
 		e.printStackTrace();
+		System.out.println("Class.forNameのところが怪しいよ！");
 	}
 	finally {
 		// データベースを切断
@@ -269,7 +270,7 @@ public boolean selectBoard(BlackBoard blackBoard) {
 	}
 
 	// 結果を返す
-	return result;
+	return blackBoardList;
 }
 
 
