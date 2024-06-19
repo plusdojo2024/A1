@@ -1,3 +1,15 @@
+/*
+//板書の内容を持ってくる
+select
+//講師による板書への加筆を行えるようにする。
+update
+//板書履歴に日付一覧を表示するために、今までの日付を持ってくる。
+selectDate
+//板書履歴の日付をクリックした際に、過去板書の中身を持ってくる
+selectBoard
+
+*/
+
 package dao;
 
 import java.sql.Connection;
@@ -12,8 +24,8 @@ import model.BlackBoard;
 
 public class BlackBoardDAO {
 
-	// 引数paramで検索項目を指定し、検索結果のリストを返す
-	public List<BlackBoard> select(BlackBoard blackBoard){
+	//板書の内容を持ってくる
+	public List<BlackBoard> select(){
 		Connection conn = null;
 		List<BlackBoard> blackBoardList = new ArrayList<BlackBoard>();
 
