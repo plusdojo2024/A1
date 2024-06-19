@@ -7,7 +7,7 @@ public class KingBoss implements Serializable {
     private String allComContents;
     private Date allComDatetime;
     private int allComFavNum;
-    private String userId;
+    private int userId;
     private Date allComFavDatetime;
     private int boardId;
     private String boardContents;
@@ -30,7 +30,7 @@ public class KingBoss implements Serializable {
 	private String pass; /*パスワード*/
 	private int checkStudent ; /*生徒判別フラッグ*/
 
-    public KingBoss(int allComId, String allComContents, Date allComDatetime, int allComFavNum, String userId,
+    public KingBoss(int allComId, String allComContents, Date allComDatetime, int allComFavNum, int userId,
 			Date allComFavDatetime, int boardId, String boardContents, Date blackBoardDatetime, int markerId,
 			String markerContents, Date markerDatetime, int markerComId, String markerComContents,
 			Date markerComDatetime, int markerComNumber, int markerRecNumber, int flagVeryGood, int flagGood,
@@ -89,10 +89,10 @@ public class KingBoss implements Serializable {
     public void setAllComFavNum(int allComFavNum) {
         this.allComFavNum = allComFavNum;
     }
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
     public Date getAllComFavDatetime() {

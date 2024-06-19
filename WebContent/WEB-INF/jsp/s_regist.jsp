@@ -12,14 +12,14 @@
         <div class="content">
             <h2 class="login">くらすぼーど</h2>
         </div>
-<form id="login_form" method="post" action="/simpleBC/LoginServlet" class="form">
-    
+<form id="login_form" method="post" action="/A1/SUserRegistServlet" class="form">
+
         <label>名前<br>
         <input type="text" name="id">
         </label><br>
-        
+
         <label>メールアドレス<br>
-        <input type="password" name="pw">
+        <input type="text" name="mail">
         </label><br>
 
         <label>Pass word<br>
@@ -31,6 +31,9 @@
             <input type="hidden" name="jobflag" value="0">
         </span>
   </form>
+  <% if (request.getAttribute("error") != null) { %>
+                <%= request.getAttribute("error") %>
+            <% } %>
     </div>
 </body>
 </html>

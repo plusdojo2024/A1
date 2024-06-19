@@ -9,7 +9,11 @@ public class Users implements Serializable{
 	private String pass; /*パスワード*/
 	private int checkStudent ; /*生徒判別フラッグ*/
 
-
+	public Users(String mail,String pass){
+		super();
+		this.mail = mail;
+		this.pass = pass;
+	}
     public Users(int userId, String userName, String mail, String pass, int checkStudent) {
 		super();
 		this.userId = userId;

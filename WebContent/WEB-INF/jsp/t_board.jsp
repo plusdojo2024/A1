@@ -1,93 +1,109 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="css/t-board.css">
-    
-    </head>
-    <body>
-        <header>
-            <div class="headbtn">
-                <button class="markerbtn">コメント</button>
-                <button id="modalOpen" class="markerbtn">マーカー</button>
-                <button class="markerbtn"><span class=center></span>ファイル添付</button>
-            </div>
-            <div id="easyModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span class="modalClose">×</span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="contents" id="contents">
-                            <!-- ここにテキストエリアの内容が表示されます -->
-                        </div>
-                        <form action="YourServlet" method="POST" id="enqueteForm">
-                            <div class="enquete" id="enquete"></div>
-                            <button type="submit" id="submitBtn" class="btn btn-primary mt-3">送信</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-    
-            <div class="boardcomit"><p class="center">板書切り替え</p></div>
-            <a href="/A1/RecordServlet">
-            <div class="pagechange"><p class="center">履歴</p></div>
-        </a>
-        </header>
-        <div class="board">
-            <textarea name="text" class="text" id="textarea"></textarea>
-        </div>
-        <div class="com">
-            <ul class="markcomlive">
-                <li class="markcombox">
-                    <div class="marklivecom1"><p class="marktext">こんにちは</p><p class=markre>♡</p></div>
-                </li>
-                <li class="markcombox">
-                    <div class="marklivecom2"><p class="marktext">おはよう</p><p class=markre>♡</p></div>
-                </li>
-                <li class="markcombox">
-                    <div class="marklivecom3"><p class="marktext">さよなら</p><p class=markre>♡</p></div>
-                </li>
-            </ul>
-        </div>
-        <div class="allcom">
-            <div class="allcomtext">
-                <p>こんにちは ♡</p>
-                <p>こんにちは</p>
-                <p>こんにちは</p>
-            </div>
-            <div class="allcomform">
-                <input type="text" name="allcomtext" class="allcomsend">
-                <input type="submit" id="search" name="submit" value="送信" class="allcombtn">
-            </div>
-        </div>
-        <div class="marker" id="marker">
-            <div class="markercontents">
-            <ul id="markerList"></ul>
-            <div>
-                <canvas id="myChart"></canvas>
-            </div>
-            </div>
-    
-        </div>
-    
-        <div class="newDiv" id="newDiv">
-            <span class="closeBtn">×</span>
-            <p id="newDivText"></p>
-            <div class="markerlevel"></div>
-        <div class="comform">
-            <!--<input type="text" name="sendcomtext" class="comsend">
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="stylesheet" href="css/t-board.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+	<header>
+		<div class="headbtn">
+			<button class="markerbtn">先生用</button>
+			<button id="modalOpen" class="markerbtn">マーカー</button>
+			<button class="markerbtn">
+				<span class=center></span>ファイル添付
+			</button>
+		</div>
+		<div id="easyModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="modalClose">×</span>
+				</div>
+				<div class="modal-body">
+					<div class="contents" id="contents">
+						<!-- ここにテキストエリアの内容が表示されます -->
+					</div>
+					<form action="YourServlet" method="POST" id="enqueteForm">
+						<div class="enquete" id="enquete"></div>
+						<button type="submit" id="submitBtn" class="btn btn-primary mt-3">送信</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="boardcomit">
+			<p class="center">板書切り替え</p>
+		</div>
+		<a href="/A1/RecordServlet">
+		<div class="pagechange">
+			<p class="center">履歴</p>
+		</div>
+		</a>
+	</header>
+	<div class="board">
+		<textarea name="text" class="text" id="textarea"></textarea>
+	</div>
+	<div class="com">
+		<ul class="markcomlive">
+			<li class="markcombox">
+				<div class="marklivecom1">
+					<p class="marktext">こんにちは</p>
+					<p class=markre>♡</p>
+				</div>
+			</li>
+			<li class="markcombox">
+				<div class="marklivecom2">
+					<p class="marktext">おはよう</p>
+					<p class=markre>♡</p>
+				</div>
+			</li>
+			<li class="markcombox">
+				<div class="marklivecom3">
+					<p class="marktext">さよなら</p>
+					<p class=markre>♡</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="allcom">
+		<div class="allcomtext" id="allcomdiv">
+			<!-- ここにコメントを表示 -->
+		</div>
+		<div class="allcomform">
+			<input type="text" name="allComContents" class="allcomsend"
+				id="allcom"> <input type="button" name="submit" value="送信"
+				class="allcombtn" onclick="goAjax()">
+		</div>
+	</div>
+	<div class="marker" id="marker">
+		<div class="markercontents">
+			<ul id="markerList"></ul>
+			<div>
+				<canvas id="myChart"></canvas>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="newDiv" id="newDiv">
+		<span class="closeBtn">×</span>
+		<p id="newDivText"></p>
+		<div class="markerlevel"></div>
+		<div class="comform">
+			<!--<input type="text" name="sendcomtext" class="comsend">
             <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
-        </div>
-    </div>
-    </body>
-    </html>
-    
-    <script>
+		</div>
+	</div>
+
+</body>
+</html>
+
+<script>
     // 使用するidの取得
     // modalを開くためのボタン
     const buttonOpen = document.getElementById('modalOpen');
@@ -105,7 +121,7 @@
     const newDivText = document.getElementById('newDivText');
     // マーカーで指定された単語をクリックしたときに出てくるdivを閉じるためのバツ
     const closeBtn = document.querySelector('.newDiv .closeBtn');
-    
+
     // ボタンがクリックされた時
     buttonOpen.addEventListener('click', modalOpen);
     function modalOpen() {
@@ -114,13 +130,13 @@
         contents.innerHTML = text;
         modal.style.display = 'block';
     }
-    
+
     // バツ印がクリックされた時
     buttonClose.addEventListener('click', modalClose);
     function modalClose() {
         modal.style.display = 'none';
     }
-    
+
     // モーダルコンテンツ以外がクリックされた時
     addEventListener('click', outsideClose);
     function outsideClose(e) {
@@ -128,17 +144,17 @@
             modal.style.display = 'none';
         }
     }
-    
+
     document.addEventListener('DOMContentLoaded', function() {
         var enquete = document.getElementById('enquete');
-    
+
         contents.addEventListener('mouseup', function(event) {
             // テキストの選択範囲を取得
             var selection = window.getSelection();
             if (!selection.isCollapsed) {
                 var range = selection.getRangeAt(0);
                 var selectedText = selection.toString();
-    
+
                 // 選択された範囲を包むspan要素を作成
                 var span = document.createElement('span');
                 span.classList.add('highlight');
@@ -147,9 +163,9 @@
                 var comment = document.createElement('div');
                 comment.classList.add('comment');
                 comment.textContent = 'あいうえお'; // 初期コメント
-    
+
                 span.appendChild(comment);
-    
+
                 // 選択されたテキストをチェックボックスとしてenqueteに追加
                 var checkboxWrapper = document.createElement('div');
                 var checkbox = document.createElement('input');
@@ -158,11 +174,11 @@
                 checkbox.value = selectedText;
                 checkbox.checked = true; // チェックボックスを最初からチェックした状態にする
                 checkboxWrapper.appendChild(checkbox);
-    
+
                 var label = document.createElement('label');
                 label.textContent = selectedText;
                 checkboxWrapper.appendChild(label);
-    
+
                 // 削除ボタンを追加
                 var deleteButton = document.createElement('button');
                 deleteButton.textContent = '削除';
@@ -174,14 +190,14 @@
                     span.outerHTML = span.innerHTML;
                 });
                 checkboxWrapper.appendChild(deleteButton);
-    
+
                 enquete.appendChild(checkboxWrapper);
-    
+
                 // 選択を解除
                 selection.removeAllRanges();
             }
         });
-    
+
         // 送信ボタンが押されたときの処理
         var submitBtn = document.getElementById('submitBtn');
         submitBtn.addEventListener('click', function(event) {
@@ -206,7 +222,7 @@
             });
             enquete.innerHTML = ''; // フォームをクリア
         });
-    
+
         // newDivのバツボタンが押されたときの処理
         closeBtn.addEventListener('click', function() {
             newDiv.classList.remove('big'); // bigクラスを削除
@@ -214,7 +230,7 @@
             var markerDiv = document.getElementById('marker');
             markerDiv.classList.remove('small'); // markerのサイズを元に戻す
         });
-    
+
         // アニメーション終了時にnewDivを非表示にする処理を追加
         newDiv.addEventListener('animationend', function() {
             if (newDiv.classList.contains('close')) {
@@ -224,19 +240,19 @@
         });
     });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
     const ctx = document.getElementById('myChart').getContext('2d');
-    
+
     // 各カテゴリのデータ
     const data = [30, 3, 3, 5,];
-    
+
     // データの合計を計算
     const total = data.reduce((sum, value) => sum + value, 0);
-    
+
     // 各データの割合を計算
     const percentages = data.map(value => (value / total) * 100);
-    
+
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -266,7 +282,7 @@
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderWidth: 1
                 },
-                
+
             ]
         },
         options: {
@@ -302,3 +318,52 @@
         }
     });
     </script>
+<script>
+    function goAjax() {
+        let allcom = document.getElementById('allcom').value;
+        let postData = { data1: allcom };
+
+        $.ajax({
+            url: '/A1/AllComServlet',
+            type: 'POST',
+            dataType: 'json',
+            data: postData,
+            success: function(data) {
+                alert("データベースに追加されました！");
+                document.getElementById("test").innerText = data.message;
+            },
+            error: function() {
+                alert("データの追加に失敗しました。");
+            }
+        });
+    }
+
+    // 1秒ごとに非同期でデータを取得し、画面を更新する
+    function fetchComments() {
+        $.ajax({
+            url: '/A1/MainServlet',
+            type: 'GET',
+            dataType: 'json',
+            data: { data1: 0 },
+            success: function(data) {
+                console.log(data); // コンソールにデータを表示
+                let allcomdiv = document.getElementById('allcomdiv');
+                allcomdiv.innerHTML = ''; // 既存の内容をクリア
+                data.reverse().forEach(function(comment) { // 最新のコメントが上に来るように逆順にする
+                    let p = document.createElement('p');
+                    p.textContent = comment.allComContents + ' ♡';
+                    allcomdiv.appendChild(p);
+                });
+            },
+            error: function() {
+                console.error('データの取得に失敗しました。');
+            }
+        });
+    }
+
+    // ページロード時に初回のデータ取得を行う
+    $(document).ready(function() {
+        fetchComments();
+        setInterval(fetchComments, 1000); // 1秒ごとにデータを取得
+    });
+</script>

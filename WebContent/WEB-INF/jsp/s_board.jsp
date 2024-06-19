@@ -1,93 +1,114 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="css/t-board.css">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="stylesheet" href="css/s-board.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    </head>
-    <body>
-        <header>
-            <div class="headbtn">
-                <button class="markerbtn">コメント</button>
-                <button id="modalOpen" class="markerbtn">マーカー</button>
-                <button class="markerbtn"><span class=center></span>ファイル添付</button>
-            </div>
-            <div id="easyModal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span class="modalClose">×</span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="contents" id="contents">
-                            <!-- ここにテキストエリアの内容が表示されます -->
-                        </div>
-                        <form action="YourServlet" method="POST" id="enqueteForm">
-                            <div class="enquete" id="enquete"></div>
-                            <button type="submit" id="submitBtn" class="btn btn-primary mt-3">送信</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+</head>
+<body>
+	<header>
+		<div class="headbtn">
+			<button class="markerbtn">生徒用</button>
+			<button id="modalOpen" class="markerbtn">マーカー</button>
+			<button class="markerbtn">
+				<span class=center></span>ファイル添付
+			</button>
+		</div>
+		<div id="easyModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="modalClose">×</span>
+				</div>
+				<div class="modal-body">
+					<div class="contents" id="contents">
+						<!-- ここにテキストエリアの内容が表示されます -->
 
-            <div class="boardcomit"><p class="center">板書切り替え</p></div>
-            <div class="pagechange"><p class="center">履歴</p></div>
-        </header>
-        <div class="board">
-            <textarea name="text" class="text" id="textarea"></textarea>
-        </div>
-        <div class="com">
-            <ul class="markcomlive">
-                <li class="markcombox">
-                    <div class="marklivecom1"><p class="marktext">こんにちは</p><p class=markre>♡</p></div>
-                </li>
-                <li class="markcombox">
-                    <div class="marklivecom2"><p class="marktext">おはよう</p><p class=markre>♡</p></div>
-                </li>
-                <li class="markcombox">
-                    <div class="marklivecom3"><p class="marktext">さよなら</p><p class=markre>♡</p></div>
-                </li>
-            </ul>
-        </div>
-        <div class="allcom">
-            <div class="allcomtext">
-                <p>こんにちは ♡</p>
-                <p>こんにちは</p>
-                <p>こんにちは</p>
-                <div id="test"></div>
-            </div>
-    <div class="allcomform">
-        <input type="text" name="allComContents" class="allcomsend" id="allcom">
-        <input type="button" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
+					</div>
+					<form action="YourServlet" method="POST" id="enqueteForm">
+						<div class="enquete" id="enquete"></div>
+						<button type="submit" id="submitBtn" class="btn btn-primary mt-3">送信</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="boardcomit">
+			<p class="center">板書切り替え</p>
+		</div>
+		<a href="/A1/RecordServlet">
+		<div class="pagechange">
+			<p class="center">履歴</p>
+		</div>
+		</a>
+	</header>
+	<div class="board">
+		<textarea name="text" class="text" id="textarea"></textarea>
+	</div>
+	<div class="com">
+		<ul class="markcomlive">
+			<li class="markcombox">
+				<div class="marklivecom1">
+					<p class="marktext">こんにちは</p>
+					<p class=markre>♡</p>
+				</div>
+			</li>
+			<li class="markcombox">
+				<div class="marklivecom2">
+					<p class="marktext">おはよう</p>
+					<p class=markre>♡</p>
+				</div>
+			</li>
+			<li class="markcombox">
+				<div class="marklivecom3">
+					<p class="marktext">さよなら</p>
+					<p class=markre>♡</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="allcom">
+		<div class="allcomtext" id="allcomdiv">
+			<!-- ここにコメントを表示 -->
+
+		</div>
+		<div class="allcomform">
+			<input type="text" name="allComContents" class="allcomsend"
+				id="allcom"> <input type="button" name="submit" value="送信"
+				class="allcombtn" onclick="goAjax()">
+		</div>
+	</div>
+	<div class="marker" id="marker">
+		<div class="markercontents">
+			<ul id="markerList"></ul>
+			<div>
+				<canvas id="myChart"></canvas>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="newDiv" id="newDiv">
+    <span class="closeBtn">×</span>
+    <p id="newDivText"></p>
+    <div>
+        <canvas id="myChart"></canvas>
     </div>
-        </div>
-        <div class="marker" id="marker">
-            <div class="markercontents">
-            <ul id="markerList"></ul>
-            <div>
-                <canvas id="myChart"></canvas>
-            </div>
-            </div>
-
-        </div>
-
-        <div class="newDiv" id="newDiv">
-            <span class="closeBtn">×</span>
-            <p id="newDivText"></p>
-            <div class="markerlevel"></div>
-        <div class="comform">
-            <!--<input type="text" name="sendcomtext" class="comsend">
+</div>
+		<div class="comform">
+			<!--<input type="text" name="sendcomtext" class="comsend">
             <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
-        </div>
-    </div>
-    </body>
-    </html>
+		</div>
+	</div>
 
-    <script>
+</body>
+</html>
+
+<script>
     // 使用するidの取得
     // modalを開くためのボタン
     const buttonOpen = document.getElementById('modalOpen');
@@ -224,8 +245,8 @@
         });
     });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
     const ctx = document.getElementById('myChart').getContext('2d');
 
     // 各カテゴリのデータ
@@ -303,9 +324,9 @@
     });
     </script>
 <script>
-    function goAjax(){
+    function goAjax() {
         let allcom = document.getElementById('allcom').value;
-        let postData = {data1: allcom};
+        let postData = { data1: allcom };
 
         $.ajax({
             url: '/A1/AllComServlet',
@@ -313,9 +334,6 @@
             dataType: 'json',
             data: postData,
             success: function(data) {
-                alert("データベースに追加されました！");
-                // データの追加が成功した場合、何かしらの処理を行う（例：ページのリロード、メッセージの表示など）
-                // ここでは、成功メッセージを表示します。
                 document.getElementById("test").innerText = data.message;
             },
             error: function() {
@@ -323,4 +341,35 @@
             }
         });
     }
+
+    // 1秒ごとに非同期でデータを取得し、画面を更新する
+    function fetchComments() {
+        $.ajax({
+            url: '/A1/MainServlet',
+            type: 'GET',
+            dataType: 'json',
+            data: { data1: 0 },
+            success: function(data) {
+                console.log(data); // コンソールにデータを表示
+                let allcomdiv = document.getElementById('allcomdiv');
+                allcomdiv.innerHTML = ''; // 既存の内容をクリア
+                //data.reverse().
+                data.forEach(function(comment) { // 最新のコメントが上に来るように逆順にする
+                    let p = document.createElement('p');
+                    p.textContent = comment.allComContents + ' ♡';
+                    allcomdiv.appendChild(p);
+                    allcomdiv.appendChild(document.createElement('hr'));
+                });
+            },
+            error: function() {
+                console.error('データの取得に失敗しました。');
+            }
+        });
+    }
+
+    // ページロード時に初回のデータ取得を行う
+    $(document).ready(function() {
+        fetchComments();
+        setInterval(fetchComments, 1000); // 1秒ごとにデータを取得
+    });
 </script>

@@ -12,20 +12,22 @@
         <div class="content">
             <h2 class="login">くらすぼーど</h2>
         </div>
-<form id="login_form" method="get" action="/A1/MainServlet" class="form">
+<form id="login_form" method="post" action="/A1/LoginServlet" class="form">
 
-        <label>User ID<br>
-        <input type="text" name="id">
+        <label>メールアドレス<br>
+        <input type="text" name="mail">
         </label><br>
 
-        <label>Pass word<br>
+        <label>パスワード<br>
         <input type="password" name="pw">
         </label><br>
 
-        <input type="submit" name="submit" value="log in">
-        <input type="reset" name="reset" value="reset"><br>
+        <input type="submit" name="submit" value="ログイン">
+        <input type="reset" name="reset" value="リセット"><br>
         <span id="error_message">
-
+            <% if (request.getAttribute("error") != null) { %>
+                <%= request.getAttribute("error") %>
+            <% } %>
         </span>
   </form>
     </div>

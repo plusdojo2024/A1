@@ -111,4 +111,40 @@ public boolean insert(AllCom allCom) {
 	// 結果を返す
 	return result;
 }
+
+public List<AllCom> getAllComments() {
+    Connection conn = null;
+    List<AllCom> allComList = new ArrayList<AllCom>();
+
+    try {
+        Class.forName("org.h2.Driver");
+        conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+        String sql = "SELECT * FROM all_com ORDER BY all_com_datetime DESC";
+        PreparedStatement pStmt = conn.prepareStatement(sql);
+        ResultSet rs = pStmt.executeQuery();
+
+        while (rs.next()) {
+            AllCom record = new AllCom(
+                rs.getInt("all_com_id"),
+                rs.getString("all_com_contents"),
+                rs.getDate("all_com_datetime")
+            );
+            allComList.add(record);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    } finally {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    return allComList;
+}
 }
