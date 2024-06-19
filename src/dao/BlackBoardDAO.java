@@ -78,12 +78,11 @@ public class BlackBoardDAO {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "INSERT INTO black_board VALUES (NULL, ?, CURRENT_TIMESTAMP)";
+		String sql = "INSERT INTO black_board VALUES (null, now(),? )";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
 		pStmt.setString(1, blackBoard.getBoardContents());
-		pStmt.setDate(2, blackBoard.getBlackBoardDatetime());
 
 		// SQL文を実行する
 		if (pStmt.executeUpdate() == 1) {
@@ -132,7 +131,7 @@ public boolean update(BlackBoard blackBoard) {
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
-		pStmt.setString(0 , blackBoard.getBoardContents());
+		pStmt.setString(1 , blackBoard.getBoardContents());
 
 		// SQL文を実行する
 		if (pStmt.executeUpdate() == 1) {
@@ -163,9 +162,10 @@ public boolean update(BlackBoard blackBoard) {
 
 
 //板書履歴に日付一覧を表示するために、今までの日付を持ってくる。
-public boolean selectDate(BlackBoard blackBoard) {
+public ArrayList<BlackBoard> selectDate(BlackBoard blackBoard) {
 	Connection conn = null;
-	boolean result = false;
+
+	ArrayList<BlackBoard> blackBoardList = new ArrayList<BlackBoard>();
 
 	try {
 		// JDBCドライバを読み込む
@@ -176,12 +176,18 @@ public boolean selectDate(BlackBoard blackBoard) {
 
 		// SQL文を準備する
 
-		String sql = "select board_date from black_board order by board_date desc;";
+		String sql = "SELECT board_date FROM black_board order by board_date desc;";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
-		// SQL文を実行する
-		if (pStmt.executeUpdate() == 1) {
-			result = true;
+		// SQL文を実行し、結果表を取得する
+		ResultSet rs = pStmt.executeQuery();
+
+		// 結果表をコレクションにコピーする
+		while (rs.next()) {
+			BlackBoard record = new BlackBoard();
+			record.setBlackBoardDatetime(rs.getDate("boardDate"));
+
+			blackBoardList.add(record);
 		}
 	}
 	catch (SQLException e) {
@@ -203,7 +209,7 @@ public boolean selectDate(BlackBoard blackBoard) {
 	}
 
 	// 結果を返す
-	return result;
+	return blackBoardList;
 }
 
 
@@ -225,7 +231,7 @@ public boolean selectBoard(BlackBoard blackBoard) {
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
-		pStmt.setDate(0 , blackBoard.getBlackBoardDatetime());
+		pStmt.setDate(1 , blackBoard.getBlackBoardDatetime());
 
 		// SQL文を実行する
 		if (pStmt.executeUpdate() == 1) {

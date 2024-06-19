@@ -7,6 +7,10 @@ public class BlackBoard implements Serializable {
     private String boardContents;       //板書内容
     private Date blackBoardDatetime;    //日付
 
+    public BlackBoard() {
+    	//何もしないコンストラクタ
+    }
+
 
     public BlackBoard(int boardId, String boardContents, Date blackBoardDatetime) {
 		super();
