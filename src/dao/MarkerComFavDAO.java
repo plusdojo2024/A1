@@ -36,7 +36,7 @@ public class MarkerComFavDAO {
 			while (rs.next()) {
 				MarkerComFav record = new MarkerComFav(
 				rs.getInt("markerComNum"),
-				rs.getString("userId"),
+				rs.getInt("userId"),
 				rs.getInt("markerComId")
 				);
 				markerComFavList.add(record);
@@ -80,11 +80,11 @@ public class MarkerComFavDAO {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SQL文を準備する
-			String sql = "INSERT INTO all_com_fav VALUES (NULL, ?, ?)";
+			String sql = "INSERT INTO marker_com_fav VALUES (NULL, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を完成させる
-			pStmt.setString(1, markerComFav.getUserId());
+			pStmt.setInt(1, markerComFav.getUserId());
 			pStmt.setInt(2, markerComFav.getMarkerComId());
 
 			// SQL文を実行する

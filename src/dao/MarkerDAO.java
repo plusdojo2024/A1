@@ -86,14 +86,13 @@ public class MarkerDAO {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SQL文を準備する
-			String sql = "INSERT INTO all_com VALUES (NULL, ?, ?,?,)";
+			String sql = "INSERT INTO marker VALUES (NULL, ?, ?, ?, now())";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を完成させる
 			pStmt.setInt(1, marker.getMarkerId());
 			pStmt.setString(2, marker.getMarkerContents());
 			pStmt.setInt(3, marker.getBoardId());
-			pStmt.setDate(4, marker.getMarkerDatetime());
 			// SQL文を実行する
 			if (pStmt.executeUpdate() == 1) {
 				result = true;

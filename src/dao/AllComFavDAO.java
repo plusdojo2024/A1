@@ -36,7 +36,7 @@ public class AllComFavDAO {
 			while (rs.next()) {
 				AllComFav record = new AllComFav(
 				rs.getInt("allComFavNum"),
-				rs.getString("userId"),
+				rs.getInt("userId"),
 				rs.getInt("allComId"),
 				rs.getDate("allComDatetime")
 				);
@@ -81,13 +81,12 @@ public class AllComFavDAO {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SQL文を準備する
-			String sql = "INSERT INTO all_com_fav VALUES (NULL, ?, ?, ?)";
+			String sql = "INSERT INTO all_com_fav VALUES (NULL, ?, ?, now())";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を完成させる
-			pStmt.setString(1, allComFav.getUserId());
+			pStmt.setInt(1, allComFav.getUserId());
 			pStmt.setInt(2, allComFav.getAllComId());
-			pStmt.setDate(3, allComFav.getAllComFavDatetime());
 
 			// SQL文を実行する
 			if (pStmt.executeUpdate() == 1) {

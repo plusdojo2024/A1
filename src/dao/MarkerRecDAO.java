@@ -26,7 +26,7 @@ public class MarkerRecDAO {
 				conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 				// SQL文を準備する
-				String sql = "SELECT * FROM all_com";
+				String sql = "SELECT * FROM marker_rec";
 				PreparedStatement pStmt = conn.prepareStatement(sql);
 
 				// SQL文を実行し、結果表を取得する
