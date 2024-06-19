@@ -172,7 +172,7 @@ public boolean delete(int number) {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "DELETE FROM marker_com_fav WHERE all_com_fav_num=?";
+		String sql = "DELETE FROM all_com_fav WHERE all_com_fav_num=?";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる

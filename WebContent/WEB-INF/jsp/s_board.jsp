@@ -7,7 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <link rel="stylesheet" href="css/t-board.css">
-    
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     </head>
     <body>
         <header>
@@ -32,7 +33,7 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="boardcomit"><p class="center">板書切り替え</p></div>
             <div class="pagechange"><p class="center">履歴</p></div>
         </header>
@@ -57,11 +58,12 @@
                 <p>こんにちは ♡</p>
                 <p>こんにちは</p>
                 <p>こんにちは</p>
+                <div id="test"></div>
             </div>
-            <div class="allcomform">
-                <input type="text" name="allcomtext" class="allcomsend">
-                <input type="submit" id="search" name="submit" value="送信" class="allcombtn">
-            </div>
+    <div class="allcomform">
+        <input type="text" name="allComContents" class="allcomsend" id="allcom">
+        <input type="button" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
+    </div>
         </div>
         <div class="marker" id="marker">
             <div class="markercontents">
@@ -70,9 +72,9 @@
                 <canvas id="myChart"></canvas>
             </div>
             </div>
-    
+
         </div>
-    
+
         <div class="newDiv" id="newDiv">
             <span class="closeBtn">×</span>
             <p id="newDivText"></p>
@@ -84,7 +86,7 @@
     </div>
     </body>
     </html>
-    
+
     <script>
     // 使用するidの取得
     // modalを開くためのボタン
@@ -103,7 +105,7 @@
     const newDivText = document.getElementById('newDivText');
     // マーカーで指定された単語をクリックしたときに出てくるdivを閉じるためのバツ
     const closeBtn = document.querySelector('.newDiv .closeBtn');
-    
+
     // ボタンがクリックされた時
     buttonOpen.addEventListener('click', modalOpen);
     function modalOpen() {
@@ -112,13 +114,13 @@
         contents.innerHTML = text;
         modal.style.display = 'block';
     }
-    
+
     // バツ印がクリックされた時
     buttonClose.addEventListener('click', modalClose);
     function modalClose() {
         modal.style.display = 'none';
     }
-    
+
     // モーダルコンテンツ以外がクリックされた時
     addEventListener('click', outsideClose);
     function outsideClose(e) {
@@ -126,17 +128,17 @@
             modal.style.display = 'none';
         }
     }
-    
+
     document.addEventListener('DOMContentLoaded', function() {
         var enquete = document.getElementById('enquete');
-    
+
         contents.addEventListener('mouseup', function(event) {
             // テキストの選択範囲を取得
             var selection = window.getSelection();
             if (!selection.isCollapsed) {
                 var range = selection.getRangeAt(0);
                 var selectedText = selection.toString();
-    
+
                 // 選択された範囲を包むspan要素を作成
                 var span = document.createElement('span');
                 span.classList.add('highlight');
@@ -145,9 +147,9 @@
                 var comment = document.createElement('div');
                 comment.classList.add('comment');
                 comment.textContent = 'あいうえお'; // 初期コメント
-    
+
                 span.appendChild(comment);
-    
+
                 // 選択されたテキストをチェックボックスとしてenqueteに追加
                 var checkboxWrapper = document.createElement('div');
                 var checkbox = document.createElement('input');
@@ -156,11 +158,11 @@
                 checkbox.value = selectedText;
                 checkbox.checked = true; // チェックボックスを最初からチェックした状態にする
                 checkboxWrapper.appendChild(checkbox);
-    
+
                 var label = document.createElement('label');
                 label.textContent = selectedText;
                 checkboxWrapper.appendChild(label);
-    
+
                 // 削除ボタンを追加
                 var deleteButton = document.createElement('button');
                 deleteButton.textContent = '削除';
@@ -172,14 +174,14 @@
                     span.outerHTML = span.innerHTML;
                 });
                 checkboxWrapper.appendChild(deleteButton);
-    
+
                 enquete.appendChild(checkboxWrapper);
-    
+
                 // 選択を解除
                 selection.removeAllRanges();
             }
         });
-    
+
         // 送信ボタンが押されたときの処理
         var submitBtn = document.getElementById('submitBtn');
         submitBtn.addEventListener('click', function(event) {
@@ -204,7 +206,7 @@
             });
             enquete.innerHTML = ''; // フォームをクリア
         });
-    
+
         // newDivのバツボタンが押されたときの処理
         closeBtn.addEventListener('click', function() {
             newDiv.classList.remove('big'); // bigクラスを削除
@@ -212,7 +214,7 @@
             var markerDiv = document.getElementById('marker');
             markerDiv.classList.remove('small'); // markerのサイズを元に戻す
         });
-    
+
         // アニメーション終了時にnewDivを非表示にする処理を追加
         newDiv.addEventListener('animationend', function() {
             if (newDiv.classList.contains('close')) {
@@ -225,16 +227,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
     const ctx = document.getElementById('myChart').getContext('2d');
-    
+
     // 各カテゴリのデータ
     const data = [30, 3, 3, 5,];
-    
+
     // データの合計を計算
     const total = data.reduce((sum, value) => sum + value, 0);
-    
+
     // 各データの割合を計算
     const percentages = data.map(value => (value / total) * 100);
-    
+
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -264,7 +266,7 @@
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderWidth: 1
                 },
-                
+
             ]
         },
         options: {
@@ -300,3 +302,25 @@
         }
     });
     </script>
+<script>
+    function goAjax(){
+        let allcom = document.getElementById('allcom').value;
+        let postData = {data1: allcom};
+
+        $.ajax({
+            url: '/A1/AllComServlet',
+            type: 'POST',
+            dataType: 'json',
+            data: postData,
+            success: function(data) {
+                alert("データベースに追加されました！");
+                // データの追加が成功した場合、何かしらの処理を行う（例：ページのリロード、メッセージの表示など）
+                // ここでは、成功メッセージを表示します。
+                document.getElementById("test").innerText = data.message;
+            },
+            error: function() {
+                alert("データの追加に失敗しました。");
+            }
+        });
+    }
+</script>
