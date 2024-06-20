@@ -13,7 +13,6 @@ selectBoard
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -227,9 +226,9 @@ public ArrayList<BlackBoard> selectDate() {
 
 
 //板書履歴の日付をクリックした際に、過去板書の中身を持ってくる
-public ArrayList<BlackBoard> selectBoard(Date blackBoardDatetime) {
+public ArrayList<BlackBoard> selectBoard(int boardId) {
 	Connection conn = null;
-	ArrayList<BlackBoard> boardList = new ArrayList<BlackBoard>();
+	ArrayList<BlackBoard> blackBoardList = new ArrayList<BlackBoard>();
 
 	try {
 		// JDBCドライバを読み込む
@@ -240,11 +239,11 @@ public ArrayList<BlackBoard> selectBoard(Date blackBoardDatetime) {
 
 		// SQL文を準備する
 
-		String sql = "select board_date, board_contents from black_board where board_date = ?;";
+		String sql = "select board_id, board_contents from black_board where board_date = ?;";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
-		pStmt.setDate(1, blackBoardDatetime);
+		pStmt.setInt(1 , boardId);
 
 		// SQL文を実行し、結果表を取得する
         ResultSet rs = pStmt.executeQuery();
@@ -255,16 +254,16 @@ public ArrayList<BlackBoard> selectBoard(Date blackBoardDatetime) {
         	blackBoard.setBlackBoardDatetime(rs.getDate("board_date"));
         	blackBoard.setBoardContents(rs.getString("board_contents"));
 
-        	boardList.add(blackBoard);
+        	blackBoardList.add(blackBoard);
         }
 	}
 	catch (SQLException e) {
 		e.printStackTrace();
-		boardList = null;
+		blackBoardList = null;
 	}
 	catch (ClassNotFoundException e) {
 		e.printStackTrace();
-		boardList = null;
+		blackBoardList = null;
 	}
 	finally {
 		// データベースを切断
@@ -274,12 +273,12 @@ public ArrayList<BlackBoard> selectBoard(Date blackBoardDatetime) {
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
-				boardList = null;
+				blackBoardList = null;
 			}
 		}
 	}
 
-	return boardList;
+	return blackBoardList;
 }
 
 
