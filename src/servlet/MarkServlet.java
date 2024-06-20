@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,39 +10,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.MarkerDAO;
-import model.Marker;
 
-
-/**
- * Servlet implementation class NineServlet
- */
 @WebServlet("/MarkServlet")
 public class MarkServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// t_board.jspに遷移する
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
-		dispatcher.forward(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // t_board.jspに遷移する
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
+        dispatcher.forward(request, response);
+    }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String markerContents = request.getParameter("markerContents");
 
-		//値の取得
-		request.setCharacterEncoding("UTF-8");
+        MarkerDAO dao = new MarkerDAO();
+        int boardId = dao.selectBoardId();
 
-		String markerContents = request.getParameter("");
+        boolean success = dao.insert(markerContents, boardId);
 
-		MarkerDAO dao = new MarkerDAO();
-		ArrayList<Marker> list = dao.selectBoardId();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-//		dao.insert(markerContents, list);
-
-
-		// ten.jspに遷移する
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
-		dispatcher.forward(request, response);
-	}
-
+        if (success) {
+            response.getWriter().write("{\"status\": \"success\"}");
+        } else {
+            response.getWriter().write("{\"status\": \"error\"}");
+        }
+    }
 }
