@@ -350,13 +350,10 @@ li{
     }
   .allcom {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
     }
     .allcomtext {
-        width: 80%;
-        height: 60vh;
+        width: 490px;
+        height: 200px;
         overflow: hidden;
         position: relative;
     }

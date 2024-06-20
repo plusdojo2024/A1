@@ -13,27 +13,23 @@ import javax.servlet.http.HttpServletResponse;
 import dao.BlackBoardDAO;
 import model.BlackBoard;
 
-/**
- * Servlet implementation class LoginServlet
- */
 @WebServlet("/RecordServlet")
 public class RecordServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BlackBoardDAO dao = new BlackBoardDAO();
+        List<BlackBoard> list = dao.selectDate();
 
+        // デバッグ用にコンソールに日付データを出力
+        for (BlackBoard board : list) {
+            System.out.println("Board Date: " + board.getBlackBoardDatetime());
+        }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    BlackBoardDAO dao = new BlackBoardDAO();
-    List<BlackBoard> list = dao.selectDate();
-    request.setAttribute("blackBoardList", list);
+        request.setAttribute("blackBoardList", list);
 
-
-		// ログインページにフォワードする
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board_record.jsp");
-		dispatcher.forward(request, response);
-	}
-
+        // JSPにフォワードする
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board_record.jsp");
+        dispatcher.forward(request, response);
+    }
 }
