@@ -13,7 +13,80 @@ import model.MarkerRec;
 public class MarkerRecDAO {
 
 
-//マーカー項目に全体のうち何人が（よくわかる）を押したか数える。
+//ーーーーーーーーーーーー受講生_理解度履歴ページ 理解度の円グラフーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+	public List<MarkerRec> markerPieChart(MarkerRec markerRec) {
+		Connection conn = null;
+		List<MarkerRec> markerRecList = new ArrayList<MarkerRec>();
+
+		try {
+			// JDBCドライバを読み込む
+			Class.forName("org.h2.Driver");
+
+			// データベースに接続する
+			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+			// SQL文を準備する
+			String sql = "sSELECT users.user_name, marker.marker_contents, "
+					+ "COUNT(marker_rec.flag_very_good) AS very_good, COUNT(marker_rec.flag_good) "
+					+ "AS good, COUNT(marker_rec.flag_bad) AS bad, COUNT(marker_rec.flag_very_bad) "
+					+ "AS very_bad FROM users INNER JOIN marker_rec ON users.user_id = lmarker_rec.user_id "
+					+ "JOIN marker ON marker_rec.marker_id = marker.marker_id WHERE users.user_id = ?;";
+
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			// SQL文を完成させる
+			pStmt.setInt(1, markerRec.getUserId());
+
+			// SQL文を実行し、結果表を取得する
+			ResultSet rs = pStmt.executeQuery();
+
+			// 結果表をコレクションにコピーする
+			while (rs.next()) {
+				MarkerRec record = new MarkerRec(
+				rs.getInt("markerRecNumber"),
+				rs.getInt("userId"),
+				rs.getInt("markerId"),
+				rs.getInt("flagVeryGood"),
+				rs.getInt("flagGood"),
+				rs.getInt("flagBad"),
+				rs.getInt("flagVeryBad"),
+				rs.getDate("markerRecDatetime")
+				);
+				markerRecList.add(record);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			markerRecList = null;
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			markerRecList = null;
+		}
+		finally {
+			// データベースを切断
+			if (conn != null) {
+				try {
+					conn.close();
+				}
+				catch (SQLException e) {
+					e.printStackTrace();
+					markerRecList = null;
+				}
+			}
+		}
+
+		// 結果を返す
+		return markerRecList;
+	}
+
+
+
+
+//ーーーーーーーーーーーーーーーーーーーーーーー（マーカー項目についたリアクションの数を数える。）ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+
+	//マーカー項目に全体のうち何人が（よくわかる）を押したか数える。
 	public List<MarkerRec> countAllVg(MarkerRec markerRec) {
 		Connection conn = null;
 		List<MarkerRec> markerRecList = new ArrayList<MarkerRec>();
