@@ -15,29 +15,19 @@ import dao.BlackBoardDAO;
 		private static final long serialVersionUID = 1L;
 
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			if(request.getParameter("保存") != null) {
+				BlackBoardDAO bbDao = new BlackBoardDAO();
+				bbDao.insertBoard();
+			}else {
+	//			//板書を一定間隔(1秒間)で保存(UPDATE)し続ける
+	//			//講師による板書への加筆
+				BlackBoardDAO blbDao = new BlackBoardDAO();
+				String boId = request.getParameter("board_id");
+				int boardId = Integer.parseInt(boId);
+				String boardContents = request.getParameter("board_contents");
 
-			//値の取得
-			//リクエストパラメータを取得
-			request.setCharacterEncoding("UTF-8");
-			String stBId = request.getParameter("board_id");
-			int board_id = Integer.parseInt(stBId);
-			String bContents = request.getParameter("board_contents");
-
-//			//「板書切り替え」ボタンが押されたら…
-//			if(request.getParameter("bu").contentEquals("切り返し")) {
-			BlackBoardDAO bbDao = new BlackBoardDAO();
-//			boolean result = bbDao.insert(new BlackBoard(0, blackBoardComents, null));
-			bbDao.insertBoard();
-
-//			//板書を一定間隔(1秒間)で保存(UPDATE)し続ける
-//			//講師による板書への加筆
-			BlackBoardDAO blbDao = new BlackBoardDAO();
-			String boId = request.getParameter("board_id");
-			int boardId = Integer.parseInt(boId);
-			String boardContents = request.getParameter("board_contents");
-
-			String BoardContents = request.getParameter("bContents");
-			blbDao.updateBoard("board_id", "board_contents");
+				blbDao.updateBoard(boardId, boardContents);
+			}
 
 		}
 }

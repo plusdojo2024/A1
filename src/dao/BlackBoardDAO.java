@@ -282,6 +282,7 @@ public ArrayList<BlackBoard> selectBoard(int boardId) {
 }
 
 
+
 //講師の画面：「板書切り替え」ボタンをクリックしたら新しい板書をINSERT
 public boolean insertBoard() {
 	Connection conn = null;
@@ -295,14 +296,14 @@ public boolean insertBoard() {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "INSERT INTO(board_contents) Values(\"\");";
+		String sql = "INSERT INTO black_board(board_contents) Values('');";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を実行し、結果表を取得する
-		ResultSet rs = pStmt.executeQuery();
+		int num  = pStmt.executeUpdate();
 
 		// SQL文を実行する
-		if (pStmt.executeUpdate() == 1) {
+		if (num == 1) {
 			result = true;
 		}
 	}
@@ -330,7 +331,7 @@ public boolean insertBoard() {
 
 
 //講師画面・受講生画面：1秒毎にUPDATE
-public boolean updateBoard(int board_id, String board_contents, BlackBoard blackBoard) {
+public boolean updateBoard(int board_id, String board_contents) {
 	Connection conn = null;
 	boolean result = false;
 
@@ -347,8 +348,8 @@ public boolean updateBoard(int board_id, String board_contents, BlackBoard black
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
-		pStmt.setString(1 , blackBoard.getBoardContents());
-		pStmt.setInt(2 , blackBoard.getBoardId());
+		pStmt.setString(1 ,board_contents);
+		pStmt.setInt(2 , board_id);
 
 		// SQL文を実行する
 		if (pStmt.executeUpdate() == 1) {
@@ -375,8 +376,7 @@ public boolean updateBoard(int board_id, String board_contents, BlackBoard black
 
 	// 結果を返す
 	return result;
-	}
-
+}
 
 }
 
