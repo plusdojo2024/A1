@@ -1,4 +1,5 @@
 package servlet;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class RecordViewServlet extends HttpServlet {
 		BlackBoardDAO dao = new BlackBoardDAO();
 	    List<BlackBoard> list = dao.select();
 	    request.setAttribute("blackBoardList", list);
-	    
+
 		// ログインページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/view_board_record.jsp");
 		dispatcher.forward(request, response);
