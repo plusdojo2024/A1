@@ -5,6 +5,7 @@
 body{
     background:rgba(254, 255, 239, 1)
 }
+
 .center{
     position:absolute;
     top:50%;
@@ -90,7 +91,7 @@ li{
     top:50%;
     transform: translate(-50%,-50%);
     font-size: 2rem;
-    
+
 }
 /* 左下 */
 .allcom{
@@ -102,11 +103,7 @@ li{
     top:57%;
     left:1%;
 }
-.allcomtext{
-    bottom: 10%;
-    margin:1%;
-    z-index:2;
-}
+
 .allcombtn{
     bottom: 10%;
     z-index:2;
@@ -116,13 +113,9 @@ li{
     bottom: 10%;
     left:47%;
     transform: translate(-50%);
+    z-index:10;
 }
-.allcomtext{
-    position: absolute;
-    left:40%;
-    top: 10%;
-    
-}
+
 .allcomtext p{
     margin:4px;
 }
@@ -342,3 +335,62 @@ li{
     }
 }
 
+    .allcomtext {
+        width: 390px;
+        height: 230px;
+        overflow-x: hidden;
+        position: absolute;
+        z-index:3;
+    }
+    .allcomtext p {
+        margin: 0;
+        padding: 5px;
+        word-wrap: break-word; /* 長い単語の折り返し */
+        white-space: normal;
+    }
+  .allcom {
+        display: flex;
+    }
+    .allcomtext {
+        width: 490px;
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+    .allcomtext p {
+        margin: 0;
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid #ccc;
+        word-wrap: break-word; /* 長い単語の折り返し */
+        white-space: normal; /* テキストの折り返し */
+    }
+    .allcomtext hr {
+        margin: 0;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+    .newDiv {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        height: 80%;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        padding: 20px;
+        overflow: auto;
+    }
+    .newDiv.big {
+        display: block;
+    }
+    .closeBtn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
