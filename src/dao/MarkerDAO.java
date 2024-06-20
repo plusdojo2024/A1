@@ -73,9 +73,9 @@ public class MarkerDAO {
 		return markerList;
 	}
 
-	public ArrayList<Marker> selectBoardId() {
+	public int selectBoardId() {
 		Connection conn = null;
-		ArrayList<Marker> markerList = new ArrayList<Marker>();
+		int marker=0;
 
 		try {
 			// JDBCドライバを読み込む
@@ -95,18 +95,18 @@ public class MarkerDAO {
 			// 結果表をコレクションにコピーする
 			while (rs.next()) {
 				Marker record = new Marker();
-				record.setBoardId(rs.getInt("markerId"));
+				record.setBoardId(rs.getInt("boardId"));
 
-				markerList.add(record);
+				marker=record.getBoardId();
 			}
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			markerList = null;
+			marker = 0;
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			markerList = null;
+			marker = 0;
 		}
 		finally {
 			// データベースを切断
@@ -116,13 +116,13 @@ public class MarkerDAO {
 				}
 				catch (SQLException e) {
 					e.printStackTrace();
-					markerList = null;
+					marker = 0;
 				}
 			}
 		}
 
 		// 結果を返す
-		return markerList;
+		return marker;
 	}
 
 
