@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.MarkerDAO;
+import model.Marker;
 
 
 /**
@@ -31,15 +33,15 @@ public class MarkServlet extends HttpServlet {
 		//値の取得
 		request.setCharacterEncoding("UTF-8");
 
-		String markerContents = request.getParameter("markerContents");
+		String markerContents = request.getParameter("");
 
 		MarkerDAO dao = new MarkerDAO();
-		int boardId = dao.selectBoardId();
+		ArrayList<Marker> list = dao.selectBoardId();
 
-		dao.insert(markerContents, boardId);
+//		dao.insert(markerContents, list);
 
 
-		// t_board.jspに遷移する
+		// ten.jspに遷移する
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
 		dispatcher.forward(request, response);
 	}

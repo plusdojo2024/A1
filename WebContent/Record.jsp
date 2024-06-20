@@ -8,8 +8,9 @@
 </head>
 <body>
 
-<form method = "post" action = "A1/RecordServlet">
+<c:forEach var="e" items="${blackBoardlist}">
+	${boardDate}
+	</c:forEach>
 
-</form>
 </body>
 </html>
