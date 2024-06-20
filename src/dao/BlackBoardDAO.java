@@ -90,7 +90,7 @@ public class BlackBoardDAO {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "INSERT INTO black_board VALUES (null, now(),? )";
+		String sql = "INSERT INTO black_board (board_Id ,Board_Datetime ,board_Contents)VALUES (null, now(),? )";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
@@ -125,52 +125,32 @@ public class BlackBoardDAO {
 
 
 //講師による板書への加筆を行えるようにする。
-public boolean update(BlackBoard blackBoard) {
-	Connection conn = null;
-	boolean result = false;
+    public boolean update(BlackBoard blackBoard) {
+        Connection conn = null;
+        boolean result = false;
 
-	try {
-		// JDBCドライバを読み込む
-		Class.forName("org.h2.Driver");
+        try {
+            Class.forName("org.h2.Driver");
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-		// データベースに接続する
-		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+            String sql = "UPDATE black_board SET board_contents = ? WHERE board_id = (SELECT MAX(board_id) FROM black_board)";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, blackBoard.getBoardContents());
 
-		// SQL文を準備する
+            result = pStmt.executeUpdate() == 1;
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
-		String sql = "UPDATE black_board SET board_contents = ? "
-				+ "WHERE board_id = (SELECT MAX(board_id) FROM black_board);";
-		PreparedStatement pStmt = conn.prepareStatement(sql);
+        return result;
+    }
 
-		// SQL文を完成させる
-		pStmt.setString(1 , blackBoard.getBoardContents());
-
-		// SQL文を実行する
-		if (pStmt.executeUpdate() == 1) {
-			result = true;
-		}
-	}
-	catch (SQLException e) {
-		e.printStackTrace();
-	}
-	catch (ClassNotFoundException e) {
-		e.printStackTrace();
-	}
-	finally {
-		// データベースを切断
-		if (conn != null) {
-			try {
-				conn.close();
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	// 結果を返す
-	return result;
-}
 
 
 //板書履歴に日付一覧を表示するために、今までの日付を持ってくる。

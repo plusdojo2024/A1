@@ -13,7 +13,7 @@
 <body>
 	<header>
 		<div class="headbtn">
-			<button class="markerbtn">生徒用</button>
+			<button class="markerbtn">先生用</button>
 			<button id="modalOpen" class="markerbtn">マーカー</button>
 			<button class="markerbtn">
 				<span class=center></span>ファイル添付
@@ -46,9 +46,9 @@
 		</div>
 		</a>
 	</header>
-	<div class="board">
-		<textarea name="text" class="text" id="textarea"></textarea>
-	</div>
+	<div class="board" id="textBoard">
+        <textarea name="text" class="text" id="textarea"></textarea>
+    </div>
 	<div class="com">
 		<ul class="markcomlive">
 			<li class="markcombox">
@@ -85,7 +85,7 @@
 	<div class="marker" id="marker">
 		<div class="markercontents">
 			<ul id="markerList"></ul>
-			<div>
+<div>
 				<canvas id="myChart"></canvas>
 			</div>
 		</div>
@@ -93,15 +93,13 @@
 	</div>
 
 	<div class="newDiv" id="newDiv">
-    <span class="closeBtn">×</span>
-    <p id="newDivText"></p>
-    <div>
-        <canvas id="myChart"></canvas>
-    </div>
-</div>
+		<span class="closeBtn">×</span>
+		<p id="newDivText"></p>
+		<div class="markerlevel"></div>
+
 		<div class="comform">
-			<!--<input type="text" name="sendcomtext" class="comsend">
-            <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
+			<input type="text" name="sendcomtext" class="comsend">
+            <input type="submit" id="search" name="submit" value="送信" class="combtn">
 		</div>
 	</div>
 
@@ -371,5 +369,26 @@
     $(document).ready(function() {
         fetchComments();
         setInterval(fetchComments, 1000); // 1秒ごとにデータを取得
+    });
+
+
+
+    function sendText() {
+        let text = document.getElementById('textarea').value;
+        $.ajax({
+            url: '/A1/BlackBoardServlet',
+            type: 'POST',
+            data: { textContent: text },
+            success: function(response) {
+                console.log('Text updated successfully');
+            },
+            error: function() {
+                console.error('Failed to update text');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        setInterval(sendText, 1000); // 1秒ごとにテキストを送信
     });
 </script>

@@ -46,9 +46,9 @@
 		</div>
 		</a>
 	</header>
-	<div class="board">
-		<textarea name="text" class="text" id="textarea"></textarea>
-	</div>
+	<div class="board" id="textBoard">
+        <!-- テキスト内容がここに表示されます -->
+    </div>
 	<div class="com">
 		<ul class="markcomlive">
 			<li class="markcombox">
@@ -85,23 +85,21 @@
 	<div class="marker" id="marker">
 		<div class="markercontents">
 			<ul id="markerList"></ul>
-			<div>
-				<canvas id="myChart"></canvas>
-			</div>
+
 		</div>
 
 	</div>
 
 	<div class="newDiv" id="newDiv">
-    <span class="closeBtn">×</span>
-    <p id="newDivText"></p>
-    <div>
-        <canvas id="myChart"></canvas>
-    </div>
-</div>
+		<span class="closeBtn">×</span>
+		<p id="newDivText"></p>
+		<div class="markerlevel"></div>
+		<div>
+				<canvas id="myChart"></canvas>
+			</div>
 		<div class="comform">
-			<!--<input type="text" name="sendcomtext" class="comsend">
-            <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
+			<input type="text" name="sendcomtext" class="comsend">
+            <input type="submit" id="search" name="submit" value="送信" class="combtn">
 		</div>
 	</div>
 
@@ -373,3 +371,21 @@
         setInterval(fetchComments, 1000); // 1秒ごとにデータを取得
     });
 </script>
+    <script>
+        function fetchText() {
+            $.ajax({
+                url: '/A1/BlackBoardServlet',
+                type: 'GET',
+                success: function(response) {
+                    document.getElementById('textBoard').innerText = response;
+                },
+                error: function() {
+                    console.error('Failed to fetch text');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            setInterval(fetchText, 1000); // 1秒ごとにテキストを取得
+        });
+    </script>

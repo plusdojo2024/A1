@@ -41,6 +41,9 @@ public class MainServlet extends HttpServlet {
 	        ObjectMapper mapper = new ObjectMapper();
 	        String jsonResponse = mapper.writeValueAsString(allComList);
 	        response.getWriter().write(jsonResponse);
+	        if (user.getCheckStudent() == 1) {
+
+	        }
         }else {
 	        if (user == null) {
 	            // ログインページにリダイレクト
