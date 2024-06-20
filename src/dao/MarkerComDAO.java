@@ -11,150 +11,234 @@ import java.util.List;
 import model.MarkerCom;
 
 public class MarkerComDAO {
+
     // 全体コメントをセレクト
+    public List<MarkerCom> select(MarkerCom markerCom) {
+        Connection conn = null;
+        List<MarkerCom> MarkerComList = new ArrayList<MarkerCom>();
 
-	    // 全体コメントをセレクト
-	    public List<MarkerCom> select(MarkerCom markerCom) {
-	        Connection conn = null;
-	        List<MarkerCom> MarkerComList = new ArrayList<MarkerCom>();
+        try {
+            // JDBCドライバを読み込む
+            Class.forName("org.h2.Driver");
 
-	        try {
-	            // JDBCドライバを読み込む
-	            Class.forName("org.h2.Driver");
+            // データベースに接続する
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-	            // データベースに接続する
-	            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+            // SQL文を準備する
+            String sql = "SELECT * FROM marker_com";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
 
-	            // SQL文を準備する
-	            String sql = "SELECT * FROM marker_com";
-	            PreparedStatement pStmt = conn.prepareStatement(sql);
+            // SQL文を実行し、結果表を取得する
+            ResultSet rs = pStmt.executeQuery();
 
-	            // SQL文を実行し、結果表を取得する
-	            ResultSet rs = pStmt.executeQuery();
+            // 結果表をコレクションにコピーする
+            while (rs.next()) {
+                MarkerCom record = new MarkerCom(
+                    rs.getInt("marker_com_id"),
+                    rs.getString("marker_com_contents"),
+                    rs.getInt("marker_id"),
+                    rs.getDate("marker_com_datetime")
+                );
+                MarkerComList.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            MarkerComList = null;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            MarkerComList = null;
+        } finally {
+            // データベースを切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    MarkerComList = null;
+                }
+            }
+        }
 
-	            // 結果表をコレクションにコピーする
-	            while (rs.next()) {
-	                MarkerCom record = new MarkerCom(
-	                    rs.getInt("marker_com_id"),
-	                    rs.getString("marker_com_contents"),
-	                    rs.getInt("marker_id"),
-	                    rs.getDate("marker_com_datetime")
-	                );
-	                MarkerComList.add(record);
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            MarkerComList = null;
-	        } catch (ClassNotFoundException e) {
-	            e.printStackTrace();
-	            MarkerComList = null;
-	        } finally {
-	            // データベースを切断
-	            if (conn != null) {
-	                try {
-	                    conn.close();
-	                } catch (SQLException e) {
-	                    e.printStackTrace();
-	                    MarkerComList = null;
-	                }
-	            }
-	        }
+        // 結果を返す
+        return MarkerComList;
+    }
 
-	        // 結果を返す
-	        return MarkerComList;
-	    }
+    public boolean insert(MarkerCom markerCom) {
+        Connection conn = null;
+        boolean result = false;
 
-	    public boolean insert(MarkerCom markerCom) {
-	        Connection conn = null;
-	        boolean result = false;
+        try {
+            // JDBCドライバを読み込む
+            Class.forName("org.h2.Driver");
 
-	        try {
-	            // JDBCドライバを読み込む
-	            Class.forName("org.h2.Driver");
+            // データベースに接続する
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-	            // データベースに接続する
-	            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+            // SQL文を準備する
+            String sql = "INSERT INTO marker_com (marker_com_contents, marker_id, marker_com_datetime) VALUES (?, ?, now())";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
 
-	            // SQL文を準備する
-	            String sql = "INSERT INTO marker_com (marker_com_contents, marker_id, marker_com_datetime) VALUES (?, ?, now())";
-	            PreparedStatement pStmt = conn.prepareStatement(sql);
+            // SQL文を完成させる
+            pStmt.setString(1, markerCom.getMarkerComContents());
+            pStmt.setInt(2, markerCom.getMarkerId());
 
-	            // SQL文を完成させる
-	            pStmt.setString(1, markerCom.getMarkerComContents());
-	            pStmt.setInt(2, markerCom.getMarkerId());
+            // SQL文を実行する
+            if (pStmt.executeUpdate() == 1) {
+                result = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            // データベースを切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-	            // SQL文を実行する
-	            if (pStmt.executeUpdate() == 1) {
-	                result = true;
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        } catch (ClassNotFoundException e) {
-	            e.printStackTrace();
-	        } finally {
-	            // データベースを切断
-	            if (conn != null) {
-	                try {
-	                    conn.close();
-	                } catch (SQLException e) {
-	                    e.printStackTrace();
-	                }
-	            }
-	        }
+        // 結果を返す
+        return result;
+    }
+    public List<MarkerCom> selectByMarkerId(int markerId) {
+        Connection conn = null;
+        List<MarkerCom> markerComList = new ArrayList<>();
 
-	        // 結果を返す
-	        return result;
-	    }
+        try {
+            // JDBCドライバを読み込む
+            Class.forName("org.h2.Driver");
 
-	    // 特定の marker_id に関連するコメントをセレクト
-	    public List<MarkerCom> selectByMarkerId(int markerId) {
-	        Connection conn = null;
-	        List<MarkerCom> MarkerComList = new ArrayList<MarkerCom>();
+            // データベースに接続する
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-	        try {
-	            // JDBCドライバを読み込む
-	            Class.forName("org.h2.Driver");
+            // SQL文を準備する
+            String sql = "SELECT * FROM marker_com WHERE marker_id = ?";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+            pStmt.setInt(1, markerId);
 
-	            // データベースに接続する
-	            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+            // SQL文を実行し、結果表を取得する
+            ResultSet rs = pStmt.executeQuery();
 
-	            // SQL文を準備する
-	            String sql = "SELECT * FROM marker_com WHERE marker_id = ?";
-	            PreparedStatement pStmt = conn.prepareStatement(sql);
-	            pStmt.setInt(1, markerId);
+            // 結果表をコレクションにコピーする
+            while (rs.next()) {
+                MarkerCom record = new MarkerCom(
+                    rs.getInt("marker_com_id"),
+                    rs.getString("marker_com_contents"),
+                    rs.getInt("marker_id"),
+                    rs.getDate("marker_com_datetime")
+                );
+                markerComList.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            markerComList = null;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            markerComList = null;
+        } finally {
+            // データベースを切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    markerComList = null;
+                }
+            }
+        }
 
-	            // SQL文を実行し、結果表を取得する
-	            ResultSet rs = pStmt.executeQuery();
+        // 結果を返す
+        return markerComList;
+    }
 
-	            // 結果表をコレクションにコピーする
-	            while (rs.next()) {
-	                MarkerCom record = new MarkerCom(
-	                    rs.getInt("marker_com_id"),
-	                    rs.getString("marker_com_contents"),
-	                    rs.getInt("marker_id"),
-	                    rs.getDate("marker_com_datetime")
-	                );
-	                MarkerComList.add(record);
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            MarkerComList = null;
-	        } catch (ClassNotFoundException e) {
-	            e.printStackTrace();
-	            MarkerComList = null;
-	        } finally {
-	            // データベースを切断
-	            if (conn != null) {
-	                try {
-	                    conn.close();
-	                } catch (SQLException e) {
-	                    e.printStackTrace();
-	                    MarkerComList = null;
-	                }
-	            }
-	        }
+    public List<MarkerCom> selectAll() {
+        Connection conn = null;
+        List<MarkerCom> markerComList = new ArrayList<>();
 
-	        // 結果を返す
-	        return MarkerComList;
-	    }
-	}
+        try {
+            // JDBCドライバを読み込む
+            Class.forName("org.h2.Driver");
+
+            // データベースに接続する
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+            // SQL文を準備する
+            String sql = "SELECT * FROM marker_com";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+
+            // SQL文を実行し、結果表を取得する
+            ResultSet rs = pStmt.executeQuery();
+
+            // 結果表をコレクションにコピーする
+            while (rs.next()) {
+                MarkerCom markerCom = new MarkerCom(
+                    rs.getInt("marker_com_id"),
+                    rs.getString("marker_com_contents"),
+                    rs.getInt("marker_id"),
+                    rs.getDate("marker_com_datetime")
+                );
+                markerComList.add(markerCom);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            markerComList = null;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    markerComList = null;
+                }
+            }
+        }
+
+        return markerComList;
+    }
+    public List<MarkerCom> selectAllWithMarkerContents() {
+        Connection conn = null;
+        List<MarkerCom> markerComList = new ArrayList<MarkerCom>();
+
+        try {
+            Class.forName("org.h2.Driver");
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+            String sql = "SELECT *, marker_contents " +
+                         "FROM marker_com " +
+                         "JOIN marker ON marker_id = marker_id " +
+                         "ORDER BY marker_com_datetime DESC";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+
+            ResultSet rs = pStmt.executeQuery();
+
+            while (rs.next()) {
+                MarkerCom record = new MarkerCom(
+                    rs.getInt("marker_com_id"),
+                    rs.getString("marker_com_contents"),
+                    rs.getInt("marker_id"),
+                    rs.getDate("marker_com_datetime"),
+                    rs.getString("marker_contents")
+                );
+                markerComList.add(record);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            markerComList = null;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    markerComList = null;
+                }
+            }
+        }
+
+        return markerComList;
+    }
+}

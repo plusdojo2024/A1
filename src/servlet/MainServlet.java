@@ -29,62 +29,88 @@ public class MainServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Users user = (Users) session.getAttribute("user");
 
+        // 全体コメントの取得
         if (request.getParameter("data1") != null) {
             AllComDAO acDao = new AllComDAO();
             List<AllCom> allComList = acDao.getAllComments();
 
-            // デバッグ用
-            for (AllCom comment : allComList) {
-                System.out.println("Comment: " + comment.getAllComContents());
-            }
-
-            // JSON形式でコメントデータを返す
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
             ObjectMapper mapper = new ObjectMapper();
             String jsonResponse = mapper.writeValueAsString(allComList);
             response.getWriter().write(jsonResponse);
-        } else if (request.getParameter("markerData") != null) {
-            MarkerDAO markerDao = new MarkerDAO();
-            List<Marker> markerList = markerDao.selectMarkers();
+            return;
+        }
 
-            // JSON形式でマーカーデータを返す
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonResponse = mapper.writeValueAsString(markerList);
-            response.getWriter().write(jsonResponse);
-        } else if (request.getParameter("markerId") != null) {
+        // マーカーコメントの取得
+        if (request.getParameter("markerId") != null) {
             int markerId = Integer.parseInt(request.getParameter("markerId"));
-            MarkerComDAO markerComDao = new MarkerComDAO();
-            List<MarkerCom> markerComList = markerComDao.selectByMarkerId(markerId);
+            MarkerComDAO mcDao = new MarkerComDAO();
+            List<MarkerCom> markerComList = mcDao.selectByMarkerId(markerId);
 
-            // JSON形式でマーカーコメントデータを返す
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
             ObjectMapper mapper = new ObjectMapper();
             String jsonResponse = mapper.writeValueAsString(markerComList);
             response.getWriter().write(jsonResponse);
-        } else {
-            if (user == null) {
-                // ログインページにリダイレクト
-                response.sendRedirect("/A1/LoginServlet");
-                return;
-            }
+            return;
+        }
 
-            // CHECK_STUDENTの値に基づいて画面遷移を振り分ける
-            if (user.getCheckStudent() == 1) {
-                // CHECK_STUDENTが1の場合、s-board.jspにフォワード
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
-                dispatcher.forward(request, response);
-            } else {
-                // CHECK_STUDENTが0の場合、t-board.jspにフォワード
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/s_board.jsp");
-                dispatcher.forward(request, response);
-            }
+        // 全てのマーカーコメントの取得
+        if (request.getParameter("allMarkerCom") != null) {
+            MarkerComDAO mcDao = new MarkerComDAO();
+            List<MarkerCom> markerComList = mcDao.selectAll();
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonResponse = mapper.writeValueAsString(markerComList);
+            response.getWriter().write(jsonResponse);
+            return;
+        }
+
+        if (request.getParameter("allMarkerCom") != null) {
+            MarkerComDAO mcDao = new MarkerComDAO();
+            List<MarkerCom> markerComList = mcDao.selectAllWithMarkerContents();
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonResponse = mapper.writeValueAsString(markerComList);
+            response.getWriter().write(jsonResponse);
+            return;
+        }
+
+        // マーカーの取得
+        if (request.getParameter("markerData") != null) {
+            MarkerDAO markerDao = new MarkerDAO();
+            List<Marker> markerList = markerDao.selectMarkers();
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonResponse = mapper.writeValueAsString(markerList);
+            response.getWriter().write(jsonResponse);
+            return;
+        }
+
+        // ログインチェックと画面遷移
+        if (user == null) {
+            response.sendRedirect("/A1/LoginServlet");
+            return;
+        }
+
+        if (user.getCheckStudent() == 1) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/s_board.jsp");
+            dispatcher.forward(request, response);
         }
     }
 }

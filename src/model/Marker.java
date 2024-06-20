@@ -10,7 +10,6 @@ public class Marker implements Serializable {
 
 
 	public Marker() {
-
 	}
 
 	public Marker(int markerId, String markerContents, int boardId, Date markerDatetime) {
