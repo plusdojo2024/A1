@@ -27,7 +27,7 @@ public class RecordServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     BlackBoardDAO dao = new BlackBoardDAO();
-    List<BlackBoard> list = dao.select();
+    List<BlackBoard> list = dao.selectDate();
     request.setAttribute("blackBoardList", list);
 
 
