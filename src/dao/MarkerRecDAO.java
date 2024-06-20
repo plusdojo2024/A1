@@ -62,6 +62,57 @@ public class MarkerRecDAO {
 		return result;
 	}
 
+	//わかるを登録する
+		public boolean insertG(int UserId , int MarkerId) {
+			Connection conn = null;
+			boolean result = false;
+
+			try {
+				// JDBCドライバを読み込む
+				Class.forName("org.h2.Driver");
+
+				// データベースに接続する
+				conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+				// SQL文を準備する
+				String sql = "INSERT INTO marker_rec(user_id, marker_id, "
+						+ "flag_very_good, flag_good, flag_bad, flag_very_bad) "
+						+ "VALUES (?, ?, 0, 1, 0, 0);";
+
+				PreparedStatement pStmt = conn.prepareStatement(sql);
+
+				// SQL文を完成させる
+				pStmt.setInt(1, UserId);
+				pStmt.setInt(2, MarkerId);
+
+				// SQL文を実行する
+				if (pStmt.executeUpdate() == 1) {
+					result = true;
+				}
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			finally {
+				// データベースを切断
+				if (conn != null) {
+					try {
+						conn.close();
+					}
+					catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			// 結果を返す
+			return result;
+		}
+
+
+
 //わからないを登録する
 		public boolean insertB(int UserId , int MarkerId) {
 			Connection conn = null;
@@ -1286,6 +1337,65 @@ public class MarkerRecDAO {
 							rs.getInt("flagVeryBad"),
 							rs.getDate("markerRecDatetime")
 							);
+							markerRecList.add(record);
+						}
+					}
+					catch (SQLException e) {
+						e.printStackTrace();
+						markerRecList = null;
+					}
+					catch (ClassNotFoundException e) {
+						e.printStackTrace();
+						markerRecList = null;
+					}
+					finally {
+						// データベースを切断
+						if (conn != null) {
+							try {
+								conn.close();
+							}
+							catch (SQLException e) {
+								e.printStackTrace();
+								markerRecList = null;
+							}
+						}
+					}
+
+					// 結果を返す
+					return markerRecList;
+				}
+
+
+//未リアクションへの警告を促す----------------------------------------------------------------------------------------
+				public List<MarkerRec> warning(int UserId) {
+					Connection conn = null;
+					List<MarkerRec> markerRecList = new ArrayList<MarkerRec>();
+
+					try {
+						// JDBCドライバを読み込む
+						Class.forName("org.h2.Driver");
+
+						// データベースに接続する
+						conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+						// SQL文を準備する
+						String sql = "SELECT marker.marker_id, marker.marker_contents FROM marker "
+								+ "INNER JOIN marker_rec AS lr ON marker.marker_id = lr.marker_id "
+								+ "WHERE lr.user_id = <> ?;";
+
+						PreparedStatement pStmt = conn.prepareStatement(sql);
+
+						// SQL文を完成させる
+						pStmt.setInt(1, UserId);
+
+						// SQL文を実行し、結果表を取得する
+						ResultSet rs = pStmt.executeQuery();
+
+						// 結果表をコレクションにコピーする
+						while (rs.next()) {
+							MarkerRec record = new MarkerRec();
+							record.setMarkerId(rs.getInt("marker_id"));
+							record.setMarkerContents(rs.getString("marker_contents"));
 							markerRecList.add(record);
 						}
 					}

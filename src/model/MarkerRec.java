@@ -25,6 +25,7 @@ public class MarkerRec implements Serializable {
 		this.flagVeryBad = flagVeryBad;
 		this.markerRecDatetime = markerRecDatetime;
 	}
+
 	public int getMarkerRecNumber() {
         return markerRecNumber;
     }
@@ -73,6 +74,11 @@ public class MarkerRec implements Serializable {
     public void setMarkerRecDatetime(Date markerRecDatetime) {
         this.markerRecDatetime = markerRecDatetime;
     }
+
+	public void setMarkerContents(String string) {
+		// ちょっとよくわからん
+
+	}
 
 
 
