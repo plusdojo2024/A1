@@ -174,7 +174,7 @@ li{
     left:50%;
     transform: translate(-50%);
 }
-#myChart{
+.myChart{
     scale:70%;
 }
 .markercontents{
@@ -373,14 +373,13 @@ li{
     .newDiv {
         display: none;
         position: fixed;
-        top: 70%;
-        left: 70%;
+        top: 77%;
+        left: 86%;
         transform: translate(-50%, -50%);
-        width: 40%;
-        height: 40%;
+        width:26%;
+    height:80%;
         background: rgba(255, 255, 255, 0.9);
         border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         z-index: 1000;
         padding: 20px;
         overflow: auto;

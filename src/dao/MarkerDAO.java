@@ -13,9 +13,9 @@ import model.Marker;
 public class MarkerDAO {
 
     // マーカーコンテンツを全て取得するメソッド
-    public List<Marker> selectAllMarkers() {
+	public List<Marker> selectAllMarkers() {
         Connection conn = null;
-        List<Marker> markerList = new ArrayList<Marker>();
+        List<Marker> markerList = new ArrayList<>();
 
         try {
             // JDBCドライバを読み込む
@@ -25,7 +25,7 @@ public class MarkerDAO {
             conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
             // SQL文を準備する
-            String sql = "SELECT marker_id, marker_contents, board_id, marker_datetime FROM marker";
+            String sql = "SELECT * FROM marker";
             PreparedStatement pStmt = conn.prepareStatement(sql);
 
             // SQL文を実行し、結果表を取得する
@@ -33,20 +33,15 @@ public class MarkerDAO {
 
             // 結果表をコレクションにコピーする
             while (rs.next()) {
-                Marker record = new Marker(
-                        rs.getInt("marker_id"),
-                        rs.getString("marker_contents"),
-                        rs.getInt("board_id"),
-                        rs.getDate("marker_datetime")
-                );
-                markerList.add(record);
+                Marker marker = new Marker();
+                marker.setMarkerId(rs.getInt("marker_id"));
+                marker.setMarkerContents(rs.getString("marker_contents"));
+                marker.setBoardId(rs.getInt("board_id"));
+                marker.setMarkerDatetime(rs.getDate("marker_datetime"));
+                markerList.add(marker);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            markerList = null;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            markerList = null;
         } finally {
             // データベースを切断
             if (conn != null) {
@@ -54,7 +49,6 @@ public class MarkerDAO {
                     conn.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    markerList = null;
                 }
             }
         }
@@ -62,7 +56,6 @@ public class MarkerDAO {
         // 結果を返す
         return markerList;
     }
-
     public int selectBoardId() {
         Connection conn = null;
         int marker = 0;
@@ -148,4 +141,52 @@ public class MarkerDAO {
         // 結果を返す
         return result;
     }
+
+        public List<Marker> selectMarkers() {
+            Connection conn = null;
+            List<Marker> markerList = new ArrayList<>();
+
+            try {
+                // JDBCドライバを読み込む
+                Class.forName("org.h2.Driver");
+
+                // データベースに接続する
+                conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+                // SQL文を準備する
+                String sql = "SELECT marker_id, marker_contents, board_id, marker_datetime FROM marker";
+                PreparedStatement pStmt = conn.prepareStatement(sql);
+
+                // SQL文を実行し、結果表を取得する
+                ResultSet rs = pStmt.executeQuery();
+
+                // 結果表をコレクションにコピーする
+                while (rs.next()) {
+                    Marker marker = new Marker(
+                        rs.getInt("marker_id"),
+                        rs.getString("marker_contents"),
+                        rs.getInt("board_id"),
+                        rs.getDate("marker_datetime")
+                    );
+                    markerList.add(marker);
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+                markerList = null;
+            } finally {
+                // データベースを切断
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        markerList = null;
+                    }
+                }
+            }
+
+            // 結果を返す
+            return markerList;
+        }
+
 }

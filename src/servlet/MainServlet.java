@@ -14,9 +14,11 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.AllComDAO;
+import dao.MarkerComDAO;
 import dao.MarkerDAO;
 import model.AllCom;
 import model.Marker;
+import model.MarkerCom;
 import model.Users;
 
 @WebServlet("/MainServlet")
@@ -45,7 +47,7 @@ public class MainServlet extends HttpServlet {
             response.getWriter().write(jsonResponse);
         } else if (request.getParameter("markerData") != null) {
             MarkerDAO markerDao = new MarkerDAO();
-            List<Marker> markerList = markerDao.selectAllMarkers();
+            List<Marker> markerList = markerDao.selectMarkers();
 
             // JSON形式でマーカーデータを返す
             response.setContentType("application/json");
@@ -53,6 +55,18 @@ public class MainServlet extends HttpServlet {
 
             ObjectMapper mapper = new ObjectMapper();
             String jsonResponse = mapper.writeValueAsString(markerList);
+            response.getWriter().write(jsonResponse);
+        } else if (request.getParameter("markerId") != null) {
+            int markerId = Integer.parseInt(request.getParameter("markerId"));
+            MarkerComDAO markerComDao = new MarkerComDAO();
+            List<MarkerCom> markerComList = markerComDao.selectByMarkerId(markerId);
+
+            // JSON形式でマーカーコメントデータを返す
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonResponse = mapper.writeValueAsString(markerComList);
             response.getWriter().write(jsonResponse);
         } else {
             if (user == null) {

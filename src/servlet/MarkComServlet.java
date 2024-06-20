@@ -2,40 +2,30 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.MarkerComDAO;
 import model.MarkerCom;
 
 public class MarkComServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-		HttpSession session = request.getSession();
+        String markerComContents = request.getParameter("markerComContents");
+        int markerId = Integer.parseInt(request.getParameter("markerId"));
 
+        MarkerCom markerCom = new MarkerCom(0, markerComContents, markerId, null);
+        MarkerComDAO markerComDao = new MarkerComDAO();
+        boolean result = markerComDao.insert(markerCom);
 
-		// リクエストパラメータを取得する
-		request.setCharacterEncoding("UTF-8");
-		String markComContents = request.getParameter("markComContents");
-		String markerId = request.getParameter("markerId");
-		int markerIdint = Integer.parseInt(markerId);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-
-
-		// 登録処理を行う
-		MarkerComDAO mcDao = new MarkerComDAO();
-		if (mcDao.insert(new MarkerCom(0,markComContents,markerIdint,null))) {
-		}
-		else {
-		}
-
-		// 結果ページにフォワードする
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/regist.jsp");
-		dispatcher.forward(request, response);
-	}
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonResponse = mapper.writeValueAsString(result ? "success" : "error");
+        response.getWriter().write(jsonResponse);
+    }
 }
-
 

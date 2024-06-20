@@ -85,22 +85,21 @@
         <div class="markercontents">
             <ul id="markerList"></ul>
             <div>
-                <canvas id="myChart"></canvas>
+                <canvas id="myChart" class="myChart"></canvas>
             </div>
         </div>
     </div>
 
     <div class="newDiv" id="newDiv">
-        <span class="closeBtn">×</span>
-        <p id="newDivText"></p>
-        <div>
-            <canvas id="myChart"></canvas>
-        </div>
+    <span class="closeBtn">×</span>
+    <p id="newDivText"></p>
+    <p id="markerIdText"></p> <!-- markerIdを表示するための要素 -->
+    <div>
+        <textarea id="newCommentText" rows="4" cols="50"></textarea>
+        <button id="sendCommentBtn">送信</button>
     </div>
-    <div class="comform">
-        <!-- <input type="text" name="sendcomtext" class="comsend">
-        <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
-    </div>
+    <div id="commentsContainer"></div> <!-- コメントを表示するためのコンテナ -->
+</div>
 
     <script>
         // 使用するidの取得
@@ -111,6 +110,7 @@
         const contents = document.getElementById('contents');
         const newDiv = document.getElementById('newDiv');
         const newDivText = document.getElementById('newDivText');
+        const newDivId = document.getElementById('newDivId'); // 新しい要素の取得
         const closeBtn = document.querySelector('.newDiv .closeBtn');
         const submitBtn = document.getElementById('submitBtn');
         const markerList = document.getElementById('markerList');
@@ -189,8 +189,11 @@
                         a.addEventListener('click', function(event) {
                             event.preventDefault();
                             newDivText.textContent = marker.markerContents;
+                            newDivId.textContent = "Marker ID: " + marker.markerId; // markerIdの表示
                             newDiv.classList.add('big');
                             newDiv.classList.remove('close');
+                            var markerDiv = document.getElementById('marker');
+                            markerDiv.classList.add('small'); // markerのサイズを半分にする
                         });
                         li.appendChild(a);
                         markerList.appendChild(li);
@@ -205,6 +208,8 @@
         closeBtn.addEventListener('click', function() {
             newDiv.classList.remove('big');
             newDiv.classList.add('close');
+            var markerDiv = document.getElementById('marker');
+            markerDiv.classList.remove('small');
         });
 
         newDiv.addEventListener('animationend', function() {
@@ -345,6 +350,185 @@
     $(document).ready(function() {
         fetchComments();
         setInterval(fetchComments, 1000); // 1秒ごとにデータを取得
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 必要な要素を取得
+        const buttonOpen = document.getElementById('modalOpen');
+        const modal = document.getElementById('easyModal');
+        const buttonClose = document.getElementsByClassName('modalClose')[0];
+        const textarea = document.getElementById('textarea');
+        const contents = document.getElementById('contents');
+        const newDiv = document.getElementById('newDiv');
+        const newDivText = document.getElementById('newDivText');
+        const markerIdText = document.getElementById('markerIdText');
+        const closeBtn = document.querySelector('.newDiv .closeBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const sendCommentBtn = document.getElementById('sendCommentBtn');
+        const newCommentText = document.getElementById('newCommentText');
+        const markerList = document.getElementById('markerList');
+        const commentsContainer = document.getElementById('commentsContainer');
+
+        let currentMarkerId = null;
+
+        // ボタンがクリックされた時
+        buttonOpen.addEventListener('click', modalOpen);
+        function modalOpen() {
+            const text = textarea.value.replace(/\n/g, '<br>');
+            contents.innerHTML = text;
+            modal.style.display = 'block';
+        }
+
+        // バツ印がクリックされた時
+        buttonClose.addEventListener('click', modalClose);
+        function modalClose() {
+            modal.style.display = 'none';
+        }
+
+        // モーダルコンテンツ以外がクリックされた時
+        addEventListener('click', outsideClose);
+        function outsideClose(e) {
+            if (e.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // テキストを選択してマーカーを引く機能
+        contents.addEventListener('mouseup', function(event) {
+            const selection = window.getSelection();
+            if (!selection.isCollapsed) {
+                const range = selection.getRangeAt(0);
+                const selectedText = selection.toString();
+
+                const span = document.createElement('span');
+                span.classList.add('highlight');
+                range.surroundContents(span);
+
+                const markerContents = document.getElementById('markerContents');
+                markerContents.value = selectedText;
+            }
+        });
+
+        submitBtn.addEventListener('click', function() {
+            const markerContents = document.getElementById('markerContents').value;
+            $.ajax({
+                url: '/A1/MarkServlet',
+                type: 'POST',
+                data: { markerContents: markerContents },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        fetchMarkers();
+                        modalClose();
+                    } else {
+                        alert('Error saving marker');
+                    }
+                },
+                error: function() {
+                    alert('Error saving marker');
+                }
+            });
+        });
+
+        function fetchMarkers() {
+            $.ajax({
+                url: '/A1/MainServlet',
+                type: 'GET',
+                data: { markerData: true },
+                dataType: 'json',
+                success: function(data) {
+                    markerList.innerHTML = '';
+                    data.forEach(function(marker) {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.textContent = marker.markerContents;
+                        a.href = "#";
+                        a.dataset.markerId = marker.markerId;
+                        a.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            newDivText.textContent = marker.markerContents;
+                            markerIdText.textContent = marker.markerId;
+                            currentMarkerId = marker.markerId;
+                            newDiv.classList.add('big');
+                            newDiv.classList.remove('close');
+                            var markerDiv = document.getElementById('marker');
+                            markerDiv.classList.add('small'); // markerのサイズを半分にする
+
+                            fetchComments(currentMarkerId);
+                        });
+                        li.appendChild(a);
+                        markerList.appendChild(li);
+                    });
+                },
+                error: function() {
+                    console.error('Error fetching markers');
+                }
+            });
+        }
+
+        function fetchComments(markerId) {
+            $.ajax({
+                url: '/A1/MainServlet',
+                type: 'GET',
+                data: { markerId: markerId },
+                dataType: 'json',
+                success: function(data) {
+                    commentsContainer.innerHTML = '';
+                    data.forEach(function(comment) {
+                        const p = document.createElement('p');
+                        p.textContent = comment.markerComContents;
+                        commentsContainer.appendChild(p);
+                    });
+                },
+                error: function() {
+                    console.error('Error fetching comments');
+                }
+            });
+        }
+
+        sendCommentBtn.addEventListener('click', function() {
+            const commentText = newCommentText.value;
+            if (currentMarkerId && commentText) {
+                $.ajax({
+                    url: '/A1/MarkerComServlet',
+                    type: 'POST',
+                    data: {
+                        markerComContents: commentText,
+                        markerId: currentMarkerId
+                    },
+                    success: function(response) {
+                        if (response === 'success') {
+                            newCommentText.value = '';
+                            fetchComments(currentMarkerId);
+                        } else {
+                            alert('Error saving comment');
+                        }
+                    },
+                    error: function() {
+                        alert('Error saving comment');
+                    }
+                });
+            }
+        });
+
+        closeBtn.addEventListener('click', function() {
+            newDiv.classList.remove('big');
+            newDiv.classList.add('close');
+            var markerDiv = document.getElementById('marker');
+            markerDiv.classList.remove('small');
+        });
+
+        newDiv.addEventListener('animationend', function() {
+            if (newDiv.classList.contains('close')) {
+                newDiv.classList.remove('close');
+                newDiv.style.zIndex = -1;
+            }
+        });
+
+        $(document).ready(function() {
+            fetchMarkers();
+            setInterval(fetchMarkers, 1000); // 1秒ごとにデータを取得
+        });
     });
 </script>
 </body>
