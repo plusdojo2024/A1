@@ -9,6 +9,10 @@ public class Marker implements Serializable {
 	private Date markerDatetime;    //日付
 
 
+	public Marker() {
+
+	}
+
 	public Marker(int markerId, String markerContents, int boardId, Date markerDatetime) {
 		super();
 		this.markerId = markerId;
