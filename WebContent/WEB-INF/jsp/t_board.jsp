@@ -1,249 +1,223 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document</title>
-<link rel="stylesheet" href="css/s-board.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/t-board.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<header>
-		<div class="headbtn">
-			<button class="markerbtn">生徒用</button>
-			<button id="modalOpen" class="markerbtn">マーカー</button>
-			<button class="markerbtn">
-				<span class=center></span>ファイル添付
-			</button>
-		</div>
-		<div id="easyModal" class="modal">
-			<div class="modal-content">
-				<div class="modal-header">
-					<span class="modalClose">×</span>
-				</div>
-				<div class="modal-body">
-					<div class="contents" id="contents">
-						<!-- ここにテキストエリアの内容が表示されます -->
+    <header>
+        <div class="headbtn">
+            <button class="markerbtn">先生用</button>
+            <button id="modalOpen" class="markerbtn">マーカー</button>
+            <button class="markerbtn">
+                <span class=center></span>ファイル添付
+            </button>
+        </div>
+        <div id="easyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modalClose">×</span>
+                </div>
+                <div class="modal-body">
+                    <div class="contents" id="contents">
+                        <!-- ここにテキストエリアの内容が表示されます -->
+                    </div>
+                    <form id="markerForm">
+                        <div id="markerContentsContainer">
+                            <textarea name="markerContents" id="markerContents" rows="4" cols="50"></textarea>
+                        </div>
+                        <button type="button" id="submitBtn" class="btn btn-primary mt-3">送信</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-					</div>
-					<form action="YourServlet" method="POST" id="enqueteForm">
-						<div class="enquete" id="enquete"></div>
-						<button type="submit" id="submitBtn" class="btn btn-primary mt-3">送信</button>
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<div class="boardcomit">
-			<p class="center">板書切り替え</p>
-		</div>
-		<a href="/A1/RecordServlet">
-		<div class="pagechange">
-			<p class="center">履歴</p>
-		</div>
-		</a>
-	</header>
-	<div class="board">
-		<textarea name="text" class="text" id="textarea"></textarea>
-	</div>
-	<div class="com">
-		<ul class="markcomlive">
-			<li class="markcombox">
-				<div class="marklivecom1">
-					<p class="marktext">こんにちは</p>
-					<p class=markre>♡</p>
-				</div>
-			</li>
-			<li class="markcombox">
-				<div class="marklivecom2">
-					<p class="marktext">おはよう</p>
-					<p class=markre>♡</p>
-				</div>
-			</li>
-			<li class="markcombox">
-				<div class="marklivecom3">
-					<p class="marktext">さよなら</p>
-					<p class=markre>♡</p>
-				</div>
-			</li>
-		</ul>
-	</div>
-	<div class="allcom">
-		<div class="allcomtext" id="allcomdiv">
-			<!-- ここにコメントを表示 -->
-
-		</div>
-		<div class="allcomform">
-			<input type="text" name="allComContents" class="allcomsend"
-				id="allcom"> <input type="button" name="submit" value="送信"
-				class="allcombtn" onclick="goAjax()">
-		</div>
-	</div>
-	<div class="marker" id="marker">
-		<div class="markercontents">
-			<ul id="markerList"></ul>
-			<div>
-				<canvas id="myChart"></canvas>
-			</div>
-		</div>
-
-	</div>
-
-	<div class="newDiv" id="newDiv">
-    <span class="closeBtn">×</span>
-    <p id="newDivText"></p>
-    <div>
-        <canvas id="myChart"></canvas>
+        <div class="boardcomit">
+            <p class="center">板書切り替え</p>
+        </div>
+        <a href="/A1/RecordServlet">
+            <div class="pagechange">
+                <p class="center">履歴</p>
+            </div>
+        </a>
+    </header>
+    <div class="board">
+        <textarea name="text" class="text" id="textarea"></textarea>
     </div>
-</div>
-		<div class="comform">
-			<!--<input type="text" name="sendcomtext" class="comsend">
-            <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
-		</div>
-	</div>
+    <div class="com">
+        <ul class="markcomlive">
+            <li class="markcombox">
+                <div class="marklivecom1">
+                    <p class="marktext">こんにちは</p>
+                    <p class=markre>♡</p>
+                </div>
+            </li>
+            <li class="markcombox">
+                <div class="marklivecom2">
+                    <p class="marktext">おはよう</p>
+                    <p class=markre>♡</p>
+                </div>
+            </li>
+            <li class="markcombox">
+                <div class="marklivecom3">
+                    <p class="marktext">さよなら</p>
+                    <p class=markre>♡</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="allcom">
+        <div class="allcomtext" id="allcomdiv">
+            <!-- ここにコメントを表示 -->
+        </div>
+        <div class="allcomform">
+            <input type="text" name="allComContents" class="allcomsend" id="allcom">
+            <input type="button" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
+        </div>
+    </div>
+    <div class="marker" id="marker">
+        <div class="markercontents">
+            <ul id="markerList"></ul>
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
 
-</body>
-</html>
+    <div class="newDiv" id="newDiv">
+        <span class="closeBtn">×</span>
+        <p id="newDivText"></p>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    <div class="comform">
+        <!-- <input type="text" name="sendcomtext" class="comsend">
+        <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
+    </div>
 
-<script>
-    // 使用するidの取得
-    // modalを開くためのボタン
-    const buttonOpen = document.getElementById('modalOpen');
-    // modalを開いたときのdiv
-    const modal = document.getElementById('easyModal');
-    // modalを閉じるためのバツ
-    const buttonClose = document.getElementsByClassName('modalClose')[0];
-    // テキストを入力するためのエリア
-    const textarea = document.getElementById('textarea');
-    // modalが開いたときに入力されている内容
-    const contents = document.getElementById('contents');
-    // マーカーで指定された単語をクリックしたときに出てくるdiv(右下)
-    const newDiv = document.getElementById('newDiv');
-    // マーカーで指定された単語をクリックしたときに出てくるdivに表示されるマーカーで指定された単語
-    const newDivText = document.getElementById('newDivText');
-    // マーカーで指定された単語をクリックしたときに出てくるdivを閉じるためのバツ
-    const closeBtn = document.querySelector('.newDiv .closeBtn');
+    <script>
+        // 使用するidの取得
+        const buttonOpen = document.getElementById('modalOpen');
+        const modal = document.getElementById('easyModal');
+        const buttonClose = document.getElementsByClassName('modalClose')[0];
+        const textarea = document.getElementById('textarea');
+        const contents = document.getElementById('contents');
+        const newDiv = document.getElementById('newDiv');
+        const newDivText = document.getElementById('newDivText');
+        const closeBtn = document.querySelector('.newDiv .closeBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const markerList = document.getElementById('markerList');
 
-    // ボタンがクリックされた時
-    buttonOpen.addEventListener('click', modalOpen);
-    function modalOpen() {
-        // テキストエリアの内容を取得して改行を<br>タグに変換
-        const text = textarea.value.replace(/\n/g, '<br>');
-        contents.innerHTML = text;
-        modal.style.display = 'block';
-    }
+        // ボタンがクリックされた時
+        buttonOpen.addEventListener('click', modalOpen);
+        function modalOpen() {
+            const text = textarea.value.replace(/\n/g, '<br>');
+            contents.innerHTML = text;
+            modal.style.display = 'block';
+        }
 
-    // バツ印がクリックされた時
-    buttonClose.addEventListener('click', modalClose);
-    function modalClose() {
-        modal.style.display = 'none';
-    }
-
-    // モーダルコンテンツ以外がクリックされた時
-    addEventListener('click', outsideClose);
-    function outsideClose(e) {
-        if (e.target == modal) {
+        // バツ印がクリックされた時
+        buttonClose.addEventListener('click', modalClose);
+        function modalClose() {
             modal.style.display = 'none';
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var enquete = document.getElementById('enquete');
+        // モーダルコンテンツ以外がクリックされた時
+        addEventListener('click', outsideClose);
+        function outsideClose(e) {
+            if (e.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
 
+        // テキストを選択してマーカーを引く機能
         contents.addEventListener('mouseup', function(event) {
-            // テキストの選択範囲を取得
-            var selection = window.getSelection();
+            const selection = window.getSelection();
             if (!selection.isCollapsed) {
-                var range = selection.getRangeAt(0);
-                var selectedText = selection.toString();
+                const range = selection.getRangeAt(0);
+                const selectedText = selection.toString();
 
-                // 選択された範囲を包むspan要素を作成
-                var span = document.createElement('span');
+                const span = document.createElement('span');
                 span.classList.add('highlight');
                 range.surroundContents(span);
-                // コメントを表示する要素を作成
-                var comment = document.createElement('div');
-                comment.classList.add('comment');
-                comment.textContent = 'あいうえお'; // 初期コメント
 
-                span.appendChild(comment);
-
-                // 選択されたテキストをチェックボックスとしてenqueteに追加
-                var checkboxWrapper = document.createElement('div');
-                var checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.name = 'selectedTexts';
-                checkbox.value = selectedText;
-                checkbox.checked = true; // チェックボックスを最初からチェックした状態にする
-                checkboxWrapper.appendChild(checkbox);
-
-                var label = document.createElement('label');
-                label.textContent = selectedText;
-                checkboxWrapper.appendChild(label);
-
-                // 削除ボタンを追加
-                var deleteButton = document.createElement('button');
-                deleteButton.textContent = '削除';
-                deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ml-2');
-                deleteButton.addEventListener('click', function() {
-                    // チェックボックスの親要素を削除
-                    checkboxWrapper.remove();
-                    // テキストの背景色を元に戻す
-                    span.outerHTML = span.innerHTML;
-                });
-                checkboxWrapper.appendChild(deleteButton);
-
-                enquete.appendChild(checkboxWrapper);
-
-                // 選択を解除
-                selection.removeAllRanges();
+                const markerContents = document.getElementById('markerContents');
+                markerContents.value = selectedText;
             }
         });
 
-        // 送信ボタンが押されたときの処理
-        var submitBtn = document.getElementById('submitBtn');
-        submitBtn.addEventListener('click', function(event) {
-            event.preventDefault(); // フォームのデフォルトの送信を防ぐ
-            var markerList = document.getElementById('markerList');
-            var checkboxes = enquete.querySelectorAll('input[type="checkbox"]:checked');
-            checkboxes.forEach(function(checkbox) {
-                var li = document.createElement('li');
-                var a = document.createElement('a');
-                a.textContent =checkbox.value;
-                a.href = "#";
-                a.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    newDivText.textContent = checkbox.value;
-                    var markerDiv = document.getElementById('marker');
-                    markerDiv.classList.add('small'); // markerのサイズを半分にする
-                    newDiv.classList.add('big'); // newDivを表示する
-                    newDiv.classList.remove('close');
-                });
-                li.appendChild(a);
-                markerList.appendChild(li);
+        submitBtn.addEventListener('click', function() {
+            const markerContents = document.getElementById('markerContents').value;
+            $.ajax({
+                url: '/A1/MarkServlet',
+                type: 'POST',
+                data: { markerContents: markerContents },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        fetchMarkers();
+                        modalClose();
+                    } else {
+                        alert('Error saving marker');
+                    }
+                },
+                error: function() {
+                    alert('Error saving marker');
+                }
             });
-            enquete.innerHTML = ''; // フォームをクリア
         });
 
-        // newDivのバツボタンが押されたときの処理
+        function fetchMarkers() {
+            $.ajax({
+                url: '/A1/MainServlet',
+                type: 'GET',
+                data: { markerData: true },
+                dataType: 'json',
+                success: function(data) {
+                    markerList.innerHTML = '';
+                    data.forEach(function(marker) {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.textContent = marker.markerContents;
+                        a.href = "#";
+                        a.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            newDivText.textContent = marker.markerContents;
+                            newDiv.classList.add('big');
+                            newDiv.classList.remove('close');
+                        });
+                        li.appendChild(a);
+                        markerList.appendChild(li);
+                    });
+                },
+                error: function() {
+                    console.error('Error fetching markers');
+                }
+            });
+        }
+
         closeBtn.addEventListener('click', function() {
-            newDiv.classList.remove('big'); // bigクラスを削除
-            newDiv.classList.add('close'); // closeアニメーションを追加
-            var markerDiv = document.getElementById('marker');
-            markerDiv.classList.remove('small'); // markerのサイズを元に戻す
+            newDiv.classList.remove('big');
+            newDiv.classList.add('close');
         });
 
-        // アニメーション終了時にnewDivを非表示にする処理を追加
         newDiv.addEventListener('animationend', function() {
             if (newDiv.classList.contains('close')) {
                 newDiv.classList.remove('close');
                 newDiv.style.zIndex = -1;
             }
         });
-    });
+
+        $(document).ready(function() {
+            fetchMarkers();
+            setInterval(fetchMarkers, 1000); // 1秒ごとにデータを取得
+        });
     </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -373,3 +347,5 @@
         setInterval(fetchComments, 1000); // 1秒ごとにデータを取得
     });
 </script>
+</body>
+</html>
