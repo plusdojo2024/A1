@@ -13,6 +13,7 @@ selectBoard
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,9 +47,9 @@ public class BlackBoardDAO {
 			// 結果表をコレクションにコピーする
 			while (rs.next()) {
 				BlackBoard record = new BlackBoard(
-				rs.getInt("boardId"),
-				rs.getString("boardContents"),
-				rs.getDate("boardDate")
+				rs.getInt("board_id"),
+				rs.getString("board_contents"),
+				rs.getDate("board_date")
 				);
 				blackBoardList.add(record);
 			}
@@ -90,7 +91,7 @@ public class BlackBoardDAO {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "INSERT INTO black_board VALUES (null, now(),? )";
+		String sql = "INSERT INTO black_board (board_contents) VALUES (?)";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
@@ -197,7 +198,7 @@ public ArrayList<BlackBoard> selectDate() {
 		// 結果表をコレクションにコピーする
 		while (rs.next()) {
 			BlackBoard record = new BlackBoard();
-			record.setBlackBoardDatetime(rs.getDate("boardDate"));
+			record.setBlackBoardDatetime(rs.getDate("board_date"));
 
 			blackBoardList.add(record);
 		}
@@ -226,9 +227,9 @@ public ArrayList<BlackBoard> selectDate() {
 
 
 //板書履歴の日付をクリックした際に、過去板書の中身を持ってくる
-public boolean selectBoard(BlackBoard blackBoard) {
+public ArrayList<BlackBoard> selectBoard(Date blackBoardDatetime) {
 	Connection conn = null;
-	boolean result = false;
+	ArrayList<BlackBoard> boardList = new ArrayList<BlackBoard>();
 
 	try {
 		// JDBCドライバを読み込む
@@ -243,18 +244,27 @@ public boolean selectBoard(BlackBoard blackBoard) {
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
-		pStmt.setDate(1 , blackBoard.getBlackBoardDatetime());
+		pStmt.setDate(1, blackBoardDatetime);
 
-		// SQL文を実行する
-		if (pStmt.executeUpdate() == 1) {
-			result = true;
-		}
+		// SQL文を実行し、結果表を取得する
+        ResultSet rs = pStmt.executeQuery();
+
+        // 結果表をコレクションにコピーする
+        while (rs.next()) {
+        	BlackBoard blackBoard = new BlackBoard();
+        	blackBoard.setBlackBoardDatetime(rs.getDate("board_date"));
+        	blackBoard.setBoardContents(rs.getString("board_contents"));
+
+        	boardList.add(blackBoard);
+        }
 	}
 	catch (SQLException e) {
 		e.printStackTrace();
+		boardList = null;
 	}
 	catch (ClassNotFoundException e) {
 		e.printStackTrace();
+		boardList = null;
 	}
 	finally {
 		// データベースを切断
@@ -264,13 +274,13 @@ public boolean selectBoard(BlackBoard blackBoard) {
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
+				boardList = null;
 			}
 		}
 	}
 
-	// 結果を返す
-	return result;
-	}
+	return boardList;
+}
 
 
 //講師の画面：「板書切り替え」ボタンをクリックしたら新しい板書をINSERT
