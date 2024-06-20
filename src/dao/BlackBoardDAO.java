@@ -319,6 +319,12 @@ public boolean insertBoard() {
 	return result;
 	}
 
+
+
+
+
+
+
 public boolean updateBoard(BlackBoard board_id, BlackBoard board_contents ) {
 	Connection conn = null;
 	boolean result = false;
@@ -368,3 +374,4 @@ public boolean updateBoard(BlackBoard board_id, BlackBoard board_contents ) {
 }
 //INSERT INTO(board_contents) Values("");
 //UPDATE black_board SET board_contents = ? WHERE id = ?;
+
