@@ -26,6 +26,8 @@ public class MarkerRec implements Serializable {
 		this.markerRecDatetime = markerRecDatetime;
 	}
 
+
+
 	public int getMarkerRecNumber() {
         return markerRecNumber;
     }
@@ -75,8 +77,12 @@ public class MarkerRec implements Serializable {
         this.markerRecDatetime = markerRecDatetime;
     }
 
+    //－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+	public MarkerRec() {
+
+	}
 	public void setMarkerContents(String string) {
-		// ちょっとよくわからん
 
 	}
 
