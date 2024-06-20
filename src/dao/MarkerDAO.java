@@ -73,8 +73,60 @@ public class MarkerDAO {
 		return markerList;
 	}
 
+	public int selectBoardId() {
+		Connection conn = null;
+		int marker=0;
 
-	public boolean insert(Marker marker) {
+		try {
+			// JDBCドライバを読み込む
+			Class.forName("org.h2.Driver");
+
+			// データベースに接続する
+			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+			// SQL文を準備する
+			String sql = "SELECT max(board_id) FROM black_board";
+
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			// SQL文を実行し、結果表を取得する
+			ResultSet rs = pStmt.executeQuery();
+
+			// 結果表をコレクションにコピーする
+			while (rs.next()) {
+				Marker record = new Marker();
+				record.setBoardId(rs.getInt("boardId"));
+
+				marker=record.getBoardId();
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			marker = 0;
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			marker = 0;
+		}
+		finally {
+			// データベースを切断
+			if (conn != null) {
+				try {
+					conn.close();
+				}
+				catch (SQLException e) {
+					e.printStackTrace();
+					marker = 0;
+				}
+			}
+		}
+
+		// 結果を返す
+		return marker;
+	}
+
+
+	public boolean insert(String markerContents, int boardId) {
 		Connection conn = null;
 		boolean result = false;
 
@@ -86,13 +138,12 @@ public class MarkerDAO {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SQL文を準備する
-			String sql = "INSERT INTO marker VALUES (NULL, ?, ?, ?, now())";
+			String sql = "INSERT INTO marker VALUES (NULL, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を完成させる
-			pStmt.setInt(1, marker.getMarkerId());
-			pStmt.setString(2, marker.getMarkerContents());
-			pStmt.setInt(3, marker.getBoardId());
+			pStmt.setString(1, markerContents);
+			pStmt.setInt(2, boardId);
 			// SQL文を実行する
 			if (pStmt.executeUpdate() == 1) {
 				result = true;
