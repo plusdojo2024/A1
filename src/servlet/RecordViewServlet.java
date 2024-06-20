@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,8 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.sun.tools.javac.util.List;
 
 import dao.BlackBoardDAO;
 import model.BlackBoard;
@@ -20,9 +19,15 @@ public class RecordViewServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+//日付の値を取得する。
+		request.setCharacterEncoding("UTF-8");
+
+		Date date =
+
+//DAOに作業を任せる
 
 		BlackBoardDAO dao = new BlackBoardDAO();
-	    List<BlackBoard> list = dao.select();
+	    List<BlackBoard> list = dao.select(date);
 	    request.setAttribute("blackBoardList", list);
 
 

@@ -8,22 +8,23 @@
 <link rel="stylesheet" href="css/s-regist.css">
 </head>
 <body>
+<h1 id="logo"><img src="img/くらすぼーどロゴ.png" alt="くらすぼーど" width="300"></h1>
     <div class="box">
         <div class="content">
-            <h2 class="login">くらすぼーど</h2>
+            <h2 class="login"></h2>
         </div>
 <form id="login_form" method="post" action="/A1/SUserRegistServlet" class="form">
 
         <label>名前<br>
-        <input type="text" name="id">
+        <input  class="text" type="text" name="id" placeholder="山田太郎">
         </label><br>
 
         <label>メールアドレス<br>
-        <input type="text" name="mail">
+        <input  class="text" type="text" name="mail" placeholder="メールアドレス">
         </label><br>
 
         <label>Pass word<br>
-        <input type="password" name="pw">
+        <input  class="text" type="password" name="pw" placeholder="パスワードは8∼16桁の英数字混合で設定してください">
         </label><br>
         <input type="submit" name="submit" value="log in">
         <input type="reset" name="reset" value="reset"><br>

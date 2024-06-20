@@ -8,22 +8,23 @@
 <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
+<h1 id="logo"><img src="img/くらすぼーどロゴ.png" alt="くらすぼーど" width="300"></h1>
     <div class="box">
         <div class="content">
-            <h2 class="login">くらすぼーど</h2>
+            <h2 class="login"></h2>
         </div>
 <form id="login_form" method="post" action="/A1/LoginServlet" class="form">
 
-        <label>メールアドレス<br>
-        <input type="text" name="mail">
-        </label><br>
+        <input class="text" type="text" name="mail" placeholder="メールアドレス">
+        <br>
 
-        <label>パスワード<br>
-        <input type="password" name="pw">
-        </label><br>
-
-        <input type="submit" name="submit" value="ログイン">
-        <input type="reset" name="reset" value="リセット"><br>
+        <input class="text"type="password" name="pw" placeholder="パスワード             ">
+        <br>
+        <input class="textsub"type="submit" name="submit" value="ログイン"
+        		>
+        <input class="textres"type="reset" name="reset" value="リセット">
+        <br>
+		<br>
         <span id="error_message">
             <% if (request.getAttribute("error") != null) { %>
                 <%= request.getAttribute("error") %>
