@@ -174,7 +174,7 @@ public boolean update(BlackBoard blackBoard) {
 
 
 //板書履歴に日付一覧を表示するために、今までの日付を持ってくる。
-public ArrayList<BlackBoard> selectDate(BlackBoard blackBoard) {
+public ArrayList<BlackBoard> selectDate() {
 	Connection conn = null;
 
 	ArrayList<BlackBoard> blackBoardList = new ArrayList<BlackBoard>();
