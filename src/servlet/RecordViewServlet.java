@@ -19,9 +19,15 @@ public class RecordViewServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+//日付の値を取得する。
+		request.setCharacterEncoding("UTF-8");
+
+		Date date =
+
+//DAOに作業を任せる
 
 		BlackBoardDAO dao = new BlackBoardDAO();
-	    List<BlackBoard> list = dao.select();
+	    List<BlackBoard> list = dao.select(date);
 	    request.setAttribute("blackBoardList", list);
 
 
