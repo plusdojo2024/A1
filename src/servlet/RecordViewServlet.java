@@ -27,10 +27,10 @@ public class RecordViewServlet extends HttpServlet {
 //DAOに作業を任せる
 
 		BlackBoardDAO dao = new BlackBoardDAO();
-	    List<BlackBoard> list = dao.selectBoard(intboardId);
+	    List<BlackBoard> bblist = dao.selectBoard(intboardId);
 
 //結果をスコープに格納してjspに送る
-	    request.setAttribute("blackBoardList", list);
+	    request.setAttribute("blackBoardList", bblist);
 
 		// ログインページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/view_board_record.jsp");

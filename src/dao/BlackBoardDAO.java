@@ -240,7 +240,7 @@ public ArrayList<BlackBoard> selectBoard(int boardId) {
 
 		// SQL文を準備する
 
-		String sql = "select board_id, board_contents from black_board where board_date = ?;";
+		String sql = "select board_id,board_date, board_contents from black_board where board_id = ?";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
@@ -254,7 +254,6 @@ public ArrayList<BlackBoard> selectBoard(int boardId) {
         	BlackBoard blackBoard = new BlackBoard();
         	blackBoard.setBlackBoardDatetime(rs.getDate("board_date"));
         	blackBoard.setBoardContents(rs.getString("board_contents"));
-
         	blackBoardList.add(blackBoard);
         }
 	}
