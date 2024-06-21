@@ -21,15 +21,16 @@ public class RecordViewServlet extends HttpServlet {
 			throws ServletException, IOException {
 //日付の値を取得する。
 		request.setCharacterEncoding("UTF-8");
-
-		Date date =
+		String boardId=request.getParameter("boardId");
+		int intboardId = Integer.parseInt(boardId);
 
 //DAOに作業を任せる
 
 		BlackBoardDAO dao = new BlackBoardDAO();
-	    List<BlackBoard> list = dao.select(date);
-	    request.setAttribute("blackBoardList", list);
+	    List<BlackBoard> list = dao.selectBoard(intboardId);
 
+//結果をスコープに格納してjspに送る
+	    request.setAttribute("blackBoardList", list);
 
 		// ログインページにフォワードする
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/view_board_record.jsp");

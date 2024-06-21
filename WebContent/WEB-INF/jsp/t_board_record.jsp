@@ -28,8 +28,9 @@
     <div class="board-list">
         <c:forEach var="board" items="${blackBoardList}">
             <div class="board-item">
-                <a href="/A1/DisplayBoardContentServlet?boardId=${board.boardId} ">
+                <a href="/A1/RecordViewServlet?boardId=${board.boardId} ">
                     ${board.blackBoardDatetime}
+                    ${board.boardId}
                 </a>
             </div>
         </c:forEach>

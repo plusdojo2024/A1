@@ -188,7 +188,7 @@ public ArrayList<BlackBoard> selectDate() {
 
 		// SQL文を準備する
 
-		String sql = "SELECT board_date FROM black_board order by board_date desc;";
+		String sql = "SELECT board_date , board_id FROM black_board order by board_date desc;";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を実行し、結果表を取得する
@@ -198,6 +198,7 @@ public ArrayList<BlackBoard> selectDate() {
 		while (rs.next()) {
 			BlackBoard record = new BlackBoard();
 			record.setBlackBoardDatetime(rs.getDate("board_date"));
+			record.setBoardId(rs.getInt("board_id"));
 
 			blackBoardList.add(record);
 		}
