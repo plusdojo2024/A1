@@ -64,19 +64,6 @@ public class MainServlet extends HttpServlet {
         // 全てのマーカーコメントの取得
         if (request.getParameter("allMarkerCom") != null) {
             MarkerComDAO mcDao = new MarkerComDAO();
-            List<MarkerCom> markerComList = mcDao.selectAll();
-
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonResponse = mapper.writeValueAsString(markerComList);
-            response.getWriter().write(jsonResponse);
-            return;
-        }
-
-        if (request.getParameter("allMarkerCom") != null) {
-            MarkerComDAO mcDao = new MarkerComDAO();
             List<MarkerCom> markerComList = mcDao.selectAllWithMarkerContents();
 
             response.setContentType("application/json");
@@ -88,10 +75,12 @@ public class MainServlet extends HttpServlet {
             return;
         }
 
+
+
         // マーカーの取得
-        if (request.getParameter("markerData") != null) {
+        if (request.getParameter("latestMarkers") != null) {
             MarkerDAO markerDao = new MarkerDAO();
-            List<Marker> markerList = markerDao.selectMarkers();
+            List<Marker> markerList = markerDao.selectMarkersByMaxBoardId();
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

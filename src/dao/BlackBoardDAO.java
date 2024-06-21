@@ -78,50 +78,47 @@ public class BlackBoardDAO {
 		return blackBoardList;
 	}
 
-	public boolean insert(BlackBoard blackBoard) {
-	Connection conn = null;
-	boolean result = false;
+	public boolean insert() {
+		Connection conn = null;
+        boolean result = false;
 
-	try {
-		// JDBCドライバを読み込む
-		Class.forName("org.h2.Driver");
+        try {
+            // JDBCドライバを読み込む
+            Class.forName("org.h2.Driver");
 
-		// データベースに接続する
-		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+            // データベースに接続する
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-		// SQL文を準備する
-		String sql = "INSERT INTO black_board (board_contents) VALUES (?)";
-		PreparedStatement pStmt = conn.prepareStatement(sql);
+            // SQL文を準備する
+            String sql = "INSERT INTO black_board(board_contents) Values('');";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
 
-		// SQL文を完成させる
-		pStmt.setString(1, blackBoard.getBoardContents());
+            // SQL文を実行し、結果表を取得する
+            int num = pStmt.executeUpdate();
 
-		// SQL文を実行する
-		if (pStmt.executeUpdate() == 1) {
-			result = true;
-		}
-	}
-	catch (SQLException e) {
-		e.printStackTrace();
-	}
-	catch (ClassNotFoundException e) {
-		e.printStackTrace();
-	}
-	finally {
-		// データベースを切断
-		if (conn != null) {
-			try {
-				conn.close();
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+            // SQL文を実行する
+            if (num == 1) {
+                result = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            // データベースを切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-	// 結果を返す
-	return result;
-}
+        // 結果を返す
+        return result;
+    }
+
 
 
 //講師による板書への加筆を行えるようにする。

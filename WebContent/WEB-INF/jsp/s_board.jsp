@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="css/t-board.css">
+    <link rel="stylesheet" href="css/s-board.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -76,14 +76,23 @@
     </div>
 
     <div class="newDiv" id="newDiv">
-        <span class="closeBtn">×</span>
-        <p id="newDivText"></p>
-        <p id="markerIdText"></p>
-        <div id="commentsContainer"></div>
-        <div class="newDivform">
-            <textarea id="newCommentText" rows="4" cols="50"></textarea>
-            <button id="sendCommentBtn">送信</button>
+		<span class="closeBtn">×</span>
+		<p id="newDivText"></p>
+		<p id="markerIdText"></p>
+		<div class="chart">
+        <canvas id="myChart" class="myChart"></canvas>
         </div>
+        <button type="button" id="verygoodtBtn" class="verygoodbtn">vg</button>
+        <button type="button" id="goodtBtn" class="goodbtn">g</button>
+        <button type="button" id="badtBtn" class="badbtn">b</button>
+        <button type="button" id="verybadtBtn" class="verybadbtn">vb</button>
+		<div class="newdivcom">
+		<div id="commentsContainer"></div>
+		</div>
+		<div class="newDivform">
+			<textarea id="newCommentText" rows="4" cols="50"></textarea>
+			<button id="sendCommentBtn">送信</button>
+		</div>
 
     </div>
 
@@ -186,7 +195,7 @@
                 $.ajax({
                     url: '/A1/MainServlet',
                     type: 'GET',
-                    data: { markerData: true },
+                    data: { latestMarkers: true },
                     dataType: 'json',
                     success: function(data) {
                         markerList.innerHTML = '';

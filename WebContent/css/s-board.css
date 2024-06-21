@@ -34,6 +34,18 @@ li{
     justify-content: center;
     align-items: center;
 }
+.alert-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f44336;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
 .text{
     width:99%;
     height:99%;
@@ -55,30 +67,8 @@ li{
     justify-content: center;
     align-items: center;
 }
-.marklivecom1{
-    position: relative;
-    width:100%;
-    height:60px;
-    border:1px solid rgba(48, 133, 195, 1);
-    margin-top:10px;
-}
-.marklivecom2{
-    position: relative;
-    width:350px;
-    height:60px;
-    border:1px solid rgba(48, 133, 195, 1);
-    margin-top:10px;
-}
-.marklivecom3{
-    position: relative;
-    width:350px;
-    height:60px;
-    border:1px solid rgba(48, 133, 195, 1);
-    margin-top:10px;
-}
-.markcombox{
-    list-style: none;
-}
+
+
 .marktext{
     position:absolute;
     top:50%;
@@ -93,6 +83,25 @@ li{
     font-size: 2rem;
 
 }
+
+.markcombox {
+        margin: 0;
+        padding: 5px;
+        width: 100%;
+        height: 270px;
+        background: rgba(255, 255, 255, 0.8);
+        word-wrap: break-word; /* 長い単語の折り返し */
+        white-space: normal; /* テキストの折り返し */
+        position:absolute;
+        top:1%;
+        left:0%;
+        overflow: auto;
+    }
+    .markcomlive hr {
+        margin: 0;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
 /* 左下 */
 .allcom{
     background-color: white;
@@ -114,11 +123,13 @@ li{
     left:47%;
     transform: translate(-50%);
     z-index:10;
+
 }
 
 .allcomtext p{
     margin:4px;
 }
+
 /* 右 */
 .marker{
     background-color: white;
@@ -129,30 +140,27 @@ li{
     margin-top:8%;
     top:0px;
     right:1%;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: auto;
 }
-.newDiv {
-    background-color: white;
-    width: 26%;
-    height: 0;
-    border: 1px solid rgba(48, 133, 195, 1);
-    position: absolute;
-    bottom: 3%;
-    right: 1%;
-    overflow: hidden;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+
+#commentsContainer{
+        position: absolute;
+        right:3%;
+        top:180px;
+        width:390px;
+    	height:30%;
+        z-index: 100;
+        padding: 20px;
+         overflow: auto;
 }
 
 .newDiv.big {
     animation: growUp 0.3s forwards;
-    z-index: 10;
+    z-index: 100;
 }
 .newDiv.close {
     animation: slideDown 0.3s forwards;
-    z-index: 10;
+    z-index: 100;
 }
 #newDivText{
     position:absolute;
@@ -160,10 +168,46 @@ li{
     top:5%;
     transform: translate(-50%);
 }
-.comform{
+#newCommentText{
+	position:absolute;
+	top:1px;
+    width:100px;
+    height:20px;
+    resize: none;
 
 }
-
+    .newDiv {
+        display: none;
+        position: fixed;
+        top: 70%;
+        left: 86%;
+        transform: translate(-50%, -50%);
+        width:26%;
+    	height:80%;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ccc;
+        z-index: 100;
+        padding: 20px;
+    }
+    .newDiv.big {
+        display: block;
+    }
+    .closeBtn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+#sendCommentBtn{
+	position:absolute;
+	left:100px;
+	width:40px;
+	margin-left:10px;
+}
+.newDivform{
+	position:absolute;
+	top:80%;
+}
 .combtn{
     bottom: 10%;
     z-index:2;
@@ -174,7 +218,7 @@ li{
     left:50%;
     transform: translate(-50%);
 }
-#myChart{
+.myChart{
     scale:70%;
 }
 .markercontents{
@@ -199,6 +243,11 @@ li{
     margin:1%;
     top:2%;
     left:65%;
+    z-index:10;
+}
+.boardcomit:hover{
+	background-color: lightcoral;
+	cursor: pointer;
 }
 .pagechange{
     background-color: white;
@@ -234,7 +283,7 @@ li{
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 100000000;
     left: 0;
     top: 0px;
     height: 100%;
@@ -281,6 +330,7 @@ li{
 .modal-body {
     padding: 10px 20px;
     color: black;
+    z-index:1000000;
 }
 .highlight {
     position: relative;
@@ -309,10 +359,10 @@ li{
 
 .marker {
     transition: height 0.3s ease;
-    overflow: hidden;
+    overflow: auto;
 }
 .marker.small {
-    height: 40%; /* markerの高さを半分に */
+    height: 25%; /* markerの高さを半分に */
 }
 @keyframes growUp {
     from {
@@ -320,13 +370,13 @@ li{
         opacity: 0;
     }
     to {
-        height: 40vh;
+        height: 53vh;
         opacity: 1;
     }
 }
 @keyframes slideDown {
     from {
-        height: 40vh;
+        height: 53vh;
         opacity: 1;
     }
     to {
@@ -336,11 +386,12 @@ li{
 }
 
     .allcomtext {
-        width: 390px;
-        height: 230px;
-        overflow-x: hidden;
+        width: 395px;
+        height:220px;
+        overflow: auto;
         position: absolute;
         z-index:3;
+        overflow: auto;
     }
     .allcomtext p {
         margin: 0;
@@ -351,12 +402,7 @@ li{
   .allcom {
         display: flex;
     }
-    .allcomtext {
-        width: 490px;
-        height: 200px;
-        overflow: hidden;
-        position: relative;
-    }
+
     .allcomtext p {
         margin: 0;
         padding: 5px;
@@ -370,27 +416,8 @@ li{
         border: none;
         border-top: 1px solid #ccc;
     }
-    .newDiv {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-        height: 80%;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        padding: 20px;
-        overflow: auto;
-    }
-    .newDiv.big {
-        display: block;
-    }
-    .closeBtn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-    }
+
+
+   .chart{
+   height:100px;
+   }

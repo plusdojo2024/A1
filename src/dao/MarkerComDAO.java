@@ -164,10 +164,11 @@ public class MarkerComDAO {
             Class.forName("org.h2.Driver");
             conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-            String sql = "SELECT marker_com.marker_id,marker_com.marker_com_contents,marker. marker_contents " +
-                         "FROM marker_com " +
-                         "JOIN marker ON marker_com.marker_id = marker.marker_id " +
-                         "ORDER BY marker_com_id DESC";
+            String sql = "SELECT mc.marker_com_id, mc.marker_com_contents, mc.marker_id, mc.marker_com_datetime, m.marker_contents " +
+                         "FROM marker_com mc " +
+                         "JOIN marker m ON mc.marker_id = m.marker_id " +
+                         "JOIN (SELECT MAX(board_id) AS max_board_id FROM black_board) bb ON m.board_id = bb.max_board_id " +
+                         "ORDER BY mc.marker_com_datetime DESC";
             PreparedStatement pStmt = conn.prepareStatement(sql);
 
             ResultSet rs = pStmt.executeQuery();

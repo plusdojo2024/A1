@@ -1,95 +1,99 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/t-board.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link rel="stylesheet" href="css/t-board.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <header>
-        <div class="headbtn">
-            <button class="markerbtn">先生用</button>
-            <button id="modalOpen" class="markerbtn">マーカー</button>
-            <button class="markerbtn">
-                <span class=center></span>ファイル添付
-            </button>
-        </div>
-        <div id="easyModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="modalClose">×</span>
-                </div>
-                <div class="modal-body">
-                    <div class="contents" id="contents">
-                        <!-- ここにテキストエリアの内容が表示されます -->
-                    </div>
-                    <form id="markerForm">
-                        <div id="markerContentsContainer">
-                            <textarea name="markerContents" id="markerContents" rows="4" cols="50"></textarea>
-                        </div>
-                        <button type="button" id="submitBtn" class="btn btn-primary mt-3">送信</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+	<header>
+		<div class="headbtn">
+			<button class="markerbtn">先生用</button>
+			<button id="modalOpen" class="markerbtn">マーカー</button>
+			<button class="markerbtn">
+				<span class=center></span>ファイル添付
+			</button>
+		</div>
+		<div id="easyModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="modalClose">×</span>
+				</div>
+				<div class="modal-body">
+					<div class="contents" id="contents">
+						<!-- ここにテキストエリアの内容が表示されます -->
+					</div>
+					<form id="markerForm">
+						<div id="markerContentsContainer">
+							<textarea name="markerContents" id="markerContents" rows="4"
+								cols="50"></textarea>
+						</div>
+						<button type="button" id="submitBtn" class="btn btn-primary mt-3">送信</button>
+					</form>
+				</div>
+			</div>
+		</div>
 
-        <div class="boardcomit">
-            <p class="center">板書切り替え</p>
-        </div>
-        <a href="/A1/RecordServlet">
-            <div class="pagechange">
-                <p class="center">履歴</p>
-            </div>
-        </a>
-    </header>
-    <div class="board">
-        <textarea name="text" class="text" id="textarea"><c:out value="${latestBlackBoard.boardContents}" /></textarea>
-    </div>
-    <div class="com">
-    <div class="markcombox">
-        <ul class="markcomlive" id="markcomlive">
-            <!-- コメントが動的に追加されます -->
-        </ul>
-    </div>
-    </div>
-    <div class="allcom">
-        <div class="allcomtext" id="allcomdiv">
+		<button id="boardcomit" class="boardcomit" name="保存">板書切替え</button>
 
-            <!-- ここにコメントを表示 -->
+		<a href="/A1/RecordServlet">
+			<div class="pagechange">
+				<p class="center">履歴</p>
+			</div>
+		</a>
+	</header>
+	<div class="board">
+		<textarea name="text" class="text" id="textarea"><c:out
+				value="${latestBlackBoard.boardContents}" /></textarea>
+	</div>
+	<div class="com">
+		<div class="markcombox">
+			<ul class="markcomlive" id="markcomlive">
+				<!-- コメントが動的に追加されます -->
+			</ul>
+		</div>
+	</div>
+	<div class="allcom">
+		<div class="allcomtext" id="allcomdiv">
 
-        </div>
-        <div class="allcomform">
-            <input type="text" name="allComContents" class="allcomsend" id="allcom">
-            <input type="button" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
-        </div>
-    </div>
-    <div class="marker" id="marker">
-        <div class="markercontents">
-            <ul id="markerList"></ul>
-            <div>
-                <!--<canvas id="myChart" class="myChart"></canvas>-->
-            </div>
-        </div>
-    </div>
+			<!-- ここにコメントを表示 -->
 
-    <div class="newDiv" id="newDiv">
-        <span class="closeBtn">×</span>
-        <p id="newDivText"></p>
-        <p id="markerIdText"></p>
-        <div id="commentsContainer"></div>
-        <div class="newDivform">
-            <textarea id="newCommentText" rows="4" cols="50"></textarea>
-            <button id="sendCommentBtn">送信</button>
-        </div>
+		</div>
+		<div class="allcomform">
+			<input type="text" name="allComContents" class="allcomsend"
+				id="allcom"> <input type="button" name="submit" value="送信"
+				class="allcombtn" onclick="goAjax()">
+		</div>
+	</div>
+	<div class="marker" id="marker">
+		<div class="markercontents">
+			<ul id="markerList"></ul>
+			<!--<div>
+				<canvas id="myChart" class="myChart"></canvas>
+			</div>-->
+		</div>
+	</div>
 
-    </div>
+	<div class="newDiv" id="newDiv">
+		<span class="closeBtn">×</span>
+		<p id="newDivText"></p>
+		<p id="markerIdText"></p>
+		<div class="newdivcom">
+		<div id="commentsContainer"></div>
+		</div>
+		<div class="newDivform">
+			<textarea id="newCommentText" rows="4" cols="50"></textarea>
+			<button id="sendCommentBtn">送信</button>
+		</div>
 
-    <script>
+	</div>
+ <div id="alertBox" class="alert-box">Alert</div>
+	<script>
         document.addEventListener('DOMContentLoaded', function() {
             const buttonOpen = document.getElementById('modalOpen');
             const modal = document.getElementById('easyModal');
@@ -107,15 +111,18 @@
             const commentsContainer = document.getElementById('commentsContainer');
             const markcomlive = document.getElementById('markcomlive');
             const allcomdiv = document.getElementById('allcomdiv');
+            const boardcomit = document.getElementById('boardcomit');
+            const alertBox = document.getElementById('alertBox');
 
             let currentMarkerId = null;
+
+
             textarea.addEventListener('input', function() {
                 const boardContents = textarea.value;
                 $.ajax({
                     url: '/A1/BlackBoardServlet',
                     type: 'POST',
                     data: {
-                        board_id: '${boardId}',
                         board_contents: boardContents
                     },
                     success: function(response) {
@@ -126,6 +133,27 @@
                     }
                 });
             });
+
+            boardcomit.addEventListener('click', function() {
+                if (confirm("板書を確定しますか？")) {
+                    if (confirm("板書を確定したら現在表示されている板書の編集は出来なくなります")) {
+                        $.ajax({
+                            url: '/A1/BlackBoardServlet',
+                            type: 'POST',
+                            data: { 保存: '保存' },
+                            success: function(response) {
+                                alert('Board inserted successfully.');
+                                location.reload(); // ページをリロードする
+                            },
+                            error: function() {
+                                alert('Error inserting board.');
+                            }
+                        });
+                    }
+                }
+            });
+
+
 
             buttonOpen.addEventListener('click', modalOpen);
             function modalOpen() {
@@ -185,7 +213,7 @@
                 $.ajax({
                     url: '/A1/MainServlet',
                     type: 'GET',
-                    data: { markerData: true },
+                    data: { latestMarkers: true },
                     dataType: 'json',
                     success: function(data) {
                         markerList.innerHTML = '';
@@ -215,6 +243,7 @@
                     }
                 });
             }
+
 
             function fetchComments(markerId) {
                 $.ajax({
@@ -283,7 +312,7 @@
                     dataType: 'json',
                     success: function(data) {
                         markcomlive.innerHTML = '';
-                        data.reverse().forEach(function(comment) {
+                        data.forEach(function(comment) {
                             const li = document.createElement('li');
                             const p = document.createElement('p');
                             p.textContent = comment.markerContents + ' : ' + comment.markerComContents + ' ♡';
@@ -347,8 +376,8 @@
             });
         }
     </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>
     const ctx = document.getElementById('myChart').getContext('2d');
 
     const data = [30, 3, 3, 5];

@@ -189,4 +189,60 @@ public class MarkerDAO {
             return markerList;
         }
 
-}
+
+        public List<Marker> selectMarkersByMaxBoardId() {
+            Connection conn = null;
+            List<Marker> markerList = new ArrayList<Marker>();
+
+            try {
+                // JDBCドライバを読み込む
+                Class.forName("org.h2.Driver");
+
+                // データベースに接続する
+                conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+                // board_idが最大のボードのIDを取得する
+                String maxBoardIdSql = "SELECT MAX(board_id) AS maxBoardId FROM black_board";
+                PreparedStatement maxBoardIdStmt = conn.prepareStatement(maxBoardIdSql);
+                ResultSet maxBoardIdRs = maxBoardIdStmt.executeQuery();
+                int maxBoardId = -1;
+                if (maxBoardIdRs.next()) {
+                    maxBoardId = maxBoardIdRs.getInt("maxBoardId");
+                }
+
+                if (maxBoardId != -1) {
+                    // 最大のboard_idに関連するマーカーを取得する
+                    String sql = "SELECT * FROM marker WHERE board_id = ?";
+                    PreparedStatement pStmt = conn.prepareStatement(sql);
+                    pStmt.setInt(1, maxBoardId);
+
+                    // SQL文を実行し、結果表を取得する
+                    ResultSet rs = pStmt.executeQuery();
+
+                    // 結果表をコレクションにコピーする
+                    while (rs.next()) {
+                        Marker marker = new Marker(
+                            rs.getInt("marker_id"),
+                            rs.getString("marker_contents"),
+                            rs.getInt("board_id"),
+                            rs.getDate("marker_datetime")
+                        );
+                        markerList.add(marker);
+                    }
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                // データベースを切断
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return markerList;
+        }
+    }

@@ -17,7 +17,7 @@ import dao.BlackBoardDAO;
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			if(request.getParameter("保存") != null) {
 				BlackBoardDAO bbDao = new BlackBoardDAO();
-				bbDao.insertBoard();
+				bbDao.insert();
 			}else {
 	//			//板書を一定間隔(1秒間)で保存(UPDATE)し続ける
 	//			//講師による板書への加筆
