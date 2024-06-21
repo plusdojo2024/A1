@@ -59,7 +59,9 @@
     </div>
     <div class="allcom">
         <div class="allcomtext" id="allcomdiv">
+
             <!-- ここにコメントを表示 -->
+
         </div>
         <div class="allcomform">
             <input type="text" name="allComContents" class="allcomsend" id="allcom">
@@ -281,7 +283,7 @@
                     dataType: 'json',
                     success: function(data) {
                         markcomlive.innerHTML = '';
-                        data.forEach(function(comment) {
+                        data.reverse().forEach(function(comment) {
                             const li = document.createElement('li');
                             const p = document.createElement('p');
                             p.textContent = comment.markerContents + ' : ' + comment.markerComContents + ' ♡';
