@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet"href="${pageContext.request.contextPath}/view-board-record.css">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -14,10 +15,10 @@
 
 
 	<!-- 結果 -->
+
 	<c:forEach var="bb" items="${blackBoardList}" >
 		中身：${bb.boardContents}<br>
 		日付：${bb.blackBoardDatetime}
-	<hr>
 </c:forEach>
 
 
