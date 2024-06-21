@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import model.AllComFav;
 
@@ -14,9 +13,11 @@ import model.AllComFav;
 public class AllComFavDAO {
 
 	// 全体コメントをセレクト
-	public List<AllComFav> select(AllComFav allComFav) {
+	public ArrayList<AllComFav> select() {
 		Connection conn = null;
-		List<AllComFav> allComFavList = new ArrayList<AllComFav>();
+		ArrayList<AllComFav> allComFavList = new ArrayList<AllComFav>();
+
+
 
 		try {
 			// JDBCドライバを読み込む
@@ -68,6 +69,55 @@ public class AllComFavDAO {
 		return allComFavList;
 	}
 
+	public int[] selectId() {
+		Connection conn = null;
+		int[] id = new int[2];
+
+		try {
+			// JDBCドライバを読み込む
+			Class.forName("org.h2.Driver");
+
+			// データベースに接続する
+			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+			// SQL文を準備する
+			String sql = "SELECT user_id, all_com_id FROM all_com_fav";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			// SQL文を実行し、結果表を取得する
+			ResultSet rs = pStmt.executeQuery();
+
+			// 結果表をコレクションにコピーする
+			while (rs.next()) {
+				id[0] = rs.getInt("user_id");
+				id[1] = rs.getInt("all_com_id");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			id = null;
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			id = null;
+		}
+		finally {
+			// データベースを切断
+			if (conn != null) {
+				try {
+					conn.close();
+				}
+				catch (SQLException e) {
+					e.printStackTrace();
+					id = null;
+				}
+			}
+		}
+
+		// 結果を返す
+		return id;
+	}
+
 
 	public boolean insert(AllComFav allComFav) {
 		Connection conn = null;
@@ -81,7 +131,7 @@ public class AllComFavDAO {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SQL文を準備する
-			String sql = "INSERT INTO all_com_fav VALUES (NULL, ?, ?, now())";
+			String sql = "INSERT INTO all_com_fav VALUES (NULL, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を完成させる
@@ -159,7 +209,7 @@ public class AllComFavDAO {
 	}
 
 
-public boolean delete(int number) {
+public boolean delete(int userId, int allComId) {
 	Connection conn = null;
 	boolean result = false;
 
@@ -171,11 +221,12 @@ public boolean delete(int number) {
 		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 		// SQL文を準備する
-		String sql = "DELETE FROM all_com_fav WHERE all_com_fav_num=?";
+		String sql = "DELETE FROM all_com_fav WHERE user_id = ? and all_com_id = ? ";
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 
 		// SQL文を完成させる
-		pStmt.setInt(1, number);
+		pStmt.setInt(1, userId);
+		pStmt.setInt(2, allComId);
 
 		// SQL文を実行する
 		if (pStmt.executeUpdate() == 1) {
