@@ -9,9 +9,9 @@
 </head>
 <body>
 <h1 id="logo"><img src="img/くらすぼーどロゴ.png" alt="くらすぼーど" width="300"></h1>
+    <h2 class="login">ログイン</h2>
     <div class="box">
         <div class="content">
-            <h2 class="login"></h2>
         </div>
 <form id="login_form" method="post" action="/A1/LoginServlet" class="form">
 

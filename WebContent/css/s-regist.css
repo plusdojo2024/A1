@@ -28,23 +28,42 @@ body {
             font-style: italic; /* プレースホルダーのフォントスタイルを斜体に設定 */
             }
 
-.form{
-	position:absolute;
-	top:20%;
-	transform:translate(-50%);
-	left:50%;
-            }
-
-
-
-
-.login{
-font-size: 2.5rem;
+.regist{
+font-size: 1.5rem;
+text-align: center;
+margin-top: 0px;
+margin-bottom: 10px;
 }
 
 .form{
     position:absolute;
     left:50%;
-    top:100px;
+    top:50px;
     transform:translate(-50%);
 }
+
+ .text{
+ 	margin-top: 3px;
+ 	 width: 300px;
+ 	 padding: 3px; /* 入力フィールドの内側の余白 */
+ 	 border-radius: 5px; /* 角の丸みを10pxに設定 */
+ 	 border: 2px solid #6495ed; /* ボーダーの設定（幅、スタイル、色） */
+
+ 	}
+
+.textsub{
+ 	margin-top: 20px;
+ 	color: white;
+ 	background-color:rgb(234, 85,73) ;
+	padding: 3px; /* 入力フィールドの内側の余白 */
+    border: 1px solid #ccc; /* ボーダーの設定 */
+    border-radius: 10px; /* 角の丸みを10pxに設定 */
+    outline: none; /* フォーカス時のデフォルトのアウトラインを非表示にする */
+    width: 120px; /* 幅を指定 */
+    transition: all 0.2s ease; /* アニメーションの設定 */
+ 	}
+
+
+  .textsub:hover {
+       opacity: .6;
+  }

@@ -20,7 +20,10 @@ body {
   }
 
 .login{
-font-size: 2.5rem;
+font-size: 1.5rem;
+text-align: center;
+margin-top: 0px;
+margin-bottom: 10px;
 }
 
 #logo {
@@ -52,7 +55,7 @@ font-size: 2.5rem;
 .textsub{
  	margin-top: 20px;
  	color: white;
- 	background-color:indianred ; /* 背景色を淡い青に設定 */
+ 	background-color:rgb(234, 85,73) ;
 	padding: 3px; /* 入力フィールドの内側の余白 */
     border: 1px solid #ccc; /* ボーダーの設定 */
     border-radius: 10px; /* 角の丸みを10pxに設定 */
@@ -73,11 +76,9 @@ font-size: 2.5rem;
         transition: all 0.2s ease; /* アニメーションの設定 */}
 
   .textsub:hover {
-        border-color: #666; /* ホバー時のボーダー色を変更 */
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* ホバー時の影の追加 */
+         opacity: .6;
   }
 
   .textres:hover {
-        border-color: #666; /* ホバー時のボーダー色を変更 */
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* ホバー時の影の追加 */
+        opacity: .6;
   }

@@ -9,25 +9,25 @@
 </head>
 <body>
 <h1 id="logo"><img src="img/くらすぼーどロゴ.png" alt="くらすぼーど" width="300"></h1>
+       <h2 class="regist">新規登録（生徒）</h2>
     <div class="box">
         <div class="content">
-            <h2 class="login"></h2>
+
         </div>
 <form id="login_form" method="post" action="/A1/SUserRegistServlet" class="form">
 
-        <label>名前<br>
+        <label>名前
         <input  class="text" type="text" name="id" placeholder="山田太郎">
-        </label><br>
+        </label>
 
-        <label>メールアドレス<br>
+        <label>メールアドレス
         <input  class="text" type="text" name="mail" placeholder="メールアドレス">
-        </label><br>
+        </label>
 
-        <label>Pass word<br>
+        <label>パスワード
         <input  class="text" type="password" name="pw" placeholder="パスワードは8∼16桁の英数字混合で設定してください">
-        </label><br>
-        <input type="submit" name="submit" value="log in">
-        <input type="reset" name="reset" value="reset"><br>
+        </label>
+        <input class="textsub" type="submit" name="submit" value="新規登録">
         <span id="error_message">
             <input type="hidden" name="jobflag" value="0">
         </span>
