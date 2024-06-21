@@ -381,21 +381,29 @@ public boolean updateBoard(int board_id, String board_contents) {
 
 
 
-public BlackBoard getLatestBoard() {
+
+
+public BlackBoard selectLatest() {
     Connection conn = null;
-    BlackBoard latestBoard = null;
+    BlackBoard blackBoard = null;
 
     try {
+        // JDBCドライバを読み込む
         Class.forName("org.h2.Driver");
+
+        // データベースに接続する
         conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-        String sql = "SELECT * FROM black_board ORDER BY board_id DESC LIMIT 1";
+        // SQL文を準備する
+        String sql = "SELECT * FROM black_board WHERE board_id = (SELECT MAX(board_id) FROM black_board)";
         PreparedStatement pStmt = conn.prepareStatement(sql);
 
+        // SQL文を実行し、結果表を取得する
         ResultSet rs = pStmt.executeQuery();
 
+        // 結果表をオブジェクトにコピーする
         if (rs.next()) {
-            latestBoard = new BlackBoard(
+            blackBoard = new BlackBoard(
                 rs.getInt("board_id"),
                 rs.getString("board_contents"),
                 rs.getDate("board_date")
@@ -404,6 +412,7 @@ public BlackBoard getLatestBoard() {
     } catch (SQLException | ClassNotFoundException e) {
         e.printStackTrace();
     } finally {
+        // データベースを切断
         if (conn != null) {
             try {
                 conn.close();
@@ -412,6 +421,7 @@ public BlackBoard getLatestBoard() {
             }
         }
     }
-    return latestBoard;
+
+    return blackBoard;
 }
 }

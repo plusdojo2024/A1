@@ -48,7 +48,7 @@
         </a>
     </header>
     <div class="board">
-        <textarea name="text" class="text" id="textarea"></textarea>
+        <textarea name="text" class="text" id="textarea"><c:out value="${latestBlackBoard.boardContents}" /></textarea>
     </div>
     <div class="com">
     <div class="markcombox">
