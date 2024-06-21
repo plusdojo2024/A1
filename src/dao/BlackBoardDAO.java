@@ -125,52 +125,53 @@ public class BlackBoardDAO {
 
 
 //講師による板書への加筆を行えるようにする。
-public boolean update(BlackBoard blackBoard) {
-	Connection conn = null;
-	boolean result = false;
+	public boolean update(String boardContents) {
+		Connection conn = null;
+		boolean result = false;
 
-	try {
-		// JDBCドライバを読み込む
-		Class.forName("org.h2.Driver");
+		try {
+			// JDBCドライバを読み込む
+			Class.forName("org.h2.Driver");
 
-		// データベースに接続する
-		conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+			// データベースに接続する
+			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-		// SQL文を準備する
+			// SQL文を準備する
 
-		String sql = "UPDATE black_board SET board_contents = ? "
-				+ "WHERE board_id = (SELECT MAX(board_id) FROM black_board);";
-		PreparedStatement pStmt = conn.prepareStatement(sql);
+			String sql = "UPDATE black_board SET board_contents = ? "
+					+ "WHERE board_id = (SELECT MAX(board_id) FROM black_board);";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
 
-		// SQL文を完成させる
-		pStmt.setString(1 , blackBoard.getBoardContents());
+			// SQL文を完成させる
+			pStmt.setString(1 , boardContents);
 
-		// SQL文を実行する
-		if (pStmt.executeUpdate() == 1) {
-			result = true;
-		}
-	}
-	catch (SQLException e) {
-		e.printStackTrace();
-	}
-	catch (ClassNotFoundException e) {
-		e.printStackTrace();
-	}
-	finally {
-		// データベースを切断
-		if (conn != null) {
-			try {
-				conn.close();
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
+			// SQL文を実行する
+			if (pStmt.executeUpdate() == 1) {
+				result = true;
 			}
 		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		finally {
+			// データベースを切断
+			if (conn != null) {
+				try {
+					conn.close();
+				}
+				catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		// 結果を返す
+		return result;
 	}
 
-	// 結果を返す
-	return result;
-}
 
 
 //板書履歴に日付一覧を表示するために、今までの日付を持ってくる。
@@ -378,5 +379,39 @@ public boolean updateBoard(int board_id, String board_contents) {
 	return result;
 }
 
-}
 
+
+public BlackBoard getLatestBoard() {
+    Connection conn = null;
+    BlackBoard latestBoard = null;
+
+    try {
+        Class.forName("org.h2.Driver");
+        conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+        String sql = "SELECT * FROM black_board ORDER BY board_id DESC LIMIT 1";
+        PreparedStatement pStmt = conn.prepareStatement(sql);
+
+        ResultSet rs = pStmt.executeQuery();
+
+        if (rs.next()) {
+            latestBoard = new BlackBoard(
+                rs.getInt("board_id"),
+                rs.getString("board_contents"),
+                rs.getDate("board_date")
+            );
+        }
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+    } finally {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    return latestBoard;
+}
+}

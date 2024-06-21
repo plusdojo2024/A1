@@ -83,6 +83,7 @@ li{
         position:absolute;
         top:1%;
         left:0%;
+        overflow: hidden;
     }
     .markcomlive hr {
         margin: 0;

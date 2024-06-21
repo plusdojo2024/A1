@@ -6,8 +6,8 @@ public class MarkerCom implements Serializable {
     private int markerComId;            //マーカーコメントＩＤ
     private String markerComContents;   //マーカーコメント内容
     private int markerId;               //マーカーID
-    private Date markerComDatetime;
-    private String markerContents;//日付
+    private Date markerComDatetime;//日付
+    private String markerContents;
     public MarkerCom() {};
     public MarkerCom(int markerComId, String markerComContents, int markerId, Date markerComDatetime) {
 		super();

@@ -13,7 +13,7 @@ import model.MarkerCom;
 public class MarkerComDAO {
 
     // 全体コメントをセレクト
-    public List<MarkerCom> select(MarkerCom markerCom) {
+    public List<MarkerCom> selectAll() {
         Connection conn = null;
         List<MarkerCom> MarkerComList = new ArrayList<MarkerCom>();
 
@@ -155,50 +155,7 @@ public class MarkerComDAO {
         return markerComList;
     }
 
-    public List<MarkerCom> selectAll() {
-        Connection conn = null;
-        List<MarkerCom> markerComList = new ArrayList<>();
 
-        try {
-            // JDBCドライバを読み込む
-            Class.forName("org.h2.Driver");
-
-            // データベースに接続する
-            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
-
-            // SQL文を準備する
-            String sql = "SELECT * FROM marker_com";
-            PreparedStatement pStmt = conn.prepareStatement(sql);
-
-            // SQL文を実行し、結果表を取得する
-            ResultSet rs = pStmt.executeQuery();
-
-            // 結果表をコレクションにコピーする
-            while (rs.next()) {
-                MarkerCom markerCom = new MarkerCom(
-                    rs.getInt("marker_com_id"),
-                    rs.getString("marker_com_contents"),
-                    rs.getInt("marker_id"),
-                    rs.getDate("marker_com_datetime")
-                );
-                markerComList.add(markerCom);
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            markerComList = null;
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    markerComList = null;
-                }
-            }
-        }
-
-        return markerComList;
-    }
     public List<MarkerCom> selectAllWithMarkerContents() {
         Connection conn = null;
         List<MarkerCom> markerComList = new ArrayList<MarkerCom>();
@@ -207,10 +164,10 @@ public class MarkerComDAO {
             Class.forName("org.h2.Driver");
             conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
-            String sql = "SELECT *, marker_contents " +
+            String sql = "SELECT marker_com.marker_id,marker_com.marker_com_contents,marker. marker_contents " +
                          "FROM marker_com " +
-                         "JOIN marker ON marker_id = marker_id " +
-                         "ORDER BY marker_com_datetime DESC";
+                         "JOIN marker ON marker_com.marker_id = marker.marker_id " +
+                         "ORDER BY marker_com_id DESC";
             PreparedStatement pStmt = conn.prepareStatement(sql);
 
             ResultSet rs = pStmt.executeQuery();

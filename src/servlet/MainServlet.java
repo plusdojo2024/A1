@@ -14,9 +14,11 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.AllComDAO;
+import dao.BlackBoardDAO;
 import dao.MarkerComDAO;
 import dao.MarkerDAO;
 import model.AllCom;
+import model.BlackBoard;
 import model.Marker;
 import model.MarkerCom;
 import model.Users;
@@ -97,6 +99,20 @@ public class MainServlet extends HttpServlet {
             String jsonResponse = mapper.writeValueAsString(markerList);
             response.getWriter().write(jsonResponse);
             return;
+        }
+        if (request.getParameter("latestBoard") != null) {
+            BlackBoardDAO bbDao = new BlackBoardDAO();
+            BlackBoard latestBoard = bbDao.getLatestBoard();
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonResponse = mapper.writeValueAsString(latestBoard);
+            response.getWriter().write(jsonResponse);
+            System.out.println();
+            return;
+
         }
 
         // ログインチェックと画面遷移

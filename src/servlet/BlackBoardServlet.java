@@ -21,12 +21,12 @@ import dao.BlackBoardDAO;
 			}else {
 	//			//板書を一定間隔(1秒間)で保存(UPDATE)し続ける
 	//			//講師による板書への加筆
+				request.setCharacterEncoding("UTF-8");
 				BlackBoardDAO blbDao = new BlackBoardDAO();
-				String boId = request.getParameter("board_id");
-				int boardId = Integer.parseInt(boId);
 				String boardContents = request.getParameter("board_contents");
 
-				blbDao.updateBoard(boardId, boardContents);
+
+				blbDao.update(boardContents);
 			}
 
 		}

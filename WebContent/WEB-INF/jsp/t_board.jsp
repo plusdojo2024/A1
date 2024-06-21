@@ -107,6 +107,23 @@
             const allcomdiv = document.getElementById('allcomdiv');
 
             let currentMarkerId = null;
+            textarea.addEventListener('input', function() {
+                const boardContents = textarea.value;
+                $.ajax({
+                    url: '/A1/BlackBoardServlet',
+                    type: 'POST',
+                    data: {
+                        board_id: '${boardId}',
+                        board_contents: boardContents
+                    },
+                    success: function(response) {
+                        console.log('Board contents updated successfully.');
+                    },
+                    error: function() {
+                        console.error('Error updating board contents.');
+                    }
+                });
+            });
 
             buttonOpen.addEventListener('click', modalOpen);
             function modalOpen() {
