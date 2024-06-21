@@ -310,7 +310,7 @@
                     dataType: 'json',
                     success: function(data) {
                         markcomlive.innerHTML = '';
-                        data.reverse().forEach(function(comment) {
+                        data.forEach(function(comment) {
                             const li = document.createElement('li');
                             const p = document.createElement('p');
                             p.textContent = comment.markerContents + ' : ' + comment.markerComContents + ' ♡';
