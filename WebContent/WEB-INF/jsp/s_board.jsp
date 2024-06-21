@@ -1,267 +1,385 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document</title>
-<link rel="stylesheet" href="css/s-board.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/t-board.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<header>
-		<div class="headbtn">
-			<button class="markerbtn">生徒用</button>
-			<button id="modalOpen" class="markerbtn">マーカー</button>
-			<button class="markerbtn">
-				<span class=center></span>ファイル添付
-			</button>
-		</div>
-		<div id="easyModal" class="modal">
-			<div class="modal-content">
-				<div class="modal-header">
-					<span class="modalClose">×</span>
-				</div>
-				<div class="modal-body">
-					<div class="contents" id="contents">
-						<!-- ここにテキストエリアの内容が表示されます -->
+    <header>
+        <div class="headbtn">
+            <button class="markerbtn">生徒用</button>
+            <button id="modalOpen" class="markerbtn">マーカー</button>
+            <button class="markerbtn">
+                <span class=center></span>ファイル添付
+            </button>
+        </div>
+        <div id="easyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modalClose">×</span>
+                </div>
+                <div class="modal-body">
+                    <div class="contents" id="contents">
+                        <!-- ここにテキストエリアの内容が表示されます -->
+                    </div>
+                    <form id="markerForm">
+                        <div id="markerContentsContainer">
+                            <textarea name="markerContents" id="markerContents" rows="4" cols="50"></textarea>
+                        </div>
+                        <button type="button" id="submitBtn" class="btn btn-primary mt-3">送信</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-					</div>
-					<form action="YourServlet" method="POST" id="enqueteForm">
-						<div class="enquete" id="enquete"></div>
-						<button type="submit" id="submitBtn" class="btn btn-primary mt-3">送信</button>
-					</form>
-				</div>
-			</div>
-		</div>
-
-		<div class="boardcomit">
-			<p class="center">板書切り替え</p>
-		</div>
-		<a href="/A1/RecordServlet">
-		<div class="pagechange">
-			<p class="center">履歴</p>
-		</div>
-		</a>
-	</header>
-	<div class="board">
-		<textarea name="text" class="text" id="textarea"></textarea>
-	</div>
-	<div class="com">
-		<ul class="markcomlive">
-			<li class="markcombox">
-				<div class="marklivecom1">
-					<p class="marktext">こんにちは</p>
-					<p class=markre>♡</p>
-				</div>
-			</li>
-			<li class="markcombox">
-				<div class="marklivecom2">
-					<p class="marktext">おはよう</p>
-					<p class=markre>♡</p>
-				</div>
-			</li>
-			<li class="markcombox">
-				<div class="marklivecom3">
-					<p class="marktext">さよなら</p>
-					<p class=markre>♡</p>
-				</div>
-			</li>
-		</ul>
-	</div>
-	<div class="allcom">
-		<div class="allcomtext" id="allcomdiv">
-			<!-- ここにコメントを表示 -->
-
-		</div>
-		<div class="allcomform">
-			<input type="text" name="allComContents" class="allcomsend"
-				id="allcom"> <input type="button" name="submit" value="送信"
-				class="allcombtn" onclick="goAjax()">
-		</div>
-	</div>
-	<div class="marker" id="marker">
-		<div class="markercontents">
-			<ul id="markerList"></ul>
-			<div>
-				<canvas id="myChart"></canvas>
-			</div>
-		</div>
-
-	</div>
-
-	<div class="newDiv" id="newDiv">
-    <span class="closeBtn">×</span>
-    <p id="newDivText"></p>
-    <div>
-        <canvas id="myChart"></canvas>
+        <div class="boardcomit">
+            <p class="center">板書切り替え</p>
+        </div>
+        <a href="/A1/RecordServlet">
+            <div class="pagechange">
+                <p class="center">履歴</p>
+            </div>
+        </a>
+    </header>
+    <div class="board" id="boardContentsDiv">
+        <textarea  name="text" class="text" id="textarea" readonly></textarea>
     </div>
-</div>
-		<div class="comform">
-			<!--<input type="text" name="sendcomtext" class="comsend">
-            <input type="submit" id="search" name="submit" value="送信" class="combtn"> -->
-		</div>
-	</div>
+    <div class="com">
+    <div class="markcombox">
+        <ul class="markcomlive" id="markcomlive">
+            <!-- ここにコメントを表示 -->
+        </ul>
+    </div>
+    </div>
+    <div class="allcom">
+        <div class="allcomtext" id="allcomdiv">
+            <!-- ここにコメントを表示 -->
+        </div>
+        <div class="allcomform">
+            <input type="text" name="allComContents" class="allcomsend" id="allcom">
+            <input type="button" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
+        </div>
+    </div>
+    <div class="marker" id="marker">
+        <div class="markercontents">
+            <ul id="markerList"></ul>
+            <div>
+                <!--<canvas id="myChart" class="myChart"></canvas>-->
+            </div>
+        </div>
+    </div>
 
-</body>
-</html>
+    <div class="newDiv" id="newDiv">
+        <span class="closeBtn">×</span>
+        <p id="newDivText"></p>
+        <p id="markerIdText"></p>
+        <div id="commentsContainer"></div>
+        <div class="newDivform">
+            <textarea id="newCommentText" rows="4" cols="50"></textarea>
+            <button id="sendCommentBtn">送信</button>
+        </div>
 
-<script>
-    // 使用するidの取得
-    // modalを開くためのボタン
-    const buttonOpen = document.getElementById('modalOpen');
-    // modalを開いたときのdiv
-    const modal = document.getElementById('easyModal');
-    // modalを閉じるためのバツ
-    const buttonClose = document.getElementsByClassName('modalClose')[0];
-    // テキストを入力するためのエリア
-    const textarea = document.getElementById('textarea');
-    // modalが開いたときに入力されている内容
-    const contents = document.getElementById('contents');
-    // マーカーで指定された単語をクリックしたときに出てくるdiv(右下)
-    const newDiv = document.getElementById('newDiv');
-    // マーカーで指定された単語をクリックしたときに出てくるdivに表示されるマーカーで指定された単語
-    const newDivText = document.getElementById('newDivText');
-    // マーカーで指定された単語をクリックしたときに出てくるdivを閉じるためのバツ
-    const closeBtn = document.querySelector('.newDiv .closeBtn');
+    </div>
 
-    // ボタンがクリックされた時
-    buttonOpen.addEventListener('click', modalOpen);
-    function modalOpen() {
-        // テキストエリアの内容を取得して改行を<br>タグに変換
-        const text = textarea.value.replace(/\n/g, '<br>');
-        contents.innerHTML = text;
-        modal.style.display = 'block';
-    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttonOpen = document.getElementById('modalOpen');
+            const modal = document.getElementById('easyModal');
+            const buttonClose = document.getElementsByClassName('modalClose')[0];
+            const textarea = document.getElementById('textarea');
+            const contents = document.getElementById('contents');
+            const newDiv = document.getElementById('newDiv');
+            const newDivText = document.getElementById('newDivText');
+            const markerIdText = document.getElementById('markerIdText');
+            const closeBtn = document.querySelector('.newDiv .closeBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const sendCommentBtn = document.getElementById('sendCommentBtn');
+            const newCommentText = document.getElementById('newCommentText');
+            const markerList = document.getElementById('markerList');
+            const commentsContainer = document.getElementById('commentsContainer');
+            const markcomlive = document.getElementById('markcomlive');
+            const allcomdiv = document.getElementById('allcomdiv');
+            const boardContentsDiv = document.getElementById('boardContentsDiv');
 
-    // バツ印がクリックされた時
-    buttonClose.addEventListener('click', modalClose);
-    function modalClose() {
-        modal.style.display = 'none';
-    }
 
-    // モーダルコンテンツ以外がクリックされた時
-    addEventListener('click', outsideClose);
-    function outsideClose(e) {
-        if (e.target == modal) {
-            modal.style.display = 'none';
-        }
-    }
+            let currentMarkerId = null;
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var enquete = document.getElementById('enquete');
 
-        contents.addEventListener('mouseup', function(event) {
-            // テキストの選択範囲を取得
-            var selection = window.getSelection();
-            if (!selection.isCollapsed) {
-                var range = selection.getRangeAt(0);
-                var selectedText = selection.toString();
-
-                // 選択された範囲を包むspan要素を作成
-                var span = document.createElement('span');
-                span.classList.add('highlight');
-                range.surroundContents(span);
-                // コメントを表示する要素を作成
-                var comment = document.createElement('div');
-                comment.classList.add('comment');
-                comment.textContent = 'あいうえお'; // 初期コメント
-
-                span.appendChild(comment);
-
-                // 選択されたテキストをチェックボックスとしてenqueteに追加
-                var checkboxWrapper = document.createElement('div');
-                var checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.name = 'selectedTexts';
-                checkbox.value = selectedText;
-                checkbox.checked = true; // チェックボックスを最初からチェックした状態にする
-                checkboxWrapper.appendChild(checkbox);
-
-                var label = document.createElement('label');
-                label.textContent = selectedText;
-                checkboxWrapper.appendChild(label);
-
-                // 削除ボタンを追加
-                var deleteButton = document.createElement('button');
-                deleteButton.textContent = '削除';
-                deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ml-2');
-                deleteButton.addEventListener('click', function() {
-                    // チェックボックスの親要素を削除
-                    checkboxWrapper.remove();
-                    // テキストの背景色を元に戻す
-                    span.outerHTML = span.innerHTML;
-                });
-                checkboxWrapper.appendChild(deleteButton);
-
-                enquete.appendChild(checkboxWrapper);
-
-                // 選択を解除
-                selection.removeAllRanges();
+            buttonOpen.addEventListener('click', modalOpen);
+            function modalOpen() {
+                const text = textarea.value.replace(/\n/g, '<br>');
+                contents.innerHTML = text;
+                modal.style.display = 'block';
             }
-        });
 
-        // 送信ボタンが押されたときの処理
-        var submitBtn = document.getElementById('submitBtn');
-        submitBtn.addEventListener('click', function(event) {
-            event.preventDefault(); // フォームのデフォルトの送信を防ぐ
-            var markerList = document.getElementById('markerList');
-            var checkboxes = enquete.querySelectorAll('input[type="checkbox"]:checked');
-            checkboxes.forEach(function(checkbox) {
-                var li = document.createElement('li');
-                var a = document.createElement('a');
-                a.textContent =checkbox.value;
-                a.href = "#";
-                a.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    newDivText.textContent = checkbox.value;
-                    var markerDiv = document.getElementById('marker');
-                    markerDiv.classList.add('small'); // markerのサイズを半分にする
-                    newDiv.classList.add('big'); // newDivを表示する
-                    newDiv.classList.remove('close');
-                });
-                li.appendChild(a);
-                markerList.appendChild(li);
+            buttonClose.addEventListener('click', modalClose);
+            function modalClose() {
+                modal.style.display = 'none';
+            }
+
+            addEventListener('click', outsideClose);
+            function outsideClose(e) {
+                if (e.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            contents.addEventListener('mouseup', function(event) {
+                const selection = window.getSelection();
+                if (!selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    const selectedText = selection.toString();
+
+                    const span = document.createElement('span');
+                    span.classList.add('highlight');
+                    range.surroundContents(span);
+
+                    const markerContents = document.getElementById('markerContents');
+                    markerContents.value = selectedText;
+                }
             });
-            enquete.innerHTML = ''; // フォームをクリア
-        });
 
-        // newDivのバツボタンが押されたときの処理
-        closeBtn.addEventListener('click', function() {
-            newDiv.classList.remove('big'); // bigクラスを削除
-            newDiv.classList.add('close'); // closeアニメーションを追加
-            var markerDiv = document.getElementById('marker');
-            markerDiv.classList.remove('small'); // markerのサイズを元に戻す
-        });
+            submitBtn.addEventListener('click', function() {
+                const markerContents = document.getElementById('markerContents').value;
+                $.ajax({
+                    url: '/A1/MarkServlet',
+                    type: 'POST',
+                    data: { markerContents: markerContents },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            fetchMarkers();
+                            modalClose();
+                        } else {
+                            alert('Error saving marker');
+                        }
+                    },
+                    error: function() {
+                        alert('Error saving marker');
+                    }
+                });
+            });
+            $(document).ready(function() {
+                function fetchLatestBoardContents() {
+                    $.ajax({
+                        url: '/A1/MainServlet',
+                        type: 'POST',
+                        data: { action: 'fetchLatestBoardContents' },
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#textarea').val(data.boardContents);
+                        },
+                        error: function() {
+                            console.error('Error fetching board contents.');
+                        }
+                    });
+                }
 
-        // アニメーション終了時にnewDivを非表示にする処理を追加
-        newDiv.addEventListener('animationend', function() {
-            if (newDiv.classList.contains('close')) {
-                newDiv.classList.remove('close');
-                newDiv.style.zIndex = -1;
+                setInterval(fetchLatestBoardContents, 1000);
+            });
+            function fetchMarkers() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { markerData: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        markerList.innerHTML = '';
+                        data.forEach(function(marker) {
+                            const li = document.createElement('li');
+                            const a = document.createElement('a');
+                            a.textContent = marker.markerContents;
+                            a.href = "#";
+                            a.dataset.markerId = marker.markerId;
+                            a.addEventListener('click', function(event) {
+                                event.preventDefault();
+                                newDivText.textContent = marker.markerContents;
+                                markerIdText.textContent = marker.markerId;
+                                currentMarkerId = marker.markerId;
+                                newDiv.classList.add('big');
+                                newDiv.classList.remove('close');
+                                var markerDiv = document.getElementById('marker');
+                                markerDiv.classList.add('small');
+                                fetchComments(currentMarkerId);
+                            });
+                            li.appendChild(a);
+                            markerList.appendChild(li);
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching markers');
+                    }
+                });
             }
+
+            function fetchComments(markerId) {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { markerId: markerId },
+                    dataType: 'json',
+                    success: function(data) {
+                        commentsContainer.innerHTML = '';
+                        data.forEach(function(comment) {
+                            const p = document.createElement('p');
+                            p.textContent = comment.markerComContents;
+                            commentsContainer.appendChild(p);
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching comments');
+                    }
+                });
+            }
+            $(document).ready(function() {
+                function fetchLatestBoardContents() {
+                    $.ajax({
+                        url: '/A1/MainServlet',
+                        type: 'GET',
+                        data: { action: 'fetchLatestBoardContents' },
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#textarea').val(data.boardContents);
+                        },
+                        error: function() {
+                            console.error('Error fetching board contents.');
+                        }
+                    });
+                }
+
+                setInterval(fetchLatestBoardContents, 1000);
+            });
+            sendCommentBtn.addEventListener('click', function() {
+                const commentText = newCommentText.value;
+                if (currentMarkerId && commentText) {
+                    $.ajax({
+                        url: '/A1/MarkerComServlet',
+                        type: 'POST',
+                        data: {
+                            markerComContents: commentText,
+                            markerId: currentMarkerId
+                        },
+                        success: function(response) {
+                            if (response === 'success') {
+                                newCommentText.value = '';
+                                fetchComments(currentMarkerId);
+                            } else {
+                                alert('Error saving comment');
+                            }
+                        },
+                        error: function() {
+                            alert('Error saving comment');
+                        }
+                    });
+                }
+            });
+
+            closeBtn.addEventListener('click', function() {
+                newDiv.classList.remove('big');
+                newDiv.classList.add('close');
+                var markerDiv = document.getElementById('marker');
+                markerDiv.classList.remove('small');
+            });
+
+            newDiv.addEventListener('animationend', function() {
+                if (newDiv.classList.contains('close')) {
+                    newDiv.classList.remove('close');
+                    newDiv.style.zIndex = -1;
+                }
+            });
+
+            function fetchAllMarkerComs() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { allMarkerCom: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        markcomlive.innerHTML = '';
+                        data.reverse().forEach(function(comment) {
+                            const li = document.createElement('li');
+                            const p = document.createElement('p');
+                            p.textContent = comment.markerContents + ' : ' + comment.markerComContents + ' ♡';
+                            markcomlive.appendChild(document.createElement('hr'));
+                            li.appendChild(p);
+                            markcomlive.appendChild(li);
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching marker comments');
+                    }
+                });
+            }
+
+            function fetchAllComs() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { data1: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        allcomdiv.innerHTML = '';
+                        data.forEach(function(comment) {
+                            const p = document.createElement('p');
+                            p.textContent = comment.allComContents + ' ♡';
+                            allcomdiv.appendChild(p);
+                            allcomdiv.appendChild(document.createElement('hr'));
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching all comments');
+                    }
+                });
+            }
+
+            $(document).ready(function() {
+                fetchMarkers();
+                fetchAllMarkerComs();
+                fetchAllComs();
+                setInterval(fetchMarkers, 1000);
+                setInterval(fetchAllMarkerComs, 1000);
+                setInterval(fetchAllComs, 1000);
+                setInterval(fetchLatestBoardContents, 1000);
+            });
         });
-    });
+
+        function goAjax() {
+            let allcom = document.getElementById('allcom').value;
+            let postData = { data1: allcom };
+
+            $.ajax({
+                url: '/A1/AllComServlet',
+                type: 'POST',
+                dataType: 'json',
+                data: postData,
+                success: function(data) {
+                    document.getElementById("test").innerText = data.message;
+                },
+                error: function() {
+                    alert("データの追加に失敗しました。");
+                }
+            });
+        }
     </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('myChart').getContext('2d');
 
-    // 各カテゴリのデータ
-    const data = [30, 3, 3, 5,];
+    const data = [30, 3, 3, 5];
 
-    // データの合計を計算
     const total = data.reduce((sum, value) => sum + value, 0);
 
-    // 各データの割合を計算
     const percentages = data.map(value => (value / total) * 100);
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Total'],  // 横棒グラフのラベルは「Total」のみ
+            labels: ['Total'],
             datasets: [
                 {
                     label: 'とてもよくわかる',
@@ -286,12 +404,11 @@
                     data: [percentages[3]],
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderWidth: 1
-                },
-
+                }
             ]
         },
         options: {
-            indexAxis: 'y',  // 横棒グラフに設定
+            indexAxis: 'y',
             scales: {
                 x: {
                     stacked: true,
@@ -308,7 +425,7 @@
             },
             plugins: {
                 legend: {
-                    display: false // 凡例を非表示にする
+                    display: false
                 },
                 tooltip: {
                     callbacks: {
@@ -318,58 +435,10 @@
                     }
                 }
             },
-            maintainAspectRatio: false, // グラフの横幅を調整するための設定
-            responsive: true // グラフのレスポンシブ対応
+            maintainAspectRatio: false,
+            responsive: true
         }
     });
-    </script>
-<script>
-    function goAjax() {
-        let allcom = document.getElementById('allcom').value;
-        let postData = { data1: allcom };
-
-        $.ajax({
-            url: '/A1/AllComServlet',
-            type: 'POST',
-            dataType: 'json',
-            data: postData,
-            success: function(data) {
-                document.getElementById("test").innerText = data.message;
-            },
-            error: function() {
-                alert("データの追加に失敗しました。");
-            }
-        });
-    }
-
-    // 1秒ごとに非同期でデータを取得し、画面を更新する
-    function fetchComments() {
-        $.ajax({
-            url: '/A1/MainServlet',
-            type: 'GET',
-            dataType: 'json',
-            data: { data1: 0 },
-            success: function(data) {
-                console.log(data); // コンソールにデータを表示
-                let allcomdiv = document.getElementById('allcomdiv');
-                allcomdiv.innerHTML = ''; // 既存の内容をクリア
-                //data.reverse().
-                data.forEach(function(comment) { // 最新のコメントが上に来るように逆順にする
-                    let p = document.createElement('p');
-                    p.textContent = comment.allComContents + ' ♡';
-                    allcomdiv.appendChild(p);
-                    allcomdiv.appendChild(document.createElement('hr'));
-                });
-            },
-            error: function() {
-                console.error('データの取得に失敗しました。');
-            }
-        });
-    }
-
-    // ページロード時に初回のデータ取得を行う
-    $(document).ready(function() {
-        fetchComments();
-        setInterval(fetchComments, 1000); // 1秒ごとにデータを取得
-    });
 </script>
+</body>
+</html>

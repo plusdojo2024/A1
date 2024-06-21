@@ -32,6 +32,7 @@ public class MainServlet extends HttpServlet {
         Users user = (Users) session.getAttribute("user");
 
         // 全体コメントの取得
+
         if (request.getParameter("data1") != null) {
             AllComDAO acDao = new AllComDAO();
             List<AllCom> allComList = acDao.getAllComments();
@@ -100,19 +101,17 @@ public class MainServlet extends HttpServlet {
             response.getWriter().write(jsonResponse);
             return;
         }
-        if (request.getParameter("latestBoard") != null) {
-            BlackBoardDAO bbDao = new BlackBoardDAO();
-            BlackBoard latestBoard = bbDao.getLatestBoard();
+        if (request.getParameter("markerData") != null) {
+            MarkerDAO markerDao = new MarkerDAO();
+            List<Marker> markerList = markerDao.selectMarkers();
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
             ObjectMapper mapper = new ObjectMapper();
-            String jsonResponse = mapper.writeValueAsString(latestBoard);
+            String jsonResponse = mapper.writeValueAsString(markerList);
             response.getWriter().write(jsonResponse);
-            System.out.println();
             return;
-
         }
 
         // ログインチェックと画面遷移
@@ -122,11 +121,30 @@ public class MainServlet extends HttpServlet {
         }
 
         if (user.getCheckStudent() == 1) {
+        	BlackBoardDAO blackBoardDAO = new BlackBoardDAO();
+            BlackBoard latestBlackBoard = blackBoardDAO.selectLatest();
+            if (latestBlackBoard != null) {
+                request.setAttribute("latestBlackBoard", latestBlackBoard);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
             dispatcher.forward(request, response);
+
+            }
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/s_board.jsp");
             dispatcher.forward(request, response);
         }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 非同期で最新の boardContents を取得する処理
+        BlackBoardDAO blackBoardDAO = new BlackBoardDAO();
+        BlackBoard latestBlackBoard = blackBoardDAO.selectLatest();
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonResponse = mapper.writeValueAsString(latestBlackBoard);
+        response.getWriter().write(jsonResponse);
     }
 }
