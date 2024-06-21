@@ -119,7 +119,7 @@ public class AllComFavDAO {
 	}
 
 
-	public boolean insert(AllComFav allComFav) {
+	public boolean insert(int userId, int allComId) {
 		Connection conn = null;
 		boolean result = false;
 
@@ -131,12 +131,12 @@ public class AllComFavDAO {
 			conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
 
 			// SQL文を準備する
-			String sql = "INSERT INTO all_com_fav VALUES (NULL, ?, ?)";
+			String sql = "INSERT INTO all_com_fav (user_id, all_com_id) VALUES ( ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			// SQL文を完成させる
-			pStmt.setInt(1, allComFav.getUserId());
-			pStmt.setInt(2, allComFav.getAllComId());
+			pStmt.setInt(1, userId);
+			pStmt.setInt(2, allComId);
 
 			// SQL文を実行する
 			if (pStmt.executeUpdate() == 1) {
@@ -165,7 +165,7 @@ public class AllComFavDAO {
 		return result;
 	}
 
-	public int getCount(AllComFav allComFav) {
+	public int getCount(int allComId) {
 		Connection conn = null;
 		int count = 0;
 
@@ -180,7 +180,7 @@ public class AllComFavDAO {
 			String sql = "SELECT COUNT(*) as c FROM all_com_fav WHERE all_com_id = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
-			pStmt.setInt(1, allComFav.getAllComId());
+			pStmt.setInt(1, allComId);
 
 			// SQL文を実行する
 			ResultSet rs = pStmt.executeQuery();

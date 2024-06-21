@@ -5,6 +5,7 @@ public class MarkerComFav implements Serializable{
 	private int markerComNumber; /*理解度コメントリアクション通し番号*/
 	private int userId; /*ユーザー通し番号*/
 	private int markerComId; /*マーカーコメントＩＤ*/
+	private int isFav;
 
 
     public MarkerComFav(int markerComNumber, int userId, int markerComId) {
