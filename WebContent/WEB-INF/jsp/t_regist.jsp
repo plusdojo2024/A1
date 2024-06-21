@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="css/s-regist.css">
 </head>
 <body>
-<h1 id="logo"><img src="img/くらすぼーどロゴ.png" alt="くらすぼーど" width="300"></h1>
+<h1 id="logo"><img src="img/くらすぼーどロゴ.png" alt="くらすぼーど" width="350"></h1>
        <h2 class="regist">新規登録（講師）</h2>
     <div class="box">
         <div class="content">
@@ -25,7 +25,7 @@
         </label>
 
         <label>パスワード
-        <input  class="text" type="password" name="pw" placeholder="パスワードは8∼16桁の英数字混合で設定してください">
+        <input  class="text" type="password" name="pw" placeholder="8∼16桁の英数字混合で設定してください">
         </label>
         <input class="textsub" type="submit" name="submit" value="新規登録">
         <span id="error_message">
