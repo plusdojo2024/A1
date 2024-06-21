@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="css/t-board-record.css">
+<link rel="stylesheet" href="/A1/css/t-board-record.css">
 </head>
 <body>
     <a href="/A1/MainServlet">
