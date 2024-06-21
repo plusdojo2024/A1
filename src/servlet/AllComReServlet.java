@@ -2,8 +2,9 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,10 +12,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.AllComFavDAO;
-import model.AllComFav;
 
 
-public class AllComReServlet {
+@WebServlet("/AllComReServlet")
+public class AllComReServlet extends HttpServlet{
+	private static final long serialVersionUID = 1L;
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// もしもログインしていなかったらログインサーブレットにリダイレクトする
 		//決まりの文章、とりあえず書くと覚えておこう
@@ -26,31 +29,30 @@ public class AllComReServlet {
 
 		// リクエストパラメータを取得する
 		request.setCharacterEncoding("UTF-8");
-		String stUserId = request.getParameter("userId");
-		int userId = Integer.parseInt(stUserId);
-		String stAllComId = request.getParameter("AllComId");
-		int allComId = Integer.parseInt(stAllComId);
-
 
 		//いいねボタンが押されたときの処理
         if(request.getParameter("data1")!=null) {
-//			// 送信されたデータの取得
-//			String data1 = request.getParameter("data1");
-//			int num = Integer.parseInt(data1);
-//			//入力されたデータを表示
-//			System.out.println(data1);
+        	String stUserId = request.getParameter("userId");
+    		int userId = Integer.parseInt(stUserId);
+    		String stAllComId = request.getParameter("AllComId");
+    		int allComId = Integer.parseInt(stAllComId);
+
+//        	int userId = 1;
+//        	int allComId = 1;
 
 			boolean ans = false;
 
 			AllComFavDAO dao = new AllComFavDAO();
-			int id[] = dao.selectId();
+			int[] id = new int[2];
+			id[0] = dao.selectId()[0];
+			id[1] = dao.selectId()[1];
 
 			if(id[0]==userId && id[1]==allComId) {
+//				System.out.println("入ってるよ");
 				ans = dao.delete(userId, allComId);
 			}else {
-				ans = dao.insert(new AllComFav(0, userId, allComId, null));
+				ans = dao.insert(userId, allComId);
 			}
-
 
 			//Jackson機能のmapperをインスタンス（実体）化
 			ObjectMapper mapper = new ObjectMapper();
@@ -69,7 +71,10 @@ public class AllComReServlet {
 		//１秒毎にいいねの数を取得するメソッド
         }else {
         	AllComFavDAO dao = new AllComFavDAO();
-			int count = dao.getCount(new AllComFav(0, 0, allComId, null));
+        	String stAllComId = request.getParameter("AllComId");
+    		int allComId = Integer.parseInt(stAllComId);
+			int count = dao.getCount(allComId);
+
 			//Jackson機能のmapperをインスタンス（実体）化
 			ObjectMapper mapper = new ObjectMapper();
 			try {
@@ -84,10 +89,10 @@ public class AllComReServlet {
 	        }
         }
 
-
-		// 結果ページにフォワードする
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/regist.jsp");
-		dispatcher.forward(request, response);
+//
+////		// 結果ページにフォワードする
+//		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/iine_suru.jsp");
+//		dispatcher.forward(request, response);
 	}
 }
 
