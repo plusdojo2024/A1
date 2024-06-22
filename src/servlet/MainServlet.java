@@ -1,7 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +19,7 @@ import dao.AllComDAO;
 import dao.BlackBoardDAO;
 import dao.MarkerComDAO;
 import dao.MarkerDAO;
+import dao.MarkerRecDAO;
 import model.AllCom;
 import model.BlackBoard;
 import model.Marker;
@@ -100,6 +103,33 @@ public class MainServlet extends HttpServlet {
             ObjectMapper mapper = new ObjectMapper();
             String jsonResponse = mapper.writeValueAsString(markerList);
             response.getWriter().write(jsonResponse);
+            return;
+        }
+        if (request.getParameter("markerChart") != null) {
+            int markerId = Integer.parseInt(request.getParameter("markerChart"));
+            MarkerRecDAO markerRecDao = new MarkerRecDAO();
+            Map<String, Integer> chartData = markerRecDao.getChartData(markerId);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonResponse = mapper.writeValueAsString(chartData);
+            response.getWriter().write(jsonResponse);
+            return;
+        }
+        if (request.getParameter("userReaction") != null) {
+            int markerId = Integer.parseInt(request.getParameter("userReaction"));
+            MarkerRecDAO dao = new MarkerRecDAO();
+            String reaction = dao.getUserReaction(user.getUserId(), markerId);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> jsonResponse = new HashMap<>();
+            jsonResponse.put("reaction", reaction);
+            response.getWriter().write(mapper.writeValueAsString(jsonResponse));
             return;
         }
 

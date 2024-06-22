@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,51 +9,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import dao.MarkerRecDAO;
 import model.Users;
 
-
-/**
- * Servlet implementation class NineServlet
- */
 @WebServlet("/MarkRegiServlet")
 public class MarkRegiServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// t_board.jspに遷移する
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
-		dispatcher.forward(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
+        HttpSession session = request.getSession();
+        Users user = (Users) session.getAttribute("user");
+        int userId = user.getUserId();
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int markerId = Integer.parseInt(request.getParameter("markerId"));
+        String reaction = request.getParameter("reaction");
 
-		//値の取得
-		request.setCharacterEncoding("UTF-8");
+        MarkerRecDAO dao = new MarkerRecDAO();
+        boolean success = false;
 
-		HttpSession session = request.getSession();
-		Users user = (Users)session.getAttribute("user");
-		int userId = user.getUserId();
+        switch (reaction) {
+            case "vg":
+                success = dao.insertOrUpdateVg(userId, markerId);
+                break;
+            case "g":
+                success = dao.insertOrUpdateG(userId, markerId);
+                break;
+            case "b":
+                success = dao.insertOrUpdateB(userId, markerId);
+                break;
+            case "vb":
+                success = dao.insertOrUpdateVb(userId, markerId);
+                break;
+        }
 
-		String stMarkerId = request.getParameter("markerId");
-		int markerId = Integer.parseInt(stMarkerId);
-
-		MarkerRecDAO dao = new MarkerRecDAO();
-
-		if(request.getParameter("bu").equals("よくわかる")) {
-			dao.insertVg(userId, markerId);
-		}else if(request.getParameter("bu").equals("わかる")) {
-			dao.insertG(userId, markerId);
-		}else if(request.getParameter("bu").equals("わからない")) {
-			dao.insertB(userId, markerId);
-		}else if(request.getParameter("bu").equals("よくわからない")) {
-			dao.insertVb(userId, markerId);
-		}
-
-		// t_board.jspに遷移する
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/t_board.jsp");
-		dispatcher.forward(request, response);
-	}
+        response.setContentType("application/json");
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(success));
+    }
 }
-

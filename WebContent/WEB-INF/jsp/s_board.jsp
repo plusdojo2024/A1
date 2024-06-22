@@ -9,6 +9,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/s-board.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -48,14 +49,14 @@
         </a>
     </header>
     <div class="board" id="boardContentsDiv">
-        <textarea  name="text" class="text" id="textarea" readonly></textarea>
+        <textarea name="text" class="text" id="textarea" readonly></textarea>
     </div>
     <div class="com">
-    <div class="markcombox">
-        <ul class="markcomlive" id="markcomlive">
-            <!-- ここにコメントを表示 -->
-        </ul>
-    </div>
+        <div class="markcombox">
+            <ul class="markcomlive" id="markcomlive">
+                <!-- ここにコメントを表示 -->
+            </ul>
+        </div>
     </div>
     <div class="allcom">
         <div class="allcomtext" id="allcomdiv">
@@ -69,31 +70,27 @@
     <div class="marker" id="marker">
         <div class="markercontents">
             <ul id="markerList"></ul>
-            <div>
-                <!--<canvas id="myChart" class="myChart"></canvas>-->
-            </div>
         </div>
     </div>
 
     <div class="newDiv" id="newDiv">
-		<span class="closeBtn">×</span>
-		<p id="newDivText"></p>
-		<p id="markerIdText"></p>
-		<div class="chart">
-        <canvas id="myChart" class="myChart"></canvas>
+        <span class="closeBtn">×</span>
+        <p id="newDivText"></p>
+        <p id="markerIdText"></p>
+        <div class="chart">
+            <canvas id="myChart" class="myChart"></canvas>
         </div>
-        <button type="button" id="verygoodtBtn" class="verygoodbtn">vg</button>
-        <button type="button" id="goodtBtn" class="goodbtn">g</button>
-        <button type="button" id="badtBtn" class="badbtn">b</button>
-        <button type="button" id="verybadtBtn" class="verybadbtn">vb</button>
-		<div class="newdivcom">
-		<div id="commentsContainer"></div>
-		</div>
-		<div class="newDivform">
-			<textarea id="newCommentText" rows="4" cols="50"></textarea>
-			<button id="sendCommentBtn">送信</button>
-		</div>
-
+        <button type="button" class="reactionBtn" data-reaction="vg">よくわかる</button>
+        <button type="button" class="reactionBtn" data-reaction="g">わかる</button>
+        <button type="button" class="reactionBtn" data-reaction="b">わからない</button>
+        <button type="button" class="reactionBtn" data-reaction="vb">よくわからない</button>
+        <div class="newdivcom">
+            <div id="commentsContainer"></div>
+        </div>
+        <div class="newDivform">
+            <textarea id="newCommentText" rows="4" cols="50"></textarea>
+            <button id="sendCommentBtn">送信</button>
+        </div>
     </div>
 
     <script>
@@ -115,10 +112,10 @@
             const markcomlive = document.getElementById('markcomlive');
             const allcomdiv = document.getElementById('allcomdiv');
             const boardContentsDiv = document.getElementById('boardContentsDiv');
-
+            const reactionButtons = document.querySelectorAll('.reactionBtn');
 
             let currentMarkerId = null;
-
+            let chart = null;
 
             buttonOpen.addEventListener('click', modalOpen);
             function modalOpen() {
@@ -173,24 +170,7 @@
                     }
                 });
             });
-            $(document).ready(function() {
-                function fetchLatestBoardContents() {
-                    $.ajax({
-                        url: '/A1/MainServlet',
-                        type: 'POST',
-                        data: { action: 'fetchLatestBoardContents' },
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#textarea').val(data.boardContents);
-                        },
-                        error: function() {
-                            console.error('Error fetching board contents.');
-                        }
-                    });
-                }
 
-                setInterval(fetchLatestBoardContents, 1000);
-            });
             function fetchMarkers() {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -215,6 +195,7 @@
                                 var markerDiv = document.getElementById('marker');
                                 markerDiv.classList.add('small');
                                 fetchComments(currentMarkerId);
+                                fetchChart(currentMarkerId);
                             });
                             li.appendChild(a);
                             markerList.appendChild(li);
@@ -245,11 +226,114 @@
                     }
                 });
             }
+
+            function fetchChart(markerId) {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { markerChart: markerId },
+                    dataType: 'json',
+                    success: function(data) {
+                        const ctx = document.getElementById('myChart').getContext('2d');
+                        const total = data.veryGood + data.good + data.bad + data.veryBad;
+                        const percentages = [
+                            (data.veryGood / total) * 100,
+                            (data.good / total) * 100,
+                            (data.bad / total) * 100,
+                            (data.veryBad / total) * 100
+                        ];
+
+                        const chartData = {
+                            labels: ['Total'],
+                            datasets: [
+                                {
+                                    label: 'とてもよくわかる',
+                                    data: [percentages[0]],
+                                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'わかる',
+                                    data: [percentages[1]],
+                                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'わからない',
+                                    data: [percentages[2]],
+                                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'とてもわからない',
+                                    data: [percentages[3]],
+                                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        };
+
+                        if (chart) {
+                            chart.data = chartData;
+                            chart.update();
+                        } else {
+                            chart = new Chart(ctx, {
+                                type: 'bar',
+                                data: chartData,
+                                options: {
+                                    indexAxis: 'y',
+                                    scales: {
+                                        x: {
+                                            stacked: true,
+                                            ticks: {
+                                                beginAtZero: true,
+                                                callback: function(value) {
+                                                    return value + "%";
+                                                }
+                                            }
+                                        },
+                                        y: {
+                                            stacked: true
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(tooltipItem) {
+                                                    return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
+                                                }
+                                            }
+                                        }
+                                    },
+                                    maintainAspectRatio: false,
+                                    responsive: true,
+                                    animation: {
+                                        duration: 0 // アニメーションを無効にする
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    error: function() {
+                        console.error('Error fetching chart data');
+                    }
+                });
+            }
+
+            function updateChart() {
+                if (currentMarkerId) {
+                    fetchChart(currentMarkerId);
+                }
+            }
+
             $(document).ready(function() {
                 function fetchLatestBoardContents() {
                     $.ajax({
                         url: '/A1/MainServlet',
-                        type: 'GET',
+                        type: 'POST',
                         data: { action: 'fetchLatestBoardContents' },
                         dataType: 'json',
                         success: function(data) {
@@ -263,6 +347,7 @@
 
                 setInterval(fetchLatestBoardContents, 1000);
             });
+
             sendCommentBtn.addEventListener('click', function() {
                 const commentText = newCommentText.value;
                 if (currentMarkerId && commentText) {
@@ -353,7 +438,29 @@
                 setInterval(fetchMarkers, 1000);
                 setInterval(fetchAllMarkerComs, 1000);
                 setInterval(fetchAllComs, 1000);
-                setInterval(fetchLatestBoardContents, 1000);
+                setInterval(updateChart, 1000);
+            });
+
+            reactionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const reaction = this.getAttribute('data-reaction');
+                    if (currentMarkerId) {
+                        $.ajax({
+                            url: '/A1/MarkRegiServlet',
+                            type: 'POST',
+                            data: {
+                                markerId: currentMarkerId,
+                                reaction: reaction
+                            },
+                            success: function(response) {
+                                fetchChart(currentMarkerId);
+                            },
+                            error: function() {
+                                alert('Error saving reaction');
+                            }
+                        });
+                    }
+                });
             });
         });
 
@@ -375,79 +482,5 @@
             });
         }
     </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('myChart').getContext('2d');
-
-    const data = [30, 3, 3, 5];
-
-    const total = data.reduce((sum, value) => sum + value, 0);
-
-    const percentages = data.map(value => (value / total) * 100);
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Total'],
-            datasets: [
-                {
-                    label: 'とてもよくわかる',
-                    data: [percentages[0]],
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'わかる',
-                    data: [percentages[1]],
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'わからない',
-                    data: [percentages[2]],
-                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'とてもわからない',
-                    data: [percentages[3]],
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            indexAxis: 'y',
-            scales: {
-                x: {
-                    stacked: true,
-                    ticks: {
-                        beginAtZero: true,
-                        callback: function(value) {
-                            return value + "%";
-                        }
-                    }
-                },
-                y: {
-                    stacked: true
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
-                        }
-                    }
-                }
-            },
-            maintainAspectRatio: false,
-            responsive: true
-        }
-    });
-</script>
 </body>
 </html>
