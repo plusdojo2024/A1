@@ -240,7 +240,8 @@
                             (data.veryGood / total) * 100,
                             (data.good / total) * 100,
                             (data.bad / total) * 100,
-                            (data.veryBad / total) * 100
+                            (data.veryBad
+                            		/ total) * 100
                         ];
 
                         const chartData = {
