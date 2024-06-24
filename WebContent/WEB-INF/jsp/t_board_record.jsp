@@ -18,11 +18,6 @@
                 板書履歴
             </div>
         </a>
-        <a href="/A1/MyMarkLevelServlet">
-            <div class="tab2">
-                理解度履歴
-            </div>
-        </a>
     </div>
 
     <div class="board-list">
