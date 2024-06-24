@@ -13,13 +13,31 @@
 </head>
 <body>
     <header>
-        <div class="headbtn">
-            <button class="markerbtn">生徒用</button>
-            <button id="modalOpen" class="markerbtn">マーカー</button>
-            <button class="markerbtn">
-                <span class=center></span>ファイル添付
-            </button>
+        <div class = "headbtn">
+        	<p>今日の名言</p>
+        	<script type="text/javascript">
+	       		rand = Math.floor(Math.random()*15);
+
+				if (rand == 0) msg = "学問は我が友";
+				if (rand == 1) msg = "学問は光、無知は闇吉";
+				if (rand == 2) msg = "学問のすべては自分を知ることから始まる";
+				if (rand == 3) msg = "知識は宝";
+				if (rand == 4) msg = "学びは終わりなき旅路";
+				if (rand == 5) msg = "学びは力なり";
+				if (rand == 6) msg = "学び舎にて大道を知る";
+				if (rand == 7) msg = "学ぶことをやめた者は老いた";
+				if (rand == 8) msg = "学びには時がない";
+				if (rand == 9) msg = "学びは心の栄養";
+				if (rand == 10) msg = "省略は嫌いなんだ！！";
+				if (rand == 11) msg = "カニデンス";
+				if (rand == 12) msg = "バーチャーとチャー！";
+				if (rand == 13) msg = "これねーー";
+				if (rand == 14) msg = "いいですね！いいですね！";
+
+				document.write(msg);
+			</script>
         </div>
+
         <div id="easyModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -482,6 +500,7 @@
                 }
             });
         }
+
     </script>
 </body>
 </html>
