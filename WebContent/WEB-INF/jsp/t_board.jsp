@@ -73,9 +73,7 @@
 	<div class="marker" id="marker">
 		<div class="markercontents">
 			<ul id="markerList"></ul>
-			<!--<div>
-				<canvas id="myChart" class="myChart"></canvas>
-			</div>-->
+			<!---->
 		</div>
 	</div>
 
@@ -83,6 +81,9 @@
 		<span class="closeBtn">×</span>
 		<p id="newDivText"></p>
 		<p id="markerIdText"></p>
+		<div>
+				<canvas id="myChart" class="myChart"></canvas>
+			</div>
 		<div class="newdivcom">
 		<div id="commentsContainer"></div>
 		</div>
@@ -378,77 +379,465 @@
     </script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script>
-    const ctx = document.getElementById('myChart').getContext('2d');
+	function fetchChart(markerId) {
+        $.ajax({
+            url: '/A1/MainServlet',
+            type: 'GET',
+            data: { markerChart: markerId },
+            dataType: 'json',
+            success: function(data) {
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const total = data.veryGood + data.good + data.bad + data.veryBad;
+                const percentages = [
+                    (data.veryGood / total) * 100,
+                    (data.good / total) * 100,
+                    (data.bad / total) * 100,
+                    (data.veryBad
+                    		/ total) * 100
+                ];
 
-    const data = [30, 3, 3, 5];
-
-    const total = data.reduce((sum, value) => sum + value, 0);
-
-    const percentages = data.map(value => (value / total) * 100);
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Total'],
-            datasets: [
-                {
-                    label: 'とてもよくわかる',
-                    data: [percentages[0]],
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'わかる',
-                    data: [percentages[1]],
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'わからない',
-                    data: [percentages[2]],
-                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'とてもわからない',
-                    data: [percentages[3]],
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            indexAxis: 'y',
-            scales: {
-                x: {
-                    stacked: true,
-                    ticks: {
-                        beginAtZero: true,
-                        callback: function(value) {
-                            return value + "%";
+                const chartData = {
+                    labels: ['Total'],
+                    datasets: [
+                        {
+                            label: 'とてもよくわかる',
+                            data: [percentages[0]],
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'わかる',
+                            data: [percentages[1]],
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'わからない',
+                            data: [percentages[2]],
+                            backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'とてもわからない',
+                            data: [percentages[3]],
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderWidth: 1
                         }
-                    }
-                },
-                y: {
-                    stacked: true
+                    ]
+                };
+
+                if (chart) {
+                    chart.data = chartData;
+                    chart.update();
+                } else {
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            indexAxis: 'y',
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function(value) {
+                                            return value + "%";
+                                        }
+                                    }
+                                },
+                                y: {
+                                    stacked: true
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
+                                        }
+                                    }
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            responsive: true,
+                            animation: {
+                                duration: 0 // アニメーションを無効にする
+                            }
+                        }
+                    });
                 }
             },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
-                        }
-                    }
-                }
-            },
-            maintainAspectRatio: false,
-            responsive: true
+            error: function() {
+                console.error('Error fetching chart data');
+            }
+        });
+    }
+
+    function updateChart() {
+        if (currentMarkerId) {
+            fetchChart(currentMarkerId);
         }
-    });
+    }
 </script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttonOpen = document.getElementById('modalOpen');
+            const modal = document.getElementById('easyModal');
+            const buttonClose = document.getElementsByClassName('modalClose')[0];
+            const textarea = document.getElementById('textarea');
+            const contents = document.getElementById('contents');
+            const newDiv = document.getElementById('newDiv');
+            const newDivText = document.getElementById('newDivText');
+            const markerIdText = document.getElementById('markerIdText');
+            const closeBtn = document.querySelector('.newDiv .closeBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const sendCommentBtn = document.getElementById('sendCommentBtn');
+            const newCommentText = document.getElementById('newCommentText');
+            const markerList = document.getElementById('markerList');
+            const commentsContainer = document.getElementById('commentsContainer');
+            const markcomlive = document.getElementById('markcomlive');
+            const allcomdiv = document.getElementById('allcomdiv');
+            const boardContentsDiv = document.getElementById('boardContentsDiv');
+            const reactionButtons = document.querySelectorAll('.reactionBtn');
+
+            let currentMarkerId = null;
+            let chart = null;
+
+            buttonOpen.addEventListener('click', modalOpen);
+            function modalOpen() {
+                const text = textarea.value.replace(/\n/g, '<br>');
+                contents.innerHTML = text;
+                modal.style.display = 'block';
+            }
+
+            buttonClose.addEventListener('click', modalClose);
+            function modalClose() {
+                modal.style.display = 'none';
+            }
+
+            addEventListener('click', outsideClose);
+            function outsideClose(e) {
+                if (e.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            contents.addEventListener('mouseup', function(event) {
+                const selection = window.getSelection();
+                if (!selection.isCollapsed) {
+                    const range = selection.getRangeAt(0);
+                    const selectedText = selection.toString();
+
+                    const span = document.createElement('span');
+                    span.classList.add('highlight');
+                    range.surroundContents(span);
+
+                    const markerContents = document.getElementById('markerContents');
+                    markerContents.value = selectedText;
+                }
+            });
+
+            submitBtn.addEventListener('click', function() {
+                const markerContents = document.getElementById('markerContents').value;
+                $.ajax({
+                    url: '/A1/MarkServlet',
+                    type: 'POST',
+                    data: { markerContents: markerContents },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            fetchMarkers();
+                            modalClose();
+                        } else {
+                            alert('Error saving marker');
+                        }
+                    },
+                    error: function() {
+                        alert('Error saving marker');
+                    }
+                });
+            });
+
+            function fetchMarkers() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { latestMarkers: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        markerList.innerHTML = '';
+                        data.forEach(function(marker) {
+                            const li = document.createElement('li');
+                            const a = document.createElement('a');
+                            a.textContent = marker.markerContents;
+                            a.href = "#";
+                            a.dataset.markerId = marker.markerId;
+                            a.addEventListener('click', function(event) {
+                                event.preventDefault();
+                                newDivText.textContent = marker.markerContents;
+                                markerIdText.textContent = marker.markerId;
+                                currentMarkerId = marker.markerId;
+                                newDiv.classList.add('big');
+                                newDiv.classList.remove('close');
+                                var markerDiv = document.getElementById('marker');
+                                markerDiv.classList.add('small');
+                                fetchComments(currentMarkerId);
+                                fetchChart(currentMarkerId);
+                            });
+                            li.appendChild(a);
+                            markerList.appendChild(li);
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching markers');
+                    }
+                });
+            }
+
+            function fetchComments(markerId) {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { markerId: markerId },
+                    dataType: 'json',
+                    success: function(data) {
+                        commentsContainer.innerHTML = '';
+                        data.forEach(function(comment) {
+                            const p = document.createElement('p');
+                            p.textContent = comment.markerComContents;
+                            commentsContainer.appendChild(p);
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching comments');
+                    }
+                });
+            }
+
+            function fetchChart(markerId) {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { markerChart: markerId },
+                    dataType: 'json',
+                    success: function(data) {
+                        const ctx = document.getElementById('myChart').getContext('2d');
+                        const total = data.veryGood + data.good + data.bad + data.veryBad;
+                        const percentages = [
+                            (data.veryGood / total) * 100,
+                            (data.good / total) * 100,
+                            (data.bad / total) * 100,
+                            (data.veryBad
+                            		/ total) * 100
+                        ];
+
+                        const chartData = {
+                            labels: ['Total'],
+                            datasets: [
+                                {
+                                    label: 'とてもよくわかる',
+                                    data: [percentages[0]],
+                                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'わかる',
+                                    data: [percentages[1]],
+                                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'わからない',
+                                    data: [percentages[2]],
+                                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'とてもわからない',
+                                    data: [percentages[3]],
+                                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        };
+
+                        if (chart) {
+                            chart.data = chartData;
+                            chart.update();
+                        } else {
+                            chart = new Chart(ctx, {
+                                type: 'bar',
+                                data: chartData,
+                                options: {
+                                    indexAxis: 'y',
+                                    scales: {
+                                        x: {
+                                            stacked: true,
+                                            ticks: {
+                                                beginAtZero: true,
+                                                callback: function(value) {
+                                                    return value + "%";
+                                                }
+                                            }
+                                        },
+                                        y: {
+                                            stacked: true
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(tooltipItem) {
+                                                    return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
+                                                }
+                                            }
+                                        }
+                                    },
+                                    maintainAspectRatio: false,
+                                    responsive: true,
+                                    animation: {
+                                        duration: 0 // アニメーションを無効にする
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    error: function() {
+                        console.error('Error fetching chart data');
+                    }
+                });
+            }
+
+            function updateChart() {
+                if (currentMarkerId) {
+                    fetchChart(currentMarkerId);
+                }
+            }
+
+
+
+            sendCommentBtn.addEventListener('click', function() {
+                const commentText = newCommentText.value;
+                if (currentMarkerId && commentText) {
+                    $.ajax({
+                        url: '/A1/MarkerComServlet',
+                        type: 'POST',
+                        data: {
+                            markerComContents: commentText,
+                            markerId: currentMarkerId
+                        },
+                        success: function(response) {
+                            if (response === 'success') {
+                                newCommentText.value = '';
+                                fetchComments(currentMarkerId);
+                            } else {
+                                alert('Error saving comment');
+                            }
+                        },
+                        error: function() {
+                            alert('Error saving comment');
+                        }
+                    });
+                }
+            });
+
+            closeBtn.addEventListener('click', function() {
+                newDiv.classList.remove('big');
+                newDiv.classList.add('close');
+                var markerDiv = document.getElementById('marker');
+                markerDiv.classList.remove('small');
+            });
+
+            newDiv.addEventListener('animationend', function() {
+                if (newDiv.classList.contains('close')) {
+                    newDiv.classList.remove('close');
+                    newDiv.style.zIndex = -1;
+                }
+            });
+
+            function fetchAllMarkerComs() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { allMarkerCom: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        markcomlive.innerHTML = '';
+                        data.forEach(function(comment) {
+                            const li = document.createElement('li');
+                            const p = document.createElement('p');
+                            p.textContent = comment.markerContents + ' : ' + comment.markerComContents + ' ♡';
+                            markcomlive.appendChild(document.createElement('hr'));
+                            li.appendChild(p);
+                            markcomlive.appendChild(li);
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching marker comments');
+                    }
+                });
+            }
+
+            function fetchAllComs() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { data1: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        allcomdiv.innerHTML = '';
+                        data.forEach(function(comment) {
+                            const p = document.createElement('p');
+                            p.textContent = comment.allComContents + ' ♡';
+                            allcomdiv.appendChild(p);
+                            allcomdiv.appendChild(document.createElement('hr'));
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching all comments');
+                    }
+                });
+            }
+
+            $(document).ready(function() {
+                fetchMarkers();
+                fetchAllMarkerComs();
+                fetchAllComs();
+                setInterval(fetchMarkers, 1000);
+                setInterval(fetchAllMarkerComs, 1000);
+                setInterval(fetchAllComs, 1000);
+                setInterval(updateChart, 1000);
+            });
+
+            reactionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const reaction = this.getAttribute('data-reaction');
+                    if (currentMarkerId) {
+                        $.ajax({
+                            url: '/A1/MarkRegiServlet',
+                            type: 'POST',
+                            data: {
+                                markerId: currentMarkerId,
+                                reaction: reaction
+                            },
+                            success: function(response) {
+                                fetchChart(currentMarkerId);
+                            },
+                            error: function() {
+                                alert('Error saving reaction');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+
+    </script>
 </body>
 </html>
