@@ -37,9 +37,9 @@
 		</div >
 
 
-        <a href="/A1/RecordServlet">
+        <a href="/A1/MainServlet">
     		<div class="pagechange">
-                <p class="center">履歴</p>
+                <p class="center">板書</p>
                 </div>
 
 
