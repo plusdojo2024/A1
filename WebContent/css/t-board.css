@@ -176,6 +176,7 @@ li{
     resize: none;
 
 }
+
     .newDiv {
         display: none;
         position: fixed;
@@ -221,6 +222,14 @@ li{
 .myChart{
     scale:70%;
 }
+.chart{
+	left:50%;
+	transform: translate(-50%);
+	position:absolute;
+	top:30px;
+   height:100px;
+   width:400px;
+   }
 .markercontents{
     position:absolute;
     width:120%;
@@ -232,6 +241,14 @@ li{
     position:absolute;
     left:10%;
 
+}
+.newdivcom{
+	position:absolute;
+	top:70px;
+	left:84%;
+	transform: translate(-50%);
+	height:170px;
+	width:100px;
 }
 /* 上 */
 .boardcomit{

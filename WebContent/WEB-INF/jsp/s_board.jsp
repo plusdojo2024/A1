@@ -13,13 +13,31 @@
 </head>
 <body>
     <header>
-        <div class="headbtn">
-            <button class="markerbtn">生徒用</button>
-            <button id="modalOpen" class="markerbtn">マーカー</button>
-            <button class="markerbtn">
-                <span class=center></span>ファイル添付
-            </button>
+        <div class = "headbtn">
+        	<p>今日の名言</p>
+        	<script type="text/javascript">
+	       		rand = Math.floor(Math.random()*15);
+
+				if (rand == 0) msg = "学問は我が友";
+				if (rand == 1) msg = "学問は光、無知は闇吉";
+				if (rand == 2) msg = "学問のすべては自分を知ることから始まる";
+				if (rand == 3) msg = "知識は宝";
+				if (rand == 4) msg = "学びは終わりなき旅路";
+				if (rand == 5) msg = "学びは力なり";
+				if (rand == 6) msg = "学び舎にて大道を知る";
+				if (rand == 7) msg = "学ぶことをやめた者は老いた";
+				if (rand == 8) msg = "学びには時がない";
+				if (rand == 9) msg = "学びは心の栄養";
+				if (rand == 10) msg = "省略は嫌いなんだ！！";
+				if (rand == 11) msg = "カニデンス";
+				if (rand == 12) msg = "バーチャーとチャー！";
+				if (rand == 13) msg = "これねーー";
+				if (rand == 14) msg = "いいですね！いいですね！";
+
+				document.write(msg);
+			</script>
         </div>
+
         <div id="easyModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -116,26 +134,26 @@
 
             let currentMarkerId = null;
             let chart = null;
-
+			//モーダルオープン
             buttonOpen.addEventListener('click', modalOpen);
             function modalOpen() {
                 const text = textarea.value.replace(/\n/g, '<br>');
                 contents.innerHTML = text;
                 modal.style.display = 'block';
             }
-
+			//モーダルを閉じる
             buttonClose.addEventListener('click', modalClose);
             function modalClose() {
                 modal.style.display = 'none';
             }
-
+			//モーダル全体を閉じる
             addEventListener('click', outsideClose);
             function outsideClose(e) {
                 if (e.target == modal) {
                     modal.style.display = 'none';
                 }
             }
-
+			//マーカー機能
             contents.addEventListener('mouseup', function(event) {
                 const selection = window.getSelection();
                 if (!selection.isCollapsed) {
@@ -170,7 +188,7 @@
                     }
                 });
             });
-
+			//newdivが表示される
             function fetchMarkers() {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -206,7 +224,7 @@
                     }
                 });
             }
-
+			//マーカーコメントが表示される
             function fetchComments(markerId) {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -226,7 +244,7 @@
                     }
                 });
             }
-
+			//グラフの表示
             function fetchChart(markerId) {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -323,13 +341,13 @@
                     }
                 });
             }
-
+			//グラフの更新
             function updateChart() {
                 if (currentMarkerId) {
                     fetchChart(currentMarkerId);
                 }
             }
-
+			//板書の更新
             $(document).ready(function() {
                 function fetchLatestBoardContents() {
                     $.ajax({
@@ -387,7 +405,7 @@
                     newDiv.style.zIndex = -1;
                 }
             });
-
+			//マーカーコメント全体の表示
             function fetchAllMarkerComs() {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -410,7 +428,7 @@
                     }
                 });
             }
-
+			//全体コメントの表示
             function fetchAllComs() {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -431,7 +449,7 @@
                     }
                 });
             }
-
+			//1秒ごとの交信
             $(document).ready(function() {
                 fetchMarkers();
                 fetchAllMarkerComs();
@@ -464,7 +482,7 @@
                 });
             });
         });
-
+		//全体コメントの送信
         function goAjax() {
             let allcom = document.getElementById('allcom').value;
             let postData = { data1: allcom };
@@ -482,6 +500,7 @@
                 }
             });
         }
+
     </script>
 </body>
 </html>
