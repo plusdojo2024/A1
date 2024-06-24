@@ -134,26 +134,26 @@
 
             let currentMarkerId = null;
             let chart = null;
-
+			//モーダルオープン
             buttonOpen.addEventListener('click', modalOpen);
             function modalOpen() {
                 const text = textarea.value.replace(/\n/g, '<br>');
                 contents.innerHTML = text;
                 modal.style.display = 'block';
             }
-
+			//モーダルを閉じる
             buttonClose.addEventListener('click', modalClose);
             function modalClose() {
                 modal.style.display = 'none';
             }
-
+			//モーダル全体を閉じる
             addEventListener('click', outsideClose);
             function outsideClose(e) {
                 if (e.target == modal) {
                     modal.style.display = 'none';
                 }
             }
-
+			//マーカー機能
             contents.addEventListener('mouseup', function(event) {
                 const selection = window.getSelection();
                 if (!selection.isCollapsed) {
@@ -188,7 +188,7 @@
                     }
                 });
             });
-
+			//newdivが表示される
             function fetchMarkers() {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -224,7 +224,7 @@
                     }
                 });
             }
-
+			//マーカーコメントが表示される
             function fetchComments(markerId) {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -244,7 +244,7 @@
                     }
                 });
             }
-
+			//グラフの表示
             function fetchChart(markerId) {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -341,13 +341,13 @@
                     }
                 });
             }
-
+			//グラフの更新
             function updateChart() {
                 if (currentMarkerId) {
                     fetchChart(currentMarkerId);
                 }
             }
-
+			//板書の更新
             $(document).ready(function() {
                 function fetchLatestBoardContents() {
                     $.ajax({
@@ -405,7 +405,7 @@
                     newDiv.style.zIndex = -1;
                 }
             });
-
+			//マーカーコメント全体の表示
             function fetchAllMarkerComs() {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -428,7 +428,7 @@
                     }
                 });
             }
-
+			//全体コメントの表示
             function fetchAllComs() {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -449,7 +449,7 @@
                     }
                 });
             }
-
+			//1秒ごとの交信
             $(document).ready(function() {
                 fetchMarkers();
                 fetchAllMarkerComs();
@@ -482,7 +482,7 @@
                 });
             });
         });
-
+		//全体コメントの送信
         function goAjax() {
             let allcom = document.getElementById('allcom').value;
             let postData = { data1: allcom };
