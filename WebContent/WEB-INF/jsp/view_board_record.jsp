@@ -4,24 +4,62 @@
     <!-- ↑の記述がないとfor Eachは使えないよ！！ -->
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link rel="stylesheet"href="${pageContext.request.contextPath}/view-board-record.css">
+
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>履歴閲覧|<c:forEach var="bb" items="${blackBoardList}" >
+		${bb.blackBoardDatetime}
+		</c:forEach>
+</title>
+<link rel="stylesheet" href="css/view-board-record.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-過去の板書を詳細表示するよ。<br>
+<header>
 
 
 	<!-- 結果 -->
 
+
+                    <div class="contents" id="contents">
+                        <!-- ここにテキストエリアの内容が表示されます -->
+                    </div>
+
+        		<h1 class= "title">板書履歴</h1>
+
+		<div  class = "date">
+
+		<c:forEach var="bb" items="${blackBoardList}" >
+		${bb.blackBoardDatetime}
+		</c:forEach>
+
+		</div >
+
+
+        <a href="/A1/RecordServlet">
+    		<div class="pagechange">
+                <p class="center">履歴</p>
+                </div>
+
+
+        </a>
+
+    </header>
+
+    <div class="board">
 	<c:forEach var="bb" items="${blackBoardList}" >
-		中身：${bb.boardContents}<br>
-		日付：${bb.blackBoardDatetime}
+		${bb.boardContents}<br>
 </c:forEach>
-
-
-
+</div>
 </body>
+
+	<footer>
+	<div class="btn">
+		<button class="backbtn" onclick="history.back()">戻る</button>
+	</div>
+
+ </footer class>
+
+
 </html>

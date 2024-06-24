@@ -1,0 +1,114 @@
+* {
+    margin: 0;
+    padding:0;
+    box-sizing:border-box;}
+body{
+    background:rgba(254, 255, 239, 1)
+}
+
+.center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+a:link{
+    text-decoration: none;
+    color:black;
+}
+li{
+    list-style: none; /* 点を消す */
+    padding: 0; /* パディングを削除 */
+}
+/*見出し*/
+h1.title{
+    color: rgba(48, 133, 195, 1);
+    text-align: center;
+    top: 100;
+    margin-top: 30;
+
+}
+/*日付部分*/
+.date{
+
+    font-weight: bold;
+     padding-left: 440px;
+}
+
+/* 板書 */
+.board{
+    width:45%;
+    height:80%;
+    background-color: white;
+    border:1px solid rgba(48, 133, 195, 1);
+
+
+    margin-top:0%;
+    margin-left: 50%;
+    transform: translate(-50%);
+    padding-bottom: 50%;
+
+    justify-content: center;
+    align-items: center;
+
+}
+.text{
+    width:99%;
+    height:99%;
+    border: none;
+    resize: none;
+    outline: none;
+}
+
+
+/* 上 */
+.boardcomit{
+    background-color: white;
+    position:absolute;
+    width:15%;
+    height:10%;
+    border:1px solid rgba(48, 133, 195, 1);
+    margin:1%;
+    top:2%;
+    left:65%;
+}
+.pagechange{
+    background-color: white;
+    position:absolute;
+    width:7%;
+    height:10%;
+    border:1px solid rgba(48, 133, 195, 1);
+    top:3%;
+    left:85%;
+}
+
+/*戻るボタン*/
+.btn{
+    position: absolute;
+    bottom: -100;
+    left:45%;
+
+
+}
+
+.backbtn{
+    background: lightblue;
+    color: #fff;
+    width:150px;
+    height: 70px;
+    border: 0;
+    font-size: 1.3rem;
+    border-radius: 5px;
+    font-weight: 900;
+    z-index:1;
+
+}
+
+.backbtn:hover {
+    background: lightcoral;
+    cursor: pointer;
+
+    }
+
+
+
