@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>マーカー履歴ページ</title>
 <link rel="stylesheet" href="css/all-marker-record.css">
 </head>
 <body>
@@ -70,7 +70,7 @@ new Chart(ctx, {
                 backgroundColor: 'rgba(75, 192, 192, 0.5)',
                 borderWidth: 1
             },
-            
+
         ]
     },
     options: {

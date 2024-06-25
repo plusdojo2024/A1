@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>受講生 | アカウント登録ページ</title>
 <link rel="stylesheet" href="css/s-regist.css">
 </head>
 <body>

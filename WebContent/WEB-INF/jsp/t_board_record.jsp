@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>講師 | 板書履歴ページ</title>
 <link rel="stylesheet" href="/A1/css/t-board-record.css">
 </head>
 <body>

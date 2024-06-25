@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>講師 | アカウント登録ページ</title>
 <link rel="stylesheet" href="css/s-regist.css">
 </head>
 <body>

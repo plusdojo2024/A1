@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>受講生 | マーカー履歴ページ</title>
 </head>
 <body>
 <a href="/A1/AllMarkSearchServlet">

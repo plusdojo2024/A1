@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>受講生 | 板書ページ</title>
 <link rel="stylesheet" href="css/t-board-record.css">
 </head>
 <body>
