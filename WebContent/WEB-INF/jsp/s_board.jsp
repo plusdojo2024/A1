@@ -13,15 +13,16 @@
 </head>
 <body>
     <header>
-        <div class = "headbtn">
-        	<p>今日の名言</p>
+    	<div class="box" id="makeImg"></div>
+		<img class = "frame" src="img/frame.png" width="400" height="132">
+        <p id = "headbtn">今日の名言</p>
+        <div class = "headtext">
         	<script type="text/javascript">
-	       		rand = Math.floor(Math.random()*15);
+	       		rand = Math.floor(Math.random()*14);
 
 				if (rand == 0) msg = "学問は我が友";
 				if (rand == 1) msg = "学問は光、無知は闇吉";
-				if (rand == 2) msg = "学問のすべては自分を知ることから始まる";
-				if (rand == 3) msg = "知識は宝";
+				if (rand == 2) msg = "知識は宝";
 				if (rand == 4) msg = "学びは終わりなき旅路";
 				if (rand == 5) msg = "学びは力なり";
 				if (rand == 6) msg = "学び舎にて大道を知る";
@@ -32,7 +33,7 @@
 				if (rand == 11) msg = "カニデンス";
 				if (rand == 12) msg = "バーチャーとチャー！";
 				if (rand == 13) msg = "これねーー";
-				if (rand == 14) msg = "いいですね！いいですね！";
+				if (rand == 3) msg = "いいですね！いいですね！";
 
 				document.write(msg);
 			</script>
