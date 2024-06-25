@@ -134,18 +134,7 @@
 
             let currentMarkerId = null;
             let chart = null;
-			//モーダルオープン
-            buttonOpen.addEventListener('click', modalOpen);
-            function modalOpen() {
-                const text = textarea.value.replace(/\n/g, '<br>');
-                contents.innerHTML = text;
-                modal.style.display = 'block';
-            }
-			//モーダルを閉じる
-            buttonClose.addEventListener('click', modalClose);
-            function modalClose() {
-                modal.style.display = 'none';
-            }
+
 			//モーダル全体を閉じる
             addEventListener('click', outsideClose);
             function outsideClose(e) {
