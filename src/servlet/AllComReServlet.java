@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.AllComFavDAO;
 
-
 @WebServlet("/AllComReServlet")
 public class AllComReServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -22,37 +21,24 @@ public class AllComReServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        response.setHeader("Cache-Control", "nocache");
-        response.setContentType("text/html;charset=UTF-8");
 
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        int allComId = Integer.parseInt(request.getParameter("AllComId"));
+        try {
+            int userId = Integer.parseInt(request.getParameter("userId"));
+            int allComId = Integer.parseInt(request.getParameter("allComId"));
 
-        AllComFavDAO dao = new AllComFavDAO();
-        boolean liked = dao.toggleLike(userId, allComId);
-        int likeCount = dao.getCount(allComId);
+            AllComFavDAO dao = new AllComFavDAO();
+            boolean liked = dao.insert(userId, allComId);
+            int likeCount = dao.getCount(allComId);
 
-        Map<String, Object> jsonResponse = new HashMap<>();
-        jsonResponse.put("liked", liked);
-        jsonResponse.put("likeCount", likeCount);
+            Map<String, Object> jsonResponse = new HashMap<>();
+            jsonResponse.put("liked", liked);
+            jsonResponse.put("likeCount", likeCount);
 
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(jsonResponse));
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        int allComId = Integer.parseInt(request.getParameter("AllComId"));
-
-        AllComFavDAO dao = new AllComFavDAO();
-        boolean liked = dao.isLikedByUser(userId, allComId);
-        int likeCount = dao.getCount(allComId);
-
-        Map<String, Object> jsonResponse = new HashMap<>();
-        jsonResponse.put("liked", liked);
-        jsonResponse.put("likeCount", likeCount);
-
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(jsonResponse));
+            ObjectMapper mapper = new ObjectMapper();
+            response.getWriter().write(mapper.writeValueAsString(jsonResponse));
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\":\"Invalid parameters\"}");
+        }
     }
 }

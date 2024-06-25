@@ -180,13 +180,13 @@ li{
     .newDiv {
         display: none;
         position: fixed;
-        top: 77%;
+        top: 70%;
         left: 86%;
         transform: translate(-50%, -50%);
         width:26%;
     	height:80%;
         background: rgba(255, 255, 255, 0.9);
-        border: 1px solid #ccc;
+        border:1px solid rgba(48, 133, 195, 1);
         z-index: 100;
         padding: 20px;
     }
@@ -224,9 +224,11 @@ li{
 }
 .chart{
 	position:absolute;
-	top:10px;
+	left:50%;
+	 transform: translate(-50%);
+	top:30px;
    height:150px;
-   width:200px;
+   width:600px;
    }
 .markercontents{
     position:absolute;
@@ -239,6 +241,20 @@ li{
     position:absolute;
     left:10%;
 
+}
+.rebtn{
+	position:relative;
+	top:33%;
+	left:280px;
+	transform: translate(-50%);
+	z-index:2;
+}
+.newdivcom{
+	position:relative;
+	top:20%;
+	left:50%;
+	width:200px;
+	height:150px;
 }
 /* 上 */
 .boardcomit{
@@ -256,14 +272,28 @@ li{
 	background-color: lightcoral;
 	cursor: pointer;
 }
+.logoimg{
+	position:absolute;
+	left:100px;
+	top:10px;
+}
 .pagechange{
-    background-color: white;
     position:absolute;
-    width:7%;
-    height:10%;
-    border:1px solid rgba(48, 133, 195, 1);
-    top:3%;
+    background: lightblue;
+    color: #fff;
+    width:200px;
+    height: 100px;
+    border: 0;
+    font-size: 1.3rem;
+    border-radius: 5px;
+    font-weight: 900;
+    z-index:1;
+    top:1%;
     left:85%;
+}
+.pagechange:hover{
+	background-color: lightcoral;
+	cursor: pointer;
 }
 .headtext{
     position:absolute;
@@ -446,6 +476,3 @@ li{
     }
 
 
-   .chart{
-   height:100px;
-   }

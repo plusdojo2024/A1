@@ -12,10 +12,10 @@
 </head>
 <body>
     <header>
+    <img src="img/くらすぼーどロゴ.png" alt="button image" style="height:100px;" class="logoimg">
         <div class="headbtn">
-            <button class="markerbtn">先生用</button>
             <button id="modalOpen" class="markerbtn">マーカー</button>
-            <button class="markerbtn"><span class="center"></span>ファイル添付</button>
+            <button id="boardcomit" class="boardcomit" name="保存">板書切替え</button>
         </div>
         <div id="easyModal" class="modal">
             <div class="modal-content">
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <button id="boardcomit" class="boardcomit" name="保存">板書切替え</button>
+
         <a href="/A1/RecordServlet">
             <div class="pagechange"><p class="center">履歴</p></div>
         </a>
@@ -355,25 +355,25 @@
                                 {
                                     label: 'とてもよくわかる',
                                     data: [percentages[0]],
-                                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                    backgroundColor: 'rgba(255,0,0, 0.5)',
                                     borderWidth: 1
                                 },
                                 {
                                     label: 'わかる',
                                     data: [percentages[1]],
-                                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                    backgroundColor: 'rgba(255, 255, 0, 0.5)',
                                     borderWidth: 1
                                 },
                                 {
                                     label: 'わからない',
                                     data: [percentages[2]],
-                                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                                    backgroundColor: 'rgba(34, 139, 34, 0.5)',
                                     borderWidth: 1
                                 },
                                 {
                                     label: 'とてもわからない',
                                     data: [percentages[3]],
-                                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                    backgroundColor: 'rgba(65, 105, 225, 0.5)',
                                     borderWidth: 1
                                 }
                             ]
@@ -444,6 +444,24 @@
                 setInterval(fetchAllComs, 1000);
                 setInterval(updateChart, 1000);
             });
+        });
+        boardcomit.addEventListener('click', function() {
+            if (confirm("板書を確定しますか？")) {
+                if (confirm("板書を確定したら現在表示されている板書の編集は出来なくなります")) {
+                    $.ajax({
+                        url: '/A1/BlackBoardServlet',
+                        type: 'POST',
+                        data: { 保存: '保存' },
+                        success: function(response) {
+                            alert('Board inserted successfully.');
+                            location.reload(); // ページをリロードする
+                        },
+                        error: function() {
+                            alert('Error inserting board.');
+                        }
+                    });
+                }
+            }
         });
     </script>
 </body>

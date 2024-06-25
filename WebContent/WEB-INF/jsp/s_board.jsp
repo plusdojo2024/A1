@@ -13,6 +13,7 @@
 </head>
 <body>
     <header>
+    <img src="img/くらすぼーどロゴ.png" alt="button image" style="height:100px;" class="logoimg">
     	<div class="box" id="makeImg"></div>
 		<img class = "frame" src="img/frame.png" width="400" height="132">
         <p id = "headbtn">今日の名言</p>
@@ -58,9 +59,7 @@
             </div>
         </div>
 
-        <div class="boardcomit">
-            <p class="center">板書切り替え</p>
-        </div>
+
         <a href="/A1/RecordServlet">
             <div class="pagechange">
                 <p class="center">履歴</p>
@@ -99,10 +98,12 @@
         <div class="chart">
             <canvas id="myChart" class="myChart"></canvas>
         </div>
-        <button type="button" class="reactionBtn" data-reaction="vg">よくわかる</button>
-        <button type="button" class="reactionBtn" data-reaction="g">わかる</button>
-        <button type="button" class="reactionBtn" data-reaction="b">わからない</button>
-        <button type="button" class="reactionBtn" data-reaction="vb">よくわからない</button>
+        <div class="rebtn">
+        <button type="button" class="reactionBtn" data-reaction="vg"><img src="img/よくわかる.jpg" alt="button image" style="height:30px;"></button>
+        <button type="button" class="reactionBtn" data-reaction="g"><img src="img/わかる.jpg" alt="button image" style="height:30px;"></button>
+        <button type="button" class="reactionBtn" data-reaction="b"><img src="img/あまりわからない.jpg" alt="button image" style="height:30px;"></button>
+        <button type="button" class="reactionBtn" data-reaction="vb"><img src="img/わからない.jpg" alt="button image" style="height:30px;"></button>
+        </div>
         <div class="newdivcom">
             <div id="commentsContainer"></div>
         </div>
@@ -258,25 +259,25 @@
                                 {
                                     label: 'とてもよくわかる',
                                     data: [percentages[0]],
-                                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                    backgroundColor: 'rgba(255,0,0, 0.5)',
                                     borderWidth: 1
                                 },
                                 {
                                     label: 'わかる',
                                     data: [percentages[1]],
-                                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                    backgroundColor: 'rgba(255, 255, 0, 0.5)',
                                     borderWidth: 1
                                 },
                                 {
                                     label: 'わからない',
                                     data: [percentages[2]],
-                                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                                    backgroundColor: 'rgba(34, 139, 34, 0.5)',
                                     borderWidth: 1
                                 },
                                 {
                                     label: 'とてもわからない',
                                     data: [percentages[3]],
-                                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                    backgroundColor: 'rgba(65, 105, 225, 0.5)',
                                     borderWidth: 1
                                 }
                             ]
