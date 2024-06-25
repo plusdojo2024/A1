@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,92 +10,49 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.AllComFavDAO;
 
 
 @WebServlet("/AllComReServlet")
-public class AllComReServlet extends HttpServlet{
-	private static final long serialVersionUID = 1L;
+public class AllComReServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// もしもログインしていなかったらログインサーブレットにリダイレクトする
-		//決まりの文章、とりあえず書くと覚えておこう
-		request.setCharacterEncoding("UTF-8");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-		response.setHeader("Cache-Control", "nocache");
-		//文字コードの指定（これがないとJSPで文字化けする）
-        response.setContentType("text/html;charser=UTF-8");
+        response.setHeader("Cache-Control", "nocache");
+        response.setContentType("text/html;charset=UTF-8");
 
-		// リクエストパラメータを取得する
-		request.setCharacterEncoding("UTF-8");
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int allComId = Integer.parseInt(request.getParameter("AllComId"));
 
-		//いいねボタンが押されたときの処理
-        if(request.getParameter("data1")!=null) {
-        	String stUserId = request.getParameter("userId");
-    		int userId = Integer.parseInt(stUserId);
-    		String stAllComId = request.getParameter("AllComId");
-    		int allComId = Integer.parseInt(stAllComId);
+        AllComFavDAO dao = new AllComFavDAO();
+        boolean liked = dao.toggleLike(userId, allComId);
+        int likeCount = dao.getCount(allComId);
 
-//        	int userId = 1;
-//        	int allComId = 1;
+        Map<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("liked", liked);
+        jsonResponse.put("likeCount", likeCount);
 
-			boolean ans = false;
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(jsonResponse));
+    }
 
-			AllComFavDAO dao = new AllComFavDAO();
-			int[] id = new int[2];
-			id[0] = dao.selectId()[0];
-			id[1] = dao.selectId()[1];
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int allComId = Integer.parseInt(request.getParameter("AllComId"));
 
-			if(id[0]==userId && id[1]==allComId) {
-//				System.out.println("入ってるよ");
-				ans = dao.delete(userId, allComId);
-			}else {
-				ans = dao.insert(userId, allComId);
-			}
+        AllComFavDAO dao = new AllComFavDAO();
+        boolean liked = dao.isLikedByUser(userId, allComId);
+        int likeCount = dao.getCount(allComId);
 
-			//Jackson機能のmapperをインスタンス（実体）化
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-	            //JavaオブジェクトからJSONに変換
-	            String testJson = mapper.writeValueAsString(ans);
-	            System.out.println(testJson);
-	            //JSONの出力
-	            response.setContentType("application/json; charset=UTF-8");
-	            response.getWriter().write(testJson);
-	        } catch (JsonProcessingException e) {
-	            e.printStackTrace();
-	        }
+        Map<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("liked", liked);
+        jsonResponse.put("likeCount", likeCount);
 
-
-		//１秒毎にいいねの数を取得するメソッド
-        }else {
-        	AllComFavDAO dao = new AllComFavDAO();
-        	String stAllComId = request.getParameter("AllComId");
-    		int allComId = Integer.parseInt(stAllComId);
-			int count = dao.getCount(allComId);
-
-			//Jackson機能のmapperをインスタンス（実体）化
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-	            //JavaオブジェクトからJSONに変換
-	            String testJson = mapper.writeValueAsString(count);
-	            System.out.println(testJson);
-	            //JSONの出力
-	            response.setContentType("application/json; charset=UTF-8");
-	            response.getWriter().write(testJson);
-	        } catch (JsonProcessingException e) {
-	            e.printStackTrace();
-	        }
-        }
-
-//
-////		// 結果ページにフォワードする
-//		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/iine_suru.jsp");
-//		dispatcher.forward(request, response);
-	}
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(jsonResponse));
+    }
 }
-
-

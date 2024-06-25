@@ -47,7 +47,9 @@
         </div>
     </div>
     <div class="allcom">
-        <div class="allcomtext" id="allcomdiv"></div>
+        <div class="allcomtext" id="allcomdiv">
+            <!-- ここにコメントを表示 -->
+        </div>
         <div class="allcomform">
             <input type="text" name="allComContents" class="allcomsend" id="allcom">
             <input type="button" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
@@ -74,6 +76,7 @@
         </div>
     </div>
     <div id="alertBox" class="alert-box">Alert</div>
+    <input type="hidden" id="hiddenUserId" value="${user.userId}"> <!-- EL式でユーザーIDを取得 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const buttonOpen = document.getElementById('modalOpen');
@@ -92,6 +95,7 @@
             const commentsContainer = document.getElementById('commentsContainer');
             const markcomlive = document.getElementById('markcomlive');
             const allcomdiv = document.getElementById('allcomdiv');
+            const allcom = document.getElementById('allcom');
             const reactionButtons = document.querySelectorAll('.reactionBtn');
 
             let currentMarkerId = null;
@@ -193,28 +197,47 @@
                 });
             });
 
-            $(document).ready(function() {
-                function fetchLatestBoardContents() {
-                    $.ajax({
-                        url: '/A1/MainServlet',
-                        type: 'POST',
-                        data: { action: 'fetchLatestBoardContents' },
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#textarea').val(data.boardContents);
-                        },
-                        error: function() {
-                            console.error('Error fetching board contents.');
-                        }
-                    });
-                }
+            function goAjax() {
+                let allcom = document.getElementById('allcom').value;
+                let postData = { data1: allcom };
 
-                setInterval(fetchMarkers, 1000);
-                setInterval(fetchAllMarkerComs, 1000);
-                setInterval(fetchAllComs, 1000);
-                setInterval(fetchLatestBoardContents, 1000);
-                setInterval(updateChart, 1000);
-            });
+                $.ajax({
+                    url: '/A1/AllComServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: postData,
+                    success: function(data) {
+                        document.getElementById("test").innerText = data.message;
+                    },
+                    error: function() {
+                        alert("データの追加に失敗しました。");
+                    }
+                });
+            }
+
+
+
+            function fetchAllComs() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { data1: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        allcomdiv.innerHTML = '';
+                        data.forEach(function(comment) {
+                            const p = document.createElement('p');
+                            p.textContent = comment.allComContents;
+                            p.innerHTML += ` <button class="like-button" data-allcomid="${comment.allComId}">♡</button>`;
+                            allcomdiv.appendChild(p);
+                            allcomdiv.appendChild(document.createElement('hr'));
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching all comments');
+                    }
+                });
+            }
 
             function modalOpen() {
                 const text = textarea.value.replace(/\n/g, '<br>');
@@ -310,27 +333,6 @@
                 });
             }
 
-            function fetchAllComs() {
-                $.ajax({
-                    url: '/A1/MainServlet',
-                    type: 'GET',
-                    data: { data1: true },
-                    dataType: 'json',
-                    success: function(data) {
-                        allcomdiv.innerHTML = '';
-                        data.forEach(function(comment) {
-                            const p = document.createElement('p');
-                            p.textContent = comment.allComContents + ' ♡';
-                            allcomdiv.appendChild(p);
-                            allcomdiv.appendChild(document.createElement('hr'));
-                        });
-                    },
-                    error: function() {
-                        console.error('Error fetching all comments');
-                    }
-                });
-            }
-
             function fetchChart(markerId) {
                 $.ajax({
                     url: '/A1/MainServlet',
@@ -344,8 +346,7 @@
                             (data.veryGood / total) * 100,
                             (data.good / total) * 100,
                             (data.bad / total) * 100,
-                            (data.veryBad
-                            		/ total) * 100
+                            (data.veryBad / total) * 100
                         ];
 
                         const chartData = {
@@ -427,30 +428,22 @@
                     }
                 });
             }
-			//グラフの更新
+
             function updateChart() {
                 if (currentMarkerId) {
                     fetchChart(currentMarkerId);
                 }
             }
 
-            function goAjax() {
-                let allcom = document.getElementById('allcom').value;
-                let postData = { data1: allcom };
-
-                $.ajax({
-                    url: '/A1/AllComServlet',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: postData,
-                    success: function(data) {
-                        document.getElementById("test").innerText = data.message;
-                    },
-                    error: function() {
-                        alert("データの追加に失敗しました。");
-                    }
-                });
-            }
+            $(document).ready(function() {
+                fetchMarkers();
+                fetchAllMarkerComs();
+                fetchAllComs();
+                setInterval(fetchMarkers, 1000);
+                setInterval(fetchAllMarkerComs, 1000);
+                setInterval(fetchAllComs, 1000);
+                setInterval(updateChart, 1000);
+            });
         });
     </script>
 </body>

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dao.AllComDAO;
+import dao.AllComFavDAO;
 import dao.BlackBoardDAO;
 import dao.MarkerComDAO;
 import dao.MarkerDAO;
@@ -48,7 +49,23 @@ public class MainServlet extends HttpServlet {
             response.getWriter().write(jsonResponse);
             return;
         }
+     // 追加: 各ユーザーが全体コメントにいいねを押しているかをチェック
+        if (request.getParameter("allComId") != null) {
+            int allComId = Integer.parseInt(request.getParameter("allComId"));
+            AllComFavDAO acfDao = new AllComFavDAO();
+            boolean liked = acfDao.isLikedByUser(user.getUserId(), allComId);
+            int likeCount = acfDao.getCount(allComId);
 
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> jsonResponse = new HashMap<>();
+            jsonResponse.put("liked", liked);
+            jsonResponse.put("likeCount", likeCount);
+            response.getWriter().write(mapper.writeValueAsString(jsonResponse));
+            return;
+        }
         // マーカーコメントの取得
         if (request.getParameter("markerId") != null) {
             int markerId = Integer.parseInt(request.getParameter("markerId"));
