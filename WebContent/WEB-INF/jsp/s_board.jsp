@@ -98,6 +98,7 @@
         <div class="chart">
             <canvas id="myChart" class="myChart"></canvas>
         </div>
+        <div id="reactionText"></div> <!-- Add this line -->
         <div class="rebtn">
         <button type="button" class="reactionBtn" data-reaction="vg"><img src="img/よくわかる.jpg" alt="button image" style="height:30px;"></button>
         <button type="button" class="reactionBtn" data-reaction="g"><img src="img/わかる.jpg" alt="button image" style="height:30px;"></button>
@@ -181,40 +182,42 @@
             });
 			//newdivが表示される
             function fetchMarkers() {
-                $.ajax({
-                    url: '/A1/MainServlet',
-                    type: 'GET',
-                    data: { latestMarkers: true },
-                    dataType: 'json',
-                    success: function(data) {
-                        markerList.innerHTML = '';
-                        data.forEach(function(marker) {
-                            const li = document.createElement('li');
-                            const a = document.createElement('a');
-                            a.textContent = marker.markerContents;
-                            a.href = "#";
-                            a.dataset.markerId = marker.markerId;
-                            a.addEventListener('click', function(event) {
-                                event.preventDefault();
-                                newDivText.textContent = marker.markerContents;
-                                markerIdText.textContent = marker.markerId;
-                                currentMarkerId = marker.markerId;
-                                newDiv.classList.add('big');
-                                newDiv.classList.remove('close');
-                                var markerDiv = document.getElementById('marker');
-                                markerDiv.classList.add('small');
-                                fetchComments(currentMarkerId);
-                                fetchChart(currentMarkerId);
-                            });
-                            li.appendChild(a);
-                            markerList.appendChild(li);
-                        });
-                    },
-                    error: function() {
-                        console.error('Error fetching markers');
-                    }
+        $.ajax({
+            url: '/A1/MainServlet',
+            type: 'GET',
+            data: { latestMarkers: true },
+            dataType: 'json',
+            success: function(data) {
+                markerList.innerHTML = '';
+                data.reverse().forEach(function(marker) {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.textContent = marker.markerContents;
+                    a.href = "#";
+                    a.dataset.markerId = marker.markerId;
+                    a.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        newDivText.textContent = marker.markerContents;
+                        markerIdText.textContent = marker.markerId;
+                        currentMarkerId = marker.markerId;
+                        newDiv.classList.add('big');
+                        newDiv.classList.remove('close');
+                        var markerDiv = document.getElementById('marker');
+                        markerDiv.classList.add('small');
+                        fetchComments(currentMarkerId);
+                        fetchChart(currentMarkerId);
+                        fetchLatestReaction(currentMarkerId);
+                    });
+                    li.appendChild(a);
+                    markerList.appendChild(li);
                 });
+            },
+            error: function() {
+                console.error('Error fetching markers');
             }
+        });
+    }
+
 			//マーカーコメントが表示される
             function fetchComments(markerId) {
                 $.ajax({
@@ -237,100 +240,125 @@
             }
 			//グラフの表示
             function fetchChart(markerId) {
+        $.ajax({
+            url: '/A1/MainServlet',
+            type: 'GET',
+            data: { markerChart: markerId },
+            dataType: 'json',
+            success: function(data) {
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const total = data.veryGood + data.good + data.bad + data.veryBad;
+                const percentages = [
+                    (data.veryGood / total) * 100,
+                    (data.good / total) * 100,
+                    (data.bad / total) * 100,
+                    (data.veryBad / total) * 100
+                ];
+
+                const chartData = {
+                    labels: ['Total'],
+                    datasets: [
+                        {
+                            label: 'とてもよくわかる',
+                            data: [percentages[0]],
+                            backgroundColor: 'rgba(255,0,0, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'わかる',
+                            data: [percentages[1]],
+                            backgroundColor: 'rgba(255, 255, 0, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'わからない',
+                            data: [percentages[2]],
+                            backgroundColor: 'rgba(34, 139, 34, 0.5)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'とてもわからない',
+                            data: [percentages[3]],
+                            backgroundColor: 'rgba(65, 105, 225, 0.5)',
+                            borderWidth: 1
+                        }
+                    ]
+                };
+
+                if (chart) {
+                    chart.data = chartData;
+                    chart.update();
+                } else {
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            indexAxis: 'y',
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                    ticks: {
+                                        beginAtZero: true,
+                                        callback: function(value) {
+                                            return value + "%";
+                                        }
+                                    }
+                                },
+                                y: {
+                                    stacked: true
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
+                                        }
+                                    }
+                                }
+                            },
+                            maintainAspectRatio: false,
+                            responsive: true,
+                            animation: {
+                                duration: 0 // アニメーションを無効にする
+                            }
+                        }
+                    });
+                }
+            },
+            error: function() {
+                console.error('Error fetching chart data');
+            }
+        });
+    }
+            function fetchLatestReaction(markerId) {
                 $.ajax({
                     url: '/A1/MainServlet',
                     type: 'GET',
-                    data: { markerChart: markerId },
+                    data: { userReaction: markerId },
                     dataType: 'json',
                     success: function(data) {
-                        const ctx = document.getElementById('myChart').getContext('2d');
-                        const total = data.veryGood + data.good + data.bad + data.veryBad;
-                        const percentages = [
-                            (data.veryGood / total) * 100,
-                            (data.good / total) * 100,
-                            (data.bad / total) * 100,
-                            (data.veryBad
-                            		/ total) * 100
-                        ];
-
-                        const chartData = {
-                            labels: ['Total'],
-                            datasets: [
-                                {
-                                    label: 'とてもよくわかる',
-                                    data: [percentages[0]],
-                                    backgroundColor: 'rgba(255,0,0, 0.5)',
-                                    borderWidth: 1
-                                },
-                                {
-                                    label: 'わかる',
-                                    data: [percentages[1]],
-                                    backgroundColor: 'rgba(255, 255, 0, 0.5)',
-                                    borderWidth: 1
-                                },
-                                {
-                                    label: 'わからない',
-                                    data: [percentages[2]],
-                                    backgroundColor: 'rgba(34, 139, 34, 0.5)',
-                                    borderWidth: 1
-                                },
-                                {
-                                    label: 'とてもわからない',
-                                    data: [percentages[3]],
-                                    backgroundColor: 'rgba(65, 105, 225, 0.5)',
-                                    borderWidth: 1
-                                }
-                            ]
-                        };
-
-                        if (chart) {
-                            chart.data = chartData;
-                            chart.update();
-                        } else {
-                            chart = new Chart(ctx, {
-                                type: 'bar',
-                                data: chartData,
-                                options: {
-                                    indexAxis: 'y',
-                                    scales: {
-                                        x: {
-                                            stacked: true,
-                                            ticks: {
-                                                beginAtZero: true,
-                                                callback: function(value) {
-                                                    return value + "%";
-                                                }
-                                            }
-                                        },
-                                        y: {
-                                            stacked: true
-                                        }
-                                    },
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                                        },
-                                        tooltip: {
-                                            callbacks: {
-                                                label: function(tooltipItem) {
-                                                    return tooltipItem.dataset.label + ': ' + tooltipItem.raw.toFixed(2) + '%';
-                                                }
-                                            }
-                                        }
-                                    },
-                                    maintainAspectRatio: false,
-                                    responsive: true,
-                                    animation: {
-                                        duration: 0 // アニメーションを無効にする
-                                    }
-                                }
-                            });
+                        const reactionText = document.getElementById('reactionText');
+                        let reaction = "未回答";
+                        if (data.reaction === 'vg') {
+                            reaction = "とてもよくわかる";
+                        } else if (data.reaction === 'g') {
+                            reaction = "わかる";
+                        } else if (data.reaction === 'b') {
+                            reaction = "あまりわからない";
+                        } else if (data.reaction === 'vb') {
+                            reaction = "わからない";
                         }
+                        reactionText.textContent = reaction;
                     },
                     error: function() {
-                        console.error('Error fetching chart data');
+                        console.error('Error fetching latest reaction');
                     }
                 });
+
             }
 			//グラフの更新
             function updateChart() {
@@ -396,6 +424,22 @@
                     newDiv.style.zIndex = -1;
                 }
             });
+            function fetchUserMarkers() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { userMarkers: true },
+                    dataType: 'json',
+                    success: function(userMarkerIds) {
+                        updateMarkersWithUserReactions(userMarkerIds);
+                    },
+                    error: function() {
+                        console.error('Error fetching user markers');
+                    }
+                });
+            }
+
+
 			//マーカーコメント全体の表示
             function fetchAllMarkerComs() {
                 $.ajax({
@@ -449,7 +493,13 @@
                 setInterval(fetchAllMarkerComs, 1000);
                 setInterval(fetchAllComs, 1000);
                 setInterval(updateChart, 1000);
+                setInterval(function() {
+                    if (currentMarkerId) {
+                        fetchLatestReaction(currentMarkerId);
+                    }
+                }, 1000);
             });
+
 
             reactionButtons.forEach(button => {
                 button.addEventListener('click', function() {

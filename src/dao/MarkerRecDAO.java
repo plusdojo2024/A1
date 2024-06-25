@@ -164,7 +164,65 @@ public class MarkerRecDAO {
 
 		return reaction;
 	}
+	 public List<Integer> getUserReactionMarkerIds(int userId) {
+	        Connection conn = null;
+	        List<Integer> markerIds = new ArrayList<>();
 
+	        try {
+	            Class.forName("org.h2.Driver");
+	            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+	            String sql = "SELECT marker_id FROM marker_rec WHERE user_id = ?";
+	            PreparedStatement pStmt = conn.prepareStatement(sql);
+	            pStmt.setInt(1, userId);
+
+	            ResultSet rs = pStmt.executeQuery();
+	            while (rs.next()) {
+	                markerIds.add(rs.getInt("marker_id"));
+	            }
+	        } catch (SQLException | ClassNotFoundException e) {
+	            e.printStackTrace();
+	        } finally {
+	            if (conn != null) {
+	                try {
+	                    conn.close();
+	                } catch (SQLException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	        return markerIds;
+	    }
+
+	public List<Integer> getUserReactions(int userId) {
+	    Connection conn = null;
+	    List<Integer> userMarkerIds = new ArrayList<>();
+
+	    try {
+	        Class.forName("org.h2.Driver");
+	        conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+	        String sql = "SELECT marker_id FROM marker_rec WHERE user_id = ?";
+	        PreparedStatement pStmt = conn.prepareStatement(sql);
+	        pStmt.setInt(1, userId);
+
+	        ResultSet rs = pStmt.executeQuery();
+	        while (rs.next()) {
+	            userMarkerIds.add(rs.getInt("marker_id"));
+	        }
+	    } catch (SQLException | ClassNotFoundException e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (conn != null) {
+	            try {
+	                conn.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    return userMarkerIds;
+	}
 	public List<MarkerRec> countVb(int UserId) {
 		Connection conn = null;
 		List<MarkerRec> markerRecList = new ArrayList<MarkerRec>();

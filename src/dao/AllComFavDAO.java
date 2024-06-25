@@ -68,6 +68,36 @@ public class AllComFavDAO {
         return result;
     }
 
+    public boolean delete(int userId, int allComId) {
+        Connection conn = null;
+        boolean result = false;
+
+        try {
+            Class.forName("org.h2.Driver");
+            conn = DriverManager.getConnection("jdbc:h2:file:C:/pleiades/workspace/data/A1", "sa", "");
+
+            String sql = "DELETE FROM all_com_fav WHERE user_id = ? AND all_com_id = ?";
+            PreparedStatement pStmt = conn.prepareStatement(sql);
+            pStmt.setInt(1, userId);
+            pStmt.setInt(2, allComId);
+
+            if (pStmt.executeUpdate() == 1) {
+                result = true;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
     public int getCount(int allComId) {
         Connection conn = null;
         int count = 0;
@@ -97,4 +127,5 @@ public class AllComFavDAO {
         }
         return count;
     }
+
 }

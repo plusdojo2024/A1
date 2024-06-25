@@ -16,6 +16,9 @@ a:link{
     text-decoration: none;
     color:black;
 }
+.highlighted-text {
+    color: red;
+}
 li{
     list-style: none; /* 点を消す */
     padding: 0; /* パディングを削除 */
@@ -199,6 +202,13 @@ li{
         right: 10px;
         cursor: pointer;
     }
+    #reactionText{
+    position:absolute;
+    left:50%;
+    top:37.3%;
+    transform: translate(-50%);
+    font-size:0.8rem;
+    }
 #sendCommentBtn{
 	position:absolute;
 	left:100px;
@@ -244,7 +254,7 @@ li{
 }
 .rebtn{
 	position:relative;
-	top:33%;
+	top:35%;
 	left:280px;
 	transform: translate(-50%);
 	z-index:2;

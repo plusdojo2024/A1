@@ -77,7 +77,7 @@
     </div>
     <div id="alertBox" class="alert-box">Alert</div>
     <input type="hidden" id="hiddenUserId" value="${user.userId}"> <!-- EL式でユーザーIDを取得 -->
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             const buttonOpen = document.getElementById('modalOpen');
             const modal = document.getElementById('easyModal');
@@ -116,7 +116,63 @@
                     document.getElementById('markerContents').value = selectedText;
                 }
             });
+            function goAjax() {
+                let allcom = document.getElementById('allcom').value;
+                let postData = { data1: allcom };
 
+                $.ajax({
+                    url: '/A1/AllComServlet',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: postData,
+                    success: function(data) {
+                        document.getElementById("test").innerText = data.message;
+                    },
+                    error: function() {
+                        alert("データの追加に失敗しました。");
+                    }
+                });
+            }
+
+
+
+
+            function fetchAllComs() {
+                $.ajax({
+                    url: '/A1/MainServlet',
+                    type: 'GET',
+                    data: { data1: true },
+                    dataType: 'json',
+                    success: function(data) {
+                        allcomdiv.innerHTML = '';
+                        data.forEach(function(comment) {
+                            const p = document.createElement('p');
+                            p.textContent = comment.allComContents + ' ♡';
+                            allcomdiv.appendChild(p);
+                            allcomdiv.appendChild(document.createElement('hr'));
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching all comments');
+                    }
+                });
+            }
+            textarea.addEventListener('input', function() {
+                const boardContents = textarea.value;
+                $.ajax({
+                    url: '/A1/BlackBoardServlet',
+                    type: 'POST',
+                    data: {
+                        board_contents: boardContents
+                    },
+                    success: function(response) {
+                        console.log('Board contents updated successfully.');
+                    },
+                    error: function() {
+                        console.error('Error updating board contents.');
+                    }
+                });
+            });
             submitBtn.addEventListener('click', function() {
                 const markerContents = document.getElementById('markerContents').value;
                 $.ajax({
@@ -197,48 +253,6 @@
                 });
             });
 
-            function goAjax() {
-                let allcom = document.getElementById('allcom').value;
-                let postData = { data1: allcom };
-
-                $.ajax({
-                    url: '/A1/AllComServlet',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: postData,
-                    success: function(data) {
-                        document.getElementById("test").innerText = data.message;
-                    },
-                    error: function() {
-                        alert("データの追加に失敗しました。");
-                    }
-                });
-            }
-
-
-
-            function fetchAllComs() {
-                $.ajax({
-                    url: '/A1/MainServlet',
-                    type: 'GET',
-                    data: { data1: true },
-                    dataType: 'json',
-                    success: function(data) {
-                        allcomdiv.innerHTML = '';
-                        data.forEach(function(comment) {
-                            const p = document.createElement('p');
-                            p.textContent = comment.allComContents;
-                            p.innerHTML += ` <button class="like-button" data-allcomid="${comment.allComId}">♡</button>`;
-                            allcomdiv.appendChild(p);
-                            allcomdiv.appendChild(document.createElement('hr'));
-                        });
-                    },
-                    error: function() {
-                        console.error('Error fetching all comments');
-                    }
-                });
-            }
-
             function modalOpen() {
                 const text = textarea.value.replace(/\n/g, '<br>');
                 contents.innerHTML = text;
@@ -263,7 +277,7 @@
                     dataType: 'json',
                     success: function(data) {
                         markerList.innerHTML = '';
-                        data.forEach(function(marker) {
+                        data.reverse().forEach(function(marker) {
                             const li = document.createElement('li');
                             const a = document.createElement('a');
                             a.textContent = marker.markerContents;
@@ -332,6 +346,8 @@
                     }
                 });
             }
+
+
 
             function fetchChart(markerId) {
                 $.ajax({
@@ -444,24 +460,6 @@
                 setInterval(fetchAllComs, 1000);
                 setInterval(updateChart, 1000);
             });
-        });
-        boardcomit.addEventListener('click', function() {
-            if (confirm("板書を確定しますか？")) {
-                if (confirm("板書を確定したら現在表示されている板書の編集は出来なくなります")) {
-                    $.ajax({
-                        url: '/A1/BlackBoardServlet',
-                        type: 'POST',
-                        data: { 保存: '保存' },
-                        success: function(response) {
-                            alert('Board inserted successfully.');
-                            location.reload(); // ページをリロードする
-                        },
-                        error: function() {
-                            alert('Error inserting board.');
-                        }
-                    });
-                }
-            }
         });
     </script>
 </body>
