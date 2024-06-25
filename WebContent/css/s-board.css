@@ -265,11 +265,32 @@ li{
     top:3%;
     left:85%;
 }
-.headbtn{
+.headtext{
     position:absolute;
-    top:5%;
+    font-size: 22px;
+    top: 56px;
     left:50%;
     transform: translate(-50%);
+}
+#headbtn{
+	position:absolute;
+    font-size: 18px;
+    top: 27px;
+    left:50%;
+    transform: translate(-50%);
+}
+.frame{
+	position:absolute;
+	left: 568px;
+}
+.box {
+	position:absolute;
+	left: 568px;
+	width: 370px;
+	height: 90px;
+	left: 580px;
+	top: 20px;
+	background   : #ffffff;
 }
 .markerbtn{
     background: lightblue;
