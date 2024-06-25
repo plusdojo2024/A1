@@ -29,7 +29,7 @@
         </label>
         <input class="textsub" type="submit" name="submit" value="新規登録">
         <span id="error_message">
-            <input type="hidden" name="jobflag" value="0">
+            <input type="hidden" name="jobflag" value="1">
         </span>
   </form>
   <% if (request.getAttribute("error") != null) { %>
