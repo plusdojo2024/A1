@@ -25,7 +25,7 @@
                     <div class="contents" id="contents">
                         <!-- ここにテキストエリアの内容が表示されます -->
                     </div>
-
+		<a class="pagechange" href="/A1/MainServlet"><span>板書</span><span>ページへ</span></a>
         		<h1 class= "title">板書履歴</h1>
 
 		<div  class = "date">
@@ -37,13 +37,15 @@
 		</div >
 
 
-        <a href="/A1/MainServlet">
-    		<div class="pagechange">
+
+
+        <!-- <a href="/A1/MainServlet">
+    		<div class="change">
                 <p class="center">板書</p>
                 </div>
 
 
-        </a>
+        </a> -->
 
     </header>
 

@@ -26,13 +26,15 @@ h1.title{
     text-align: center;
     top: 100;
     margin-top: 30;
+    font-size: 50px;
 
 }
 /*日付部分*/
 .date{
 
     font-weight: bold;
-     padding-left: 440px;
+     padding-left: 417px;
+     font-size: 20px;
 }
 
 /* 板書 */
@@ -109,6 +111,48 @@ h1.title{
     cursor: pointer;
 
     }
+
+.pagechange {
+  display: inline-block;           /* 改行なしのブロック要素 */
+  position: relative;              /* 相対位置指定 */
+  width: 200px;                    /* 横幅 */
+  height: 60px;                    /* 高さ */
+  text-align: center;              /* 水平方向は中央揃え */
+  line-height: 56px;               /* 行の高さ */
+  left:80%;
+  top:10px;
+}
+.pagechange span {
+  display: block;                  /* ブロック要素 */
+  position: absolute;              /* 親要素の左上を基準位置 */
+  width: 100%;                     /* 横幅 */
+  height: 100%;                    /* 高さ */
+  border: 2px solid #5cd2e6;          /* 罫線 */
+  transform-style: preserve-3d;    /* 重なりを3Dで表示 */
+  transition: 0.5s;   /* 変化時間 */
+}
+.pagechange span:nth-child(1) {
+  background-color: #f4e869;   /* 板書ボタンの色 */
+  color: #5cd2e6;          /* 板書の文字の色 */
+  font-weight: bold;
+  font-size: 20px;
+  transform: rotateX(0deg);        /* 横軸の回転なし */
+  transform-origin: 0 50%  -30px;  /* transformの起点 */
+}
+.pagechange span:nth-child(2) {
+  background-color: #5cd2e6;   /* ページへボタンの色 */
+  color: #f4e869;          /* ページへの文字の色 */
+  font-weight: bold;
+  font-size: 20px;
+  transform: rotateX(90deg);       /* 横軸で90度回転 */
+  transform-origin: 0 50%  -30px;  /* transformの起点 */
+}
+.pagechange:hover span:nth-child(1) {
+  transform: rotateX(-90deg);      /* 横軸で前方に90度回転 */
+}
+.pagechange:hover span:nth-child(2) {
+  transform: rotateX(0deg);        /* 横軸の回転なし */
+}
 
 
 
