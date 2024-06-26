@@ -469,7 +469,7 @@
                         type: 'POST',
                         data: { 保存: '保存' },
                         success: function(response) {
-                            alert('Board inserted successfully.');
+                            alert('板書が確定しました');
                             location.reload(); // ページをリロードする
                         },
                         error: function() {
