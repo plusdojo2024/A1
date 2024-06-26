@@ -10,6 +10,7 @@
 <body>
 <h1 id="logo"><img src="img/くらすぼーどロゴ.png" alt="くらすぼーど" width="350"></h1>
     <h2 class="login">ログイン</h2>
+
     <div class="box">
         <div class="content">
         </div>
@@ -33,4 +34,7 @@
   </form>
     </div>
 </body>
+<footer>
+<p class="footertext">&copy;くらすぼーど</p>
+</footer>
 </html>

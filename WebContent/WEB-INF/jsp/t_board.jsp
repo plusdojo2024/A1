@@ -34,9 +34,9 @@
             </div>
         </div>
 
-        <a href="/A1/RecordServlet">
-            <div class="pagechange"><p class="center">履歴</p></div>
-        </a>
+        <div class="recbtns">
+            <a class="reebtn" href="/A1/RecordServlet"><span>履歴</span><span>ページへ</span></a>
+</div>
     </header>
     <div class="board">
         <textarea name="text" class="text" id="textarea"><c:out value="${latestBlackBoard.boardContents}" /></textarea>
@@ -51,8 +51,8 @@
             <!-- ここにコメントを表示 -->
         </div>
         <div class="allcomform">
-            <input type="text" name="allComContents" class="allcomsend" id="allcom">
-            <input type="button" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
+            <input type="hidden" name="allComContents" class="allcomsend" id="allcom">
+            <input type="hidden" name="submit" value="送信" class="allcombtn" onclick="goAjax()">
         </div>
     </div>
     <div class="marker" id="marker">
@@ -147,7 +147,7 @@
                         allcomdiv.innerHTML = '';
                         data.forEach(function(comment) {
                             const p = document.createElement('p');
-                            p.textContent = comment.allComContents + ' ♡';
+                            p.textContent = comment.allComContents ;
                             allcomdiv.appendChild(p);
                             allcomdiv.appendChild(document.createElement('hr'));
                         });
@@ -335,7 +335,7 @@
                         data.forEach(function(comment) {
                             const li = document.createElement('li');
                             const p = document.createElement('p');
-                            p.textContent = comment.markerContents + ' : ' + comment.markerComContents + ' ♡';
+                            p.textContent = comment.markerContents + ' : ' + comment.markerComContents;
                             markcomlive.appendChild(document.createElement('hr'));
                             li.appendChild(p);
                             markcomlive.appendChild(li);
@@ -460,6 +460,24 @@
                 setInterval(fetchAllComs, 1000);
                 setInterval(updateChart, 1000);
             });
+        });
+        boardcomit.addEventListener('click', function() {
+            if (confirm("板書を確定しますか？")) {
+                if (confirm("板書を確定したら現在表示されている板書の編集は出来なくなります")) {
+                    $.ajax({
+                        url: '/A1/BlackBoardServlet',
+                        type: 'POST',
+                        data: { 保存: '保存' },
+                        success: function(response) {
+                            alert('Board inserted successfully.');
+                            location.reload(); // ページをリロードする
+                        },
+                        error: function() {
+                            alert('Error inserting board.');
+                        }
+                    });
+                }
+            }
         });
     </script>
 </body>

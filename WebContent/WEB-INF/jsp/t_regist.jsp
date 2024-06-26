@@ -37,4 +37,7 @@
             <% } %>
     </div>
 </body>
+<footer>
+<p class="footertext">&copy;くらすぼーど</p>
+</footer>
 </html>

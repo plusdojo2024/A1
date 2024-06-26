@@ -36,7 +36,6 @@
     </div>
  </div>
 
-    <a href="/A1/AllMarkSearchServlet">確認</a>
 
 </body>
 </html>
