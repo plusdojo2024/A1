@@ -1,0 +1,76 @@
+CREATE TABLE black_board (
+board_id INT AUTO_INCREMENT,
+board_date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+board_contents VARCHAR(max) NOT NULL,
+PRIMARY KEY(board_id)
+);
+CREATE TABLE marker (
+marker_id INT AUTO_INCREMENT PRIMARY KEY,
+marker_contents VARCHAR(30) NOT NULL,
+board_id INT NOT NULL,
+marker_datetime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+FOREIGN KEY (board_id) REFERENCES black_board(board_id)
+);
+CREATE TABLE marker_rec (
+marker_rec_number INT AUTO_INCREMENT PRIMARY KEY,
+user_id INT NOT NULL,
+marker_id INT NOT NULL,
+flag_very_good INT NOT NULL,
+flag_good INT NOT NULL,
+flag_bad INT NOT NULL,
+flag_very_bad INT NOT NULL,
+marker_Rec_datetime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+FOREIGN KEY (marker_id) REFERENCES marker(marker_id)
+);
+CREATE TABLE all_com_fav (
+all_com_fav_num INT AUTO_INCREMENT PRIMARY KEY,
+user_id VARCHAR(100) NOT NULL,
+all_com_id INT NOT NULL,
+all_com_fav_datetime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+FOREIGN KEY (all_com_id) REFERENCES all_com(all_com_id)
+);
+CREATE TABLE all_com (
+all_com_id INT AUTO_INCREMENT,
+all_com_contents VARCHAR NOT NULL,
+all_com_datetime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+PRIMARY KEY(all_com_id)
+);
+CREATE TABLE marker_com (
+    marker_com_id INT AUTO_INCREMENT PRIMARY KEY,
+    marker_com_contents VARCHAR(200) NOT NULL,
+    marker_id INT NOT NULL,
+    marker_com_datetime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (marker_id) REFERENCES marker(marker_id)
+);
+CREATE TABLE marker_com_fav (
+marker_com_number INT AUTO_INCREMENT PRIMARY KEY,
+user_id VARCHAR(100) NOT NULL,
+marker_com_id INT NOT NULL,
+FOREIGN KEY (user_id) REFERENCES users(user_id),
+FOREIGN KEY (marker_com_id) REFERENCES marker_com(marker_com_id)
+);
+CREATE TABLE users (
+user_id INT AUTO_INCREMENT,
+user_name VARCHAR(100) NOT NULL,
+mail VARCHAR(100) NOT NULL,
+pass VARCHAR(16) NOT NULL,
+check_student INT(1) NOT NULL,
+PRIMARY KEY(user_id)
+);
+INSERT INTO black_board(board_contents) 
+VALUES ( '今日は○○について…');
+INSERT INTO black_board( board_contents) 
+VALUES ('明日は○○についてやる予定…');
+INSERT INTO black_board(board_contents) 
+VALUES ('今日は…');
+INSERT INTO black_board(board_contents) 
+VALUES ('明日は…');
+INSERT INTO black_board(board_contents) 
+VALUES ('予定が変わって今日は…');
+
+INSERT INTO users (user_name, mail, pass, check_student)
+VALUES ('樋口', 'teacher@seplus.2024', '1111', 1);
+
+INSERT INTO users (user_name, mail, pass, check_student)
+VALUES ('田中', 'student@seplus.2024', '1111', 0);
+
